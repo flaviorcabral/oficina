@@ -1,0 +1,466 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<component name="dataSourceStorage">
+  <data-source name="MySQL - oficina@localhost" uuid="41f162ff-9059-4c61-add7-22fc074586ab">
+    <database-info product="MySQL" version="5.5.5-10.1.16-MariaDB" jdbc-version="4.0" driver-name="MySQL Connector Java" driver-version="mysql-connector-java-5.1.35 ( Revision: 5fb9c5849535c13917c2cf9baaece6ef9693ef27 )">
+      <extra-name-characters>#@</extra-name-characters>
+      <identifier-quote-string>`</identifier-quote-string>
+    </database-info>
+    <case-sensitivity plain-identifiers="lower" quoted-identifiers="lower"/>
+    <database-model serializer="dbm" rdbms="MYSQL" format-version="2.2">
+      <schema id="1" name="oficina"/>
+      <table id="2" parent="1" name="clientes"/>
+      <table id="3" parent="1" name="contas"/>
+      <table id="4" parent="1" name="estados"/>
+      <table id="5" parent="1" name="fornecedores"/>
+      <table id="6" parent="1" name="ordem"/>
+      <table id="7" parent="1" name="ordemi"/>
+      <table id="8" parent="1" name="parametros"/>
+      <table id="9" parent="1" name="pecas"/>
+      <table id="10" parent="1" name="pedidos"/>
+      <table id="11" parent="1" name="pedidosi"/>
+      <table id="12" parent="1" name="servicos"/>
+      <table id="13" parent="1" name="usuarios"/>
+      <column id="14" parent="2" name="cdclie">
+        <mandatory>1</mandatory>
+        <data-type>varchar(14)</data-type>
+      </column>
+      <column id="15" parent="2" name="declie">
+        <data-type>varchar(100)</data-type>
+      </column>
+      <column id="16" parent="2" name="cdtipo">
+        <data-type>varchar(15)</data-type>
+      </column>
+      <column id="17" parent="2" name="nrinsc">
+        <data-type>varchar(20)</data-type>
+      </column>
+      <column id="18" parent="2" name="nrccm">
+        <data-type>varchar(20)</data-type>
+      </column>
+      <column id="19" parent="2" name="nrrg">
+        <data-type>varchar(20)</data-type>
+      </column>
+      <column id="20" parent="2" name="deende">
+        <data-type>varchar(100)</data-type>
+      </column>
+      <column id="21" parent="2" name="nrende">
+        <data-type>int(11)</data-type>
+      </column>
+      <column id="22" parent="2" name="decomp">
+        <data-type>varchar(50)</data-type>
+      </column>
+      <column id="23" parent="2" name="debair">
+        <data-type>varchar(50)</data-type>
+      </column>
+      <column id="24" parent="2" name="decida">
+        <data-type>varchar(50)</data-type>
+      </column>
+      <column id="25" parent="2" name="cdesta">
+        <data-type>varchar(50)</data-type>
+      </column>
+      <column id="26" parent="2" name="nrcepi">
+        <data-type>varchar(8)</data-type>
+      </column>
+      <column id="27" parent="2" name="nrtele">
+        <data-type>varchar(20)</data-type>
+      </column>
+      <column id="28" parent="2" name="nrcelu">
+        <data-type>varchar(20)</data-type>
+      </column>
+      <column id="29" parent="2" name="demail">
+        <data-type>varchar(255)</data-type>
+      </column>
+      <column id="30" parent="2" name="deobse">
+        <data-type>varchar(500)</data-type>
+      </column>
+      <column id="31" parent="2" name="flativ">
+        <data-type>varchar(10)</data-type>
+      </column>
+      <column id="32" parent="2" name="dtcada">
+        <data-type>date</data-type>
+      </column>
+      <key id="33" parent="2" name="PRIMARY">
+        <columns>cdclie</columns>
+        <primary>1</primary>
+      </key>
+      <column id="34" parent="3" name="cdcont">
+        <mandatory>1</mandatory>
+        <data-type>bigint(20)</data-type>
+      </column>
+      <column id="35" parent="3" name="decont">
+        <data-type>varchar(50)</data-type>
+      </column>
+      <column id="36" parent="3" name="dtcont">
+        <data-type>date</data-type>
+      </column>
+      <column id="37" parent="3" name="vlcont">
+        <data-type>decimal(15,2)</data-type>
+      </column>
+      <column id="38" parent="3" name="cdtipo">
+        <data-type>varchar(15)</data-type>
+      </column>
+      <column id="39" parent="3" name="vlpago">
+        <data-type>decimal(15,2)</data-type>
+      </column>
+      <column id="40" parent="3" name="dtpago">
+        <data-type>date</data-type>
+      </column>
+      <column id="41" parent="3" name="cdquem">
+        <data-type>varchar(100)</data-type>
+      </column>
+      <column id="42" parent="3" name="cdorig">
+        <data-type>varchar(100)</data-type>
+      </column>
+      <column id="43" parent="3" name="deobse">
+        <data-type>varchar(500)</data-type>
+      </column>
+      <column id="44" parent="3" name="flativ">
+        <data-type>varchar(15)</data-type>
+      </column>
+      <column id="45" parent="3" name="dtcada">
+        <data-type>date</data-type>
+      </column>
+      <key id="46" parent="3" name="PRIMARY">
+        <columns>cdcont</columns>
+        <primary>1</primary>
+      </key>
+      <column id="47" parent="4" name="cdesta">
+        <mandatory>1</mandatory>
+        <data-type>char(2)</data-type>
+      </column>
+      <column id="48" parent="4" name="deesta">
+        <data-type>char(35)</data-type>
+      </column>
+      <key id="49" parent="4" name="PRIMARY">
+        <columns>cdesta</columns>
+        <primary>1</primary>
+      </key>
+      <column id="50" parent="5" name="cdforn">
+        <mandatory>1</mandatory>
+        <data-type>varchar(14)</data-type>
+      </column>
+      <column id="51" parent="5" name="deforn">
+        <data-type>varchar(100)</data-type>
+      </column>
+      <column id="52" parent="5" name="cdtipo">
+        <data-type>varchar(15)</data-type>
+      </column>
+      <column id="53" parent="5" name="nrinsc">
+        <data-type>varchar(20)</data-type>
+      </column>
+      <column id="54" parent="5" name="nrccm">
+        <data-type>varchar(20)</data-type>
+      </column>
+      <column id="55" parent="5" name="nrrg">
+        <data-type>varchar(20)</data-type>
+      </column>
+      <column id="56" parent="5" name="deende">
+        <data-type>varchar(100)</data-type>
+      </column>
+      <column id="57" parent="5" name="nrende">
+        <data-type>int(11)</data-type>
+      </column>
+      <column id="58" parent="5" name="decomp">
+        <data-type>varchar(50)</data-type>
+      </column>
+      <column id="59" parent="5" name="debair">
+        <data-type>varchar(50)</data-type>
+      </column>
+      <column id="60" parent="5" name="decida">
+        <data-type>varchar(50)</data-type>
+      </column>
+      <column id="61" parent="5" name="cdesta">
+        <data-type>varchar(50)</data-type>
+      </column>
+      <column id="62" parent="5" name="nrcepi">
+        <data-type>varchar(8)</data-type>
+      </column>
+      <column id="63" parent="5" name="nrtele">
+        <data-type>varchar(20)</data-type>
+      </column>
+      <column id="64" parent="5" name="nrcelu">
+        <data-type>varchar(20)</data-type>
+      </column>
+      <column id="65" parent="5" name="demail">
+        <data-type>varchar(255)</data-type>
+      </column>
+      <column id="66" parent="5" name="deobse">
+        <data-type>varchar(500)</data-type>
+      </column>
+      <column id="67" parent="5" name="flativ">
+        <data-type>varchar(10)</data-type>
+      </column>
+      <column id="68" parent="5" name="dtcada">
+        <data-type>date</data-type>
+      </column>
+      <key id="69" parent="5" name="PRIMARY">
+        <columns>cdforn</columns>
+        <primary>1</primary>
+      </key>
+      <column id="70" parent="6" name="cdorde">
+        <mandatory>1</mandatory>
+        <data-type>bigint(20)</data-type>
+      </column>
+      <column id="71" parent="6" name="cdclie">
+        <data-type>varchar(100)</data-type>
+      </column>
+      <column id="72" parent="6" name="veplac">
+        <data-type>char(7)</data-type>
+      </column>
+      <column id="73" parent="6" name="vemarc">
+        <data-type>varchar(30)</data-type>
+      </column>
+      <column id="74" parent="6" name="vemode">
+        <data-type>varchar(30)</data-type>
+      </column>
+      <column id="75" parent="6" name="veanom">
+        <data-type>char(4)</data-type>
+      </column>
+      <column id="76" parent="6" name="veanof">
+        <data-type>char(4)</data-type>
+      </column>
+      <column id="77" parent="6" name="vecorv">
+        <data-type>varchar(15)</data-type>
+      </column>
+      <column id="78" parent="6" name="cdsitu">
+        <data-type>varchar(30)</data-type>
+      </column>
+      <column id="79" parent="6" name="dtorde">
+        <data-type>date</data-type>
+      </column>
+      <column id="80" parent="6" name="vlorde">
+        <data-type>decimal(15,2)</data-type>
+      </column>
+      <column id="81" parent="6" name="cdform">
+        <data-type>varchar(30)</data-type>
+      </column>
+      <column id="82" parent="6" name="qtform">
+        <data-type>int(11)</data-type>
+      </column>
+      <column id="83" parent="6" name="vlpago">
+        <data-type>decimal(15,2)</data-type>
+      </column>
+      <column id="84" parent="6" name="dtpago">
+        <data-type>date</data-type>
+      </column>
+      <column id="85" parent="6" name="deobse">
+        <data-type>varchar(500)</data-type>
+      </column>
+      <column id="86" parent="6" name="flativ">
+        <data-type>varchar(15)</data-type>
+      </column>
+      <column id="87" parent="6" name="dtcada">
+        <mandatory>1</mandatory>
+        <data-type>date</data-type>
+      </column>
+      <key id="88" parent="6" name="PRIMARY">
+        <columns>cdorde</columns>
+        <primary>1</primary>
+      </key>
+      <column id="89" parent="7" name="cdorde">
+        <data-type>bigint(20)</data-type>
+      </column>
+      <column id="90" parent="7" name="nritem">
+        <data-type>int(11)</data-type>
+      </column>
+      <column id="91" parent="7" name="cdpeca">
+        <data-type>varchar(100)</data-type>
+      </column>
+      <column id="92" parent="7" name="qtpeca">
+        <data-type>int(11)</data-type>
+      </column>
+      <column id="93" parent="7" name="vlpeca">
+        <data-type>decimal(15,2)</data-type>
+      </column>
+      <column id="94" parent="7" name="vltota">
+        <data-type>decimal(15,2)</data-type>
+      </column>
+      <column id="95" parent="8" name="cdprop">
+        <mandatory>1</mandatory>
+        <data-type>varchar(14)</data-type>
+      </column>
+      <column id="96" parent="8" name="deprop">
+        <data-type>varchar(100)</data-type>
+      </column>
+      <column id="97" parent="8" name="nrinsc">
+        <data-type>varchar(20)</data-type>
+      </column>
+      <column id="98" parent="8" name="nrccm">
+        <data-type>varchar(20)</data-type>
+      </column>
+      <column id="99" parent="8" name="deende">
+        <data-type>varchar(100)</data-type>
+      </column>
+      <column id="100" parent="8" name="nrende">
+        <data-type>int(11)</data-type>
+      </column>
+      <column id="101" parent="8" name="decomp">
+        <data-type>varchar(50)</data-type>
+      </column>
+      <column id="102" parent="8" name="debair">
+        <data-type>varchar(50)</data-type>
+      </column>
+      <column id="103" parent="8" name="decida">
+        <data-type>varchar(100)</data-type>
+      </column>
+      <column id="104" parent="8" name="cdesta">
+        <data-type>varchar(50)</data-type>
+      </column>
+      <column id="105" parent="8" name="nrcepi">
+        <data-type>varchar(8)</data-type>
+      </column>
+      <column id="106" parent="8" name="nrtele">
+        <data-type>varchar(20)</data-type>
+      </column>
+      <column id="107" parent="8" name="nrcelu">
+        <data-type>varchar(20)</data-type>
+      </column>
+      <column id="108" parent="8" name="demail">
+        <data-type>varchar(255)</data-type>
+      </column>
+      <key id="109" parent="8" name="PRIMARY">
+        <columns>cdprop</columns>
+        <primary>1</primary>
+      </key>
+      <column id="110" parent="9" name="cdpeca">
+        <mandatory>1</mandatory>
+        <data-type>varchar(30)</data-type>
+      </column>
+      <column id="111" parent="9" name="depeca">
+        <data-type>varchar(100)</data-type>
+      </column>
+      <column id="112" parent="9" name="vlpeca">
+        <data-type>decimal(15,2)</data-type>
+      </column>
+      <column id="113" parent="9" name="qtpeca">
+        <data-type>int(11)</data-type>
+      </column>
+      <column id="114" parent="9" name="flativ">
+        <data-type>varchar(15)</data-type>
+      </column>
+      <column id="115" parent="9" name="dtcada">
+        <data-type>date</data-type>
+      </column>
+      <key id="116" parent="9" name="PRIMARY">
+        <columns>cdpeca</columns>
+        <primary>1</primary>
+      </key>
+      <column id="117" parent="10" name="cdpedi">
+        <mandatory>1</mandatory>
+        <data-type>bigint(20)</data-type>
+      </column>
+      <column id="118" parent="10" name="cdforn">
+        <data-type>varchar(100)</data-type>
+      </column>
+      <column id="119" parent="10" name="dtpedi">
+        <data-type>date</data-type>
+      </column>
+      <column id="120" parent="10" name="vlpedi">
+        <data-type>decimal(15,2)</data-type>
+      </column>
+      <column id="121" parent="10" name="vlpago">
+        <data-type>decimal(15,2)</data-type>
+      </column>
+      <column id="122" parent="10" name="dtpago">
+        <data-type>date</data-type>
+      </column>
+      <column id="123" parent="10" name="cdform">
+        <data-type>varchar(30)</data-type>
+      </column>
+      <column id="124" parent="10" name="qtform">
+        <data-type>int(11)</data-type>
+      </column>
+      <column id="125" parent="10" name="decont">
+        <data-type>varchar(100)</data-type>
+      </column>
+      <column id="126" parent="10" name="dtentr">
+        <data-type>date</data-type>
+      </column>
+      <column id="127" parent="10" name="deobse">
+        <data-type>varchar(500)</data-type>
+      </column>
+      <column id="128" parent="10" name="flativ">
+        <data-type>varchar(15)</data-type>
+      </column>
+      <column id="129" parent="10" name="dtcada">
+        <data-type>date</data-type>
+      </column>
+      <key id="130" parent="10" name="PRIMARY">
+        <columns>cdpedi</columns>
+        <primary>1</primary>
+      </key>
+      <column id="131" parent="11" name="cdpedi">
+        <data-type>bigint(20)</data-type>
+      </column>
+      <column id="132" parent="11" name="nritem">
+        <data-type>int(11)</data-type>
+      </column>
+      <column id="133" parent="11" name="cdpeca">
+        <data-type>varchar(100)</data-type>
+      </column>
+      <column id="134" parent="11" name="qtpeca">
+        <data-type>int(11)</data-type>
+      </column>
+      <column id="135" parent="11" name="vlpeca">
+        <data-type>decimal(15,2)</data-type>
+      </column>
+      <column id="136" parent="11" name="vltota">
+        <data-type>decimal(15,2)</data-type>
+      </column>
+      <column id="137" parent="12" name="cdserv">
+        <mandatory>1</mandatory>
+        <data-type>varchar(30)</data-type>
+      </column>
+      <column id="138" parent="12" name="deserv">
+        <data-type>varchar(100)</data-type>
+      </column>
+      <column id="139" parent="12" name="vlserv">
+        <data-type>decimal(15,2)</data-type>
+      </column>
+      <column id="140" parent="12" name="qtserv">
+        <data-type>int(11)</data-type>
+      </column>
+      <column id="141" parent="12" name="flativ">
+        <data-type>varchar(15)</data-type>
+      </column>
+      <column id="142" parent="12" name="dtcada">
+        <data-type>date</data-type>
+      </column>
+      <key id="143" parent="12" name="PRIMARY">
+        <columns>cdserv</columns>
+        <primary>1</primary>
+      </key>
+      <column id="144" parent="13" name="cdusua">
+        <mandatory>1</mandatory>
+        <data-type>char(14)</data-type>
+      </column>
+      <column id="145" parent="13" name="deusua">
+        <data-type>varchar(100)</data-type>
+      </column>
+      <column id="146" parent="13" name="demail">
+        <data-type>varchar(255)</data-type>
+      </column>
+      <column id="147" parent="13" name="nrtele">
+        <data-type>varchar(20)</data-type>
+      </column>
+      <column id="148" parent="13" name="cdtipo">
+        <data-type>varchar(30)</data-type>
+      </column>
+      <column id="149" parent="13" name="defoto">
+        <data-type>varchar(500)</data-type>
+      </column>
+      <column id="150" parent="13" name="desenh">
+        <data-type>varchar(500)</data-type>
+      </column>
+      <column id="151" parent="13" name="flativ">
+        <data-type>varchar(15)</data-type>
+      </column>
+      <column id="152" parent="13" name="dtcada">
+        <data-type>date</data-type>
+      </column>
+      <key id="153" parent="13" name="PRIMARY">
+        <columns>cdusua</columns>
+        <primary>1</primary>
+      </key>
+    </database-model>
+  </data-source>
+</component>

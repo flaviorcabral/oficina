@@ -1,0 +1,21 @@
+descrição scripts
+
+index.html -> Pagina de Login
+index.php -> Home sistema
+
+meusdados.php -> Atualizar dados usuario
+minhasenha.php -> Atualizar senha
+
+mensagem.php -> Pagina de mensagens
+
+cliente.php -> Lista dos clientes
+clientei.php -> Incluir cliente
+clientea.php -> Visulaizar info cliente
+clientea.php?acao=edita -> Editar info cliente
+clientea.php?acao=apaga -> Excluir cliente
+
+ordem.php -> Lista das OSs
+ordemi.php -> Incluir OS
+ordema.php?acao=ver -> Visualizar OS
+ordema.php?acao=edita -> editar OS
+ordema.php?acao=apaga -> Excluir OS
