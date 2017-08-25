@@ -38,7 +38,7 @@
 		} else {
 			// senha NÃO confere
 			$demens = "A senha não confere. Tente novamente!";
-			$detitu = "Aliança Auto Mecânica | Acesso";
+			$detitu = "Template oficina | Acesso";
 			header('Location: mensagem.php?demens='.$demens.'&detitu='.$detitu);
 		}
 
@@ -46,7 +46,7 @@
 	else {
 		// e-mail NÃO encontrado
 		$demens = "Usuário não cadastrado ou inativo!";
-		$detitu = "Aliança Auto Mecânica | Acesso";
+		$detitu = "Template oficina | Acesso";
 		header('Location: mensagem.php?demens='.$demens.'&detitu='.$detitu);
 	}
 

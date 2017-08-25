@@ -72,7 +72,6 @@
     }
 
     // reduzir o tamanho do nome do usuario
-    $deusua1=$deusua;
     $deusua = substr($deusua, 0,15);
 
     $demails="flaviorcabral@gmail.com";
@@ -197,14 +196,7 @@
                     <ul class="nav navbar-top-links navbar-left">
                         <br>
                         <li>
-                            <?php if (strlen($cdusua) == 14 ) {;?>
-                                <span><?php echo  formatar($cdusua,"cnpj")." - ";?></span>
-                            <?php } Else {?>
-                                <span><?php echo  formatar($cdusua,"cpf")." - ";?></span>
-                            <?php }?>
-                        </li>
-                        <li>
-                            <span><?php echo  $deusua1 ;?></span>
+                            <span><?php echo  $deusua; ?></span>
                         </li>
                     </ul>
                     <ul class="nav navbar-top-links navbar-right">

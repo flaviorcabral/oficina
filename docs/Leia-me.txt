@@ -1,4 +1,4 @@
-descrição scripts
+descriï¿½ï¿½o scripts
 
 index.html -> Pagina de Login
 index.php -> Home sistema
@@ -19,3 +19,11 @@ ordemi.php -> Incluir OS
 ordema.php?acao=ver -> Visualizar OS
 ordema.php?acao=edita -> editar OS
 ordema.php?acao=apaga -> Excluir OS
+
+
+Scripts utilizados:
+
+*index.php
+*home.php
+*meusdados.php
+*minhasenha.php

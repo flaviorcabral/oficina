@@ -1,5 +1,11 @@
 <?php
 
+    include_once '../../config.php';
+
+    ini_set ('display_errors', 1 );
+    error_reporting ( E_ALL | E_STRICT );
+    //error_reporting (0);
+
     // identificando dispositivo
     $iphone = strpos($_SERVER['HTTP_USER_AGENT'],"iPhone");
     $ipad = strpos($_SERVER['HTTP_USER_AGENT'],"iPad");
@@ -14,9 +20,8 @@
         $eMovel="S";
     }
 
-    // incluindo bibliotecas de apoio
-    include "banco.php";
-    include "util.php";
+    $con = new Controller();
+    $con->pagsMeusDados();
 
     //codigo do usuario
     if (isset($_COOKIE['cdusua'])) {
@@ -55,6 +60,7 @@
     }
 
     $detipo="Tipo Não Identificado";
+
     if ($cdtipo == "A") {
         $detipo="Administrador";
     }
@@ -75,8 +81,8 @@
     $deusua1=$deusua;
     $deusua = substr($deusua, 0,15);
 
-    // usuarios
-    $aUsua= ConsultarDados("usuarios", "cdusua", $cdusua);
+    // usuario
+    $usuario = $con->buscarUsuario($cdusua);
 
 ?>
 <!DOCTYPE html>
@@ -87,7 +93,7 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-    <title>Aliança Auto Mecânica&copy; | Principal </title>
+    <title>Template Oficinas | Principal </title>
 
     <link href="../../templates/css/bootstrap.min.css" rel="stylesheet">
     <link href="../../templates/font-awesome/css/font-awesome.css" rel="stylesheet">
@@ -133,21 +139,14 @@
                         <a class="navbar-minimalize minimalize-styl-2 btn btn-warning " href="#"><i class="fa fa-bars"></i> </a>
                     </div>
                     <ul class="nav navbar-top-links navbar-left">
-                        <br>
                         <li>
-                            <?php if (strlen($cdusua) == 14 ) {;?>
-                                <span><?php echo  formatar($cdusua,"cnpj")." - ";?></span>
-                            <?php } Else {?>
-                                <span><?php echo  formatar($cdusua,"cpf")." - ";?></span>
-                            <?php }?>
-                        </li>
-                        <li>
-                            <span><?php echo  $deusua1 ;?></span>
+                            <br>
+                            <span><?php echo  $cdusua . "-" .$deusua1 ;?></span>
                         </li>
                     </ul>
                     <ul class="nav navbar-top-links navbar-right">
                         <li>
-                            <span class="m-r-sm text-muted welcome-message">Benvindo ao <strong>Aliança Auto Mecânica&copy;</strong></span>
+                            <span class="m-r-sm text-muted welcome-message">Benvindo ao <strong>Template Oficinas</strong></span>
                         </li>
                         <li>
                             <a href="../../index.php">
@@ -162,13 +161,12 @@
                 <div class="col-lg-12">
                     <div class="ibox float-e-margins">
                         <div class="ibox-title">
-                            <!--h4>Meus Dados - <small>Atualização</small></h4-->
                             <button type="button" class="btn btn-warning btn-lg btn-block"><i
                                                         class="fa fa-user"></i> Meus Dados - <small>Atualização</small>
                             </button>
                         </div>
                         <div class="ibox-content">
-                            <form class="form-horizontal" method="POST" enctype="multipart/form-data" action="meusdadosg.php">
+                            <form class="form-horizontal" method="POST" enctype="multipart/form-data">
                                 <div class="row">
                                     <div class="col-lg-4 text-center">
                                         <h2><?php echo $deusua; ?></h2>
@@ -184,43 +182,37 @@
                                                 Alterar foto
                                             </label>
                                             <br>
-                                            <!--label>"<?php echo $defoto; ?>"</label--> 
-                                            <!--input id="defoto"  value="<?php echo $defoto; ?>" name="defoto" class="input-file" type="file"-->
                                             <span><small>A foto será atualizada após a gravação</small></span>
                                         </div>
                                     </div>
                                     <div class="col-lg-6">
                                         <div class="form-group">
-                                            <label class="col-md-2 control-label" for="textinput">Cpf/Cnpj</label>
+                                            <label class="col-md-2 control-label" for="textinput">Codigo</label>
                                             <div class="col-md-6 ">
-                                                <?php if (strlen($cdusua) < 12 ) {?>
-                                                    <input id="cdusua" name="cdusua" type="text" value="<?php echo formatar($cdusua,"cpf"); ?>" placeholder="" class="form-control" maxlength = "20" readonly="">
-                                                <?php } Else {?>
-                                                    <input id="cdusua" name="cdusua" type="text" value="<?php echo formatar($cdusua,"cnpj"); ?>" placeholder="" class="form-control" maxlength = "20" readonly="">
-                                                <?php }?>
+                                                    <input id="cdusua" name="cdusua" type="text" value="<?php echo $cdusua; ?>" placeholder="" class="form-control" maxlength = "20" readonly="">
                                             </div>
                                         </div>
                                         <div class="form-group">
                                             <label class="col-md-2 control-label" for="textinput">Nome</label>
                                             <div class="col-md-10">
-                                                <input id="deusua" name="deusua" value="<?php echo $aUsua[0]["deusua"]; ?>" type="text" placeholder="" class="form-control" maxlength = "100" autofocus required="">
+                                                <input id="deusua" name="deusua" value="<?php echo $usuario["deusua"]; ?>" type="text" placeholder="" class="form-control" maxlength = "100" autofocus required="">
                                             </div>
                                         </div>
                                         <div class="form-group">
                                             <label class="col-md-2 control-label" for="textinput">E-Mail</label>
                                             <div class="col-md-10">
-                                                <input id="demail" name="demail" value="<?php echo $aUsua[0]["demail"]; ?>" type="e-mail" placeholder="" class="form-control" maxlength = "255">
+                                                <input id="demail" name="demail" value="<?php echo $usuario["demail"]; ?>" type="e-mail" placeholder="" class="form-control" maxlength = "255">
                                             </div>
                                         </div>
                                         <div class="form-group">
                                             <label class="col-md-2 control-label" for="textinput">Telefone</label>
                                             <div class="col-md-10">
-                                                <input id="nrtele" name="nrtele" value="<?php echo $aUsua[0]["nrtele"]; ?>" type="text" placeholder="" class="form-control" maxlength = "20">
+                                                <input id="nrtele" name="nrtele" value="<?php echo $usuario["nrtele"]; ?>" type="text" placeholder="" class="form-control" maxlength = "20">
                                             </div>
                                         </div>
                                         <div class="form-group">
                                             <label class="col-md-2 control-label" for="textinput">Cadastro</label>
-                                            <?php $data = strtotime($aUsua[0]["dtcada"]);?>
+                                            <?php $data = strtotime($usuario["dtcada"]);?>
                                             <div class="col-md-3">
                                                 <input id="dtcada" name="dtcada" value="<?php echo date("d-m-Y", $data); ?>" type="text" placeholder="" class="form-control" maxlength = "20" readonly="">
                                             </div>
@@ -229,8 +221,8 @@
                                 </div>
                                 <div>
                                     <center>
-                                        <button class="btn btn-sm btn-primary " type="submit"><strong>Confirmar</strong></button>
-                                        <button class="btn btn-sm btn-warning " type="button" onClick="window.open('index.php','_parent')"><strong>Retornar</strong></button>
+                                        <button class="btn btn-sm btn-primary" type="submit" name="atualiza"><strong>Confirmar</strong></button>
+                                        <button class="btn btn-sm btn-warning " type="button" onClick="window.open('home.php','_parent')"><strong>Retornar</strong></button>
                                     </center>
                                 </div>
                             </form>

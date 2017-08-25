@@ -130,7 +130,6 @@ function AlterarDados($tabela, $dados, $nomes=null, $campo=null, $chave=null, $s
     return;
 }
 
-
 function IncluirDados($tabela, $dados=null, $nomes=null, $sql="") {
     include "conexao.php";
 
@@ -184,8 +183,6 @@ function IncluirDados($tabela, $dados=null, $nomes=null, $sql="") {
 
     return;
 }
-
-
 
 function GravarNovaSenha($demail,$desenh) {
     include "conexao.php";

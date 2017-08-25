@@ -3,10 +3,152 @@
 class Controller
 {
 
-    function login(){
+    function login()
+    {
 
         if(isset($_REQUEST['login'])){
 
+            $cdusua = preg_replace('/[^[:alnum:]_]/', '', $_POST["cdusua"]);
+            $desenh = md5(preg_replace('/[^[:alnum:]_]/', '', $_POST["desenh"]));
+
+            $usuario = new Usuario();
+
+            $result = $usuario->validaAcesso($cdusua);
+
+            if ($result) {
+
+                $senha = $result['desenh'];
+
+                if ($senha == $desenh) {
+                    // dados ok
+                    $cdusua=$result["cdusua"];
+                    $deusua=$result["deusua"];
+                    $cdtipo=substr($result["cdtipo"],0,1);
+                    $defoto=$result["defoto"];
+                    $demail=$result["demail"];
+
+                    setcookie("cdusua",$cdusua);
+                    setcookie("deusua",$deusua);
+                    setcookie("cdtipo",$cdtipo);
+                    setcookie("defoto",$defoto);
+                    setcookie("demail",$demail);
+
+                    //$delog = "Acesso ao Sistema"; //Implementar geração de logs
+                    //GravarLog($cdusua, $delog);
+
+                    header('Location: app/views/home.php');
+
+                } else {
+                    // senha NÃO confere
+                    $demens = "A senha não confere. Tente novamente!";
+                    $detitu = "Template oficina | Acesso";
+                    header('Location: app/views/mensagem.php?demens='.$demens.'&detitu='.$detitu);
+                }
+
+            } else {
+                // Usuario NÃO encontrado
+                $demens = "Usuário não cadastrado ou inativo!";
+                $detitu = "Template oficina | Acesso";
+                header('Location: app/views/mensagem.php?demens='.$demens.'&detitu='.$detitu);
+            }
+
+        }
+    }
+
+    function buscarUsuario($mat)
+    {
+        $user = new Usuario();
+        $result = $user->buscaUsuario($mat);
+        return $result;
+    }
+
+    function listarUsuarios()
+    {
+        $user = new Usuario();
+        $result = $user->listaUsuarios();
+        return $result;
+    }
+
+    function updateDadosUsuario()
+    {
+        $user = new Usuario();
+
+        $cdusua = $_POST["cdusua"];
+        $demail = $_POST["demail"];
+        $deusua = $_POST["deusua"];
+        $defoto = $_POST["defoto"];
+        $tel    = $_POST["nrtele"];
+
+        // tratando o upload da foto
+        $uploaddir = '../../templates/img/'.$cdusua;
+        $uploadfile = $uploaddir . basename($_FILES['defoto']['name']);
+
+        // upload do arquivo da foto
+        move_uploaded_file($_FILES['defoto']['tmp_name'], $uploadfile);
+
+        $defoto1=basename($_FILES['defoto']['name']);
+
+        if (!empty($defoto1) == true) {
+            $defoto= $uploadfile;
+        }
+
+        $result = $user->updateUsuario($cdusua,$deusua,$demail,$tel,$defoto);
+
+        if($result){
+            setcookie("deusua",$deusua);
+            setcookie("defoto",$defoto);
+            setcookie("demail",$demail);
+
+            //$delog = "Alteração de Próprios Dados (Nome/Foto/E-Mail)";
+            //GravarLog($cdusua, $delog);
+
+            //gravar log
+            //GravarIPLog($cdusua, "Alterar Meus Dados:");
+
+            $demens = "Cadastro atualizado com sucesso!";
+            $detitu = "Template Oficinas | Meus Dados";
+            $devolt = "home.php";
+            header('Location: mensagem.php?demens='.$demens.'&detitu='.$detitu.'&devolt='.$devolt);
+        }
+    }
+
+    function updateSenhaUsuario()
+    {
+        // receber as variaveis usuario (e-mail) e senha
+        $data = date('Y-m-d H:i:s');
+        $cdusua = $_POST["cdusua"];
+        $desenh = md5($_POST["desenh"]);
+        $desenh1 = md5($_POST["desenh1"]);
+
+        if (empty($desenh) == true) {
+            $demens = "É obrigatório informar a nova senha!";
+            $detitu = "Template Oficina | Alterar Senha";
+            $devolt = "minhasenha.php";
+            header('Location: mensagem.php?demens=' . $demens . '&detitu=' . $detitu . '&devolt=' . $devolt);
+        } Else {
+
+            if ($desenh !== $desenh1) {
+                $demens = "As senhas informadas estão diferentes! Favor corrigir.";
+                $detitu = "Template Oficina | Alterar Senha";
+                $devolt = "minhasenha.php";
+                header('Location: mensagem.php?demens=' . $demens . '&detitu=' . $detitu . '&devolt=' . $devolt);
+            } Else {
+
+                $user = new Usuario();
+                $result = $user->updateSenha($cdusua, $desenh);
+
+                if ($result) {
+
+                    //GravarIPLog($cdusua, "Alterar Senha");
+                    //$delog = "Alteração da Própria Senha";
+                    //GravarLog($cdusua, $delog);
+
+                    $demens = "Senha atualizada com sucesso!";
+                    $detitu = "Template Oficina | Alterar Senha";
+                    $devolt = "home.php";
+                    header('Location: mensagem.php?demens=' . $demens . '&detitu=' . $detitu . '&devolt=' . $devolt);
+                }
+            }
         }
     }
 
@@ -296,8 +438,8 @@ class Controller
 
         //require 'lib/PHPMailer/PHPMailerAutoload.php';
 
-        include("lib/PHPMailer/class.phpmailer.php");
-        include("lib/PHPMailer/class.smtp.php");
+        include("../../lib/PHPMailer/class.phpmailer.php");
+        include("../../lib/PHPMailer/class.smtp.php");
 
         $email = new PHPMailer(); // Esta é a criação do objeto
         $email->CharSet = 'UTF-8';
@@ -527,8 +669,8 @@ class Controller
 
         //require 'lib/PHPMailer/PHPMailerAutoload.php';
 
-        include("lib/PHPMailer/class.phpmailer.php");
-        include("lib/PHPMailer/class.smtp.php");
+        include("../../lib/PHPMailer/class.phpmailer.php");
+        include("../../lib/PHPMailer/class.smtp.php");
 
         //$dequem="dataagro@dataagro.com.br";
 
@@ -669,8 +811,23 @@ class Controller
     }
 
 
-    public function pagLogin(){
+    public function pagLogin()
+    {
 
+        $this->login();
 
+    }
+
+    public function pagsMeusDados()
+    {
+        if(isset($_REQUEST['atualiza']))
+        {
+            $this->updateDadosUsuario();
+        }
+
+        if(isset($_REQUEST['atualizaSenha']))
+        {
+            $this->updateSenhaUsuario();
+        }
     }
 }

@@ -225,8 +225,8 @@
                                                 <label class="col-md-2 control-label" for="textinput">Ativo?</label>
                                                 <div class="col-md-4">
                                                     <select name="flativ" id="flativ">
-                                                        <option selected= "selected">Sim</option>
-                                                        <option>Não</option>
+                                                        <option selected= "selected" value="Sim">Sim</option>
+                                                        <option value="Nao">Não</option>
                                                     </select>
                                                 </div>
                                             </div>
@@ -235,8 +235,8 @@
                                                 <label class="col-md-2 control-label" for="textinput">Tipo</label>
                                                 <div class="col-md-4">
                                                     <select name="cdtipo" id="cdtipo">
-                                                        <option selected= "selected">Administrador</option>
-                                                        <option>Funcionário</option>
+                                                        <option selected= "selected" value="Administrador">Administrador</option>
+                                                        <option value="Funcionario">Funcionário</option>
                                                     </select>
                                                 </div>
                                             </div>

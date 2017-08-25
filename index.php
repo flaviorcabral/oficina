@@ -1,10 +1,10 @@
 <?php
 
+include_once 'config.php';
+
 ini_set ('display_errors', 1 );
 error_reporting ( E_ALL | E_STRICT );
 error_reporting (0);
-
-include_once 'config.php';
 
 $con = new Controller();
 $con->pagLogin();
@@ -34,11 +34,13 @@ $con->pagLogin();
         <div>
             <h3>Bem vindo</h3>
             <div class="m-b-sm">
-                    <img alt="<< Colocar imagem logo oficina >>" class="img-square img-responsive" src="" style="width: 210px">
+                <center>
+                    <img class="img-square img-responsive" src="templates/img/logomarca.jpg" style="width: 110px; height: 100px">
+                </center>
             </div>
-            <p>Simplificando a gestão Oficinas</p>
+            <p>Gestão de oficinas</p>
             <p><strong>Informe os dados de acesso.</strong></p>
-            <form class="m-t" role="form" method="post" action="app/views/validaacesso.php">
+            <form class="m-t" role="form" method="post">
                 <div class="form-group">
                     <input id="cdusua" name = "cdusua" type="text" class="form-control" placeholder="código" required="">
                 </div>

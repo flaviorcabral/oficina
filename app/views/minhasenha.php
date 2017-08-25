@@ -1,5 +1,11 @@
 <?php
 
+    include_once '../../config.php';
+
+    ini_set ('display_errors', 1 );
+    error_reporting ( E_ALL | E_STRICT );
+    //error_reporting (0);
+
     // identificando dispositivo
     $iphone = strpos($_SERVER['HTTP_USER_AGENT'],"iPhone");
     $ipad = strpos($_SERVER['HTTP_USER_AGENT'],"iPad");
@@ -14,9 +20,8 @@
         $eMovel="S";
     }
 
-    // incluindo bibliotecas de apoio
-    include "banco.php";
-    include "util.php";
+    $con = new Controller();
+    $con->pagsMeusDados();
 
     //codigo do usuario
     if (isset($_COOKIE['cdusua'])) {
@@ -72,8 +77,7 @@
     }
 
     // reduzir o tamanho do nome do usuario
-    $deusua1=$deusua;
-    $deusua = substr($deusua, 0,15);
+    $deusua1 = substr($deusua, 0,15);
 
 ?>
 <!DOCTYPE html>
@@ -84,7 +88,7 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-    <title>Aliança Auto Mecânica&copy; | Principal </title>
+    <title>Template Oficina | Principal </title>
 
     <link href="../../templates/css/bootstrap.min.css" rel="stylesheet">
     <link href="../../templates/font-awesome/css/font-awesome.css" rel="stylesheet">
@@ -104,7 +108,7 @@
                                 <img alt="foto" width="80" height="80" class="img-circle" src="<?php echo $defoto; ?>" />
                                  </span>
                             <a data-toggle="dropdown" class="dropdown-toggle" href="#">
-                                <span class="clear"> <span class="block m-t-xs"> <strong class="font-bold"><?php echo $deusua; ?></strong>
+                                <span class="clear"> <span class="block m-t-xs"> <strong class="font-bold"><?php echo $deusua1; ?></strong>
                                  </span> <span class="text-muted text-xs block"><?php echo $detipo; ?><b class="caret"></b></span> </span> </a>
                             <ul class="dropdown-menu animated fadeInRight m-t-xs">
                                 <li><a href="meusdados.php">Atualizar Meus Dados</a></li>
@@ -131,19 +135,12 @@
                 <ul class="nav navbar-top-links navbar-left">
                     <br>
                     <li>
-                        <?php if (strlen($cdusua) == 14 ) {;?>
-                            <span><?php echo  formatar($cdusua,"cnpj")." - ";?></span>
-                        <?php } Else {?>
-                            <span><?php echo  formatar($cdusua,"cpf")." - ";?></span>
-                        <?php }?>
-                    </li>
-                    <li>
                         <span><?php echo  $deusua1 ;?></span>
                     </li>
                 </ul>
                 <ul class="nav navbar-top-links navbar-right">
                     <li>
-                        <span class="m-r-sm text-muted welcome-message">Benvindo a <strong>Aliança Auto Mecânica &copy;</strong></span>
+                        <span class="m-r-sm text-muted welcome-message">Benvindo a <strong>Template Oficina</strong></span>
                     </li>
                     <li>
                         <a href="../../index.php">
@@ -163,18 +160,11 @@
                             </button>
                         </div>
                         <div class="ibox-content">
-                            <form class="form-horizontal" method="POST" enctype="multipart/form-data" action="minhasenhag.php">
-
-                                <!--input type=hidden name="cdusua" value="<?php echo $cdusua; ?>"-->
-
+                            <form class="form-horizontal" method="POST" enctype="multipart/form-data">
                                   <div class="form-group">
-                                    <label class="col-md-2 control-label" for="textinput">Cpf/Cnpj</label>
+                                    <label class="col-md-2 control-label" for="textinput">Código</label>
                                     <div class="col-md-3">
-                                        <?php if (strlen($cdusua) < 12 ) {?>
-                                            <input id="cdusua" name="cdusua" type="text" value="<?php echo formatar($cdusua,"cpf"); ?>" placeholder="" class="form-control" maxlength = "20" readonly="">
-                                        <?php } Else {?>
-                                            <input id="cdusua" name="cdusua" type="text" value="<?php echo formatar($cdusua,"cnpj"); ?>" placeholder="" class="form-control" maxlength = "20" readonly="">
-                                        <?php }?>
+                                            <input id="cdusua" name="cdusua" type="text" value="<?php echo $cdusua; ?>" placeholder="" class="form-control" maxlength = "20" readonly="">
                                     </div>
                                   </div>
 
@@ -203,9 +193,8 @@
 
                                   <div>
                                     <center>
-                                        <!--button class="btn btn-sm btn-warning " type="button" onclick="window.open('index1c.php','_parent')"><strong>Cancelar</strong></button-->
-                                        <button class="btn btn-sm btn-primary " type="submit"><strong>Confirmar</strong></button>
-                                        <button class="btn btn-sm btn-warning " type="button" onClick="window.open('index.php','_parent')"><strong>Retornar</strong></button>
+                                        <button class="btn btn-sm btn-primary " type="submit" name="atualizaSenha"><strong>Confirmar</strong></button>
+                                        <button class="btn btn-sm btn-warning " type="button" onClick="window.open('home.php','_parent')"><strong>Retornar</strong></button>
                                     </center>
                                   </div>
                             </form>
