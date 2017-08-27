@@ -2,7 +2,7 @@
 
     $BDSERVIDOR = '127.0.0.1';
     $BDUSUARIO = 'root';
-    $BDSENHA = 'un1cr3d1';
+    $BDSENHA = 'j6t2h';
     $BDBANCO = 'oficina';
 
     $conexao = mysqli_connect($BDSERVIDOR, $BDUSUARIO, $BDSENHA, $BDBANCO);

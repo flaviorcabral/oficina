@@ -225,9 +225,9 @@
 
                                                 ?> 
 
-                                                <?php $ver = "ordema.php?acao=ver&chave=".$coluna1; ?>
-                                                <?php $edita = "ordema.php?acao=edita&chave=".$coluna1; ?>
-                                                <?php $apaga = "ordema.php?acao=apaga&chave=".$coluna1; ?>
+                                                <?php $ver = "ordemacoes.php?acao=ver&chave=".$coluna1; ?>
+                                                <?php $edita = "ordemacoes.php?acao=edita&chave=".$coluna1; ?>
+                                                <?php $apaga = "ordemacoes.php?acao=apaga&chave=".$coluna1; ?>
                                                 <?php $imprime = "ordemp.php?acao=imprime&chave=".$coluna1; ?>
 
                                                 <td><?php print $coluna1; ?></td>

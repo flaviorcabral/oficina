@@ -1,5 +1,11 @@
 <?php
 
+    include_once '../../config.php';
+
+    ini_set ('display_errors', 1 );
+    error_reporting ( E_ALL | E_STRICT );
+    //error_reporting (0);
+
     // identificando dispositivo
     $iphone = strpos($_SERVER['HTTP_USER_AGENT'],"iPhone");
     $ipad = strpos($_SERVER['HTTP_USER_AGENT'],"iPad");
@@ -14,9 +20,8 @@
         $eMovel="S";
     }
 
-    // incluindo bibliotecas de apoio
-    include "banco.php";
-    include "util.php";
+    $con = new Controller();
+    $ordens = $con->listarOrdensServico();
 
     //codigo do usuario
     if (isset($_COOKIE['cdusua'])) {
@@ -74,8 +79,6 @@
     // reduzir o tamanho do nome do usuario
     $deusua1=$deusua;
     $deusua = substr($deusua, 0,15);
-
-    $aOrde= ConsultarDados("", "", "","select * from ordem order by cdorde");
 ?>
 <!DOCTYPE html>
 <html>
@@ -85,7 +88,7 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-    <title>Demonstração&copy; | Principal </title>
+    <title>Template Oficina | Principal </title>
 
     <link href="../../templates/css/bootstrap.min.css" rel="stylesheet">
     <link href="../../templates/font-awesome/css/font-awesome.css" rel="stylesheet">
@@ -133,19 +136,12 @@
                     <ul class="nav navbar-top-links navbar-left">
                         <br>
                         <li>
-                            <?php if (strlen($cdusua) == 14 ) {;?>
-                                <span><?php echo  formatar($cdusua,"cnpj")." - ";?></span>
-                            <?php } Else {?>
-                                <span><?php echo  formatar($cdusua,"cpf")." - ";?></span>
-                            <?php }?>
-                        </li>
-                        <li>
                             <span><?php echo  $deusua1 ;?></span>
                         </li>
                     </ul>
                     <ul class="nav navbar-top-links navbar-right">
                         <li>
-                            <span class="m-r-sm text-muted welcome-message">Benvindo ao <strong>Demonstração Auto Mecânica&copy;</strong></span>
+                            <span class="m-r-sm text-muted welcome-message">Benvindo ao <strong>Template oficina</strong></span>
                         </li>
                         <li>
                             <a href="../../index.php">
@@ -166,7 +162,7 @@
 
                         <div class="ibox-content">
                             <div class="pull-left">
-                                <a onclick="#" href="ordemi.php" class="btn btn-warning ">Incluir</a>
+                                <a onclick="#" href="ordemacoes.php?acao=nova" class="btn btn-warning ">Incluir</a>
                             </div>
                             <br>
                             <br>
@@ -184,20 +180,18 @@
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        <?php for ($f =0; $f <= (count($aOrde)-1); $f++) { ?>
+                                        <?php foreach($ordens as $ordem): ?>
                                             <tr class="gradeX">
-                                                <?php $datap = strtotime($aOrde[$f]["dtorde"]) ;?>
-                                                <!--?php $datae = strtotime($aOrde[$f]["dtentr"]) ;?-->
-
-                                                <?php $coluna1 = trim($aOrde[$f]["cdorde"]); ?>
-                                                <?php $coluna2 = trim($aOrde[$f]["cdclie"]); ?>
-                                                <?php $coluna3 = number_format($aOrde[$f]["vlorde"],2,',','.'); ?>
-                                                <?php $coluna4 = trim($aOrde[$f]["veplac"]); ?>
+                                                <?php $datap = strtotime($ordem["dtorde"]) ;?>
+                                                <?php $coluna1 = trim($ordem["cdorde"]); ?>
+                                                <?php $coluna2 = trim($ordem["cdclie"]); ?>
+                                                <?php $coluna3 = number_format($ordem["vlorde"],2,',','.'); ?>
+                                                <?php $coluna4 = trim($ordem["veplac"]); ?>
                                                 <?php $coluna5 = date("d/m/Y",$datap); ?>
                                                
-                                                <?php $ver = "ordema.php?acao=ver&chave=".$coluna1; ?>
-                                                <?php $edita = "ordema.php?acao=edita&chave=".$coluna1; ?>
-                                                <?php $apaga = "ordema.php?acao=apaga&chave=".$coluna1; ?>
+                                                <?php $ver = "ordemacoes.php?acao=ver&chave=".$coluna1; ?>
+                                                <?php $edita = "ordemacoes.php?acao=edita&chave=".$coluna1; ?>
+                                                <?php $apaga = "ordemacoes.php?acao=apaga&chave=".$coluna1; ?>
                                                 <?php $imprime = "ordemp.php?acao=imprime&chave=".$coluna1; ?>
 
                                                 <td><?php print $coluna1; ?></td>
@@ -214,7 +208,7 @@
                                                     </div>
                                                 </td>
                                             </tr>
-                                        <?php }; ?>    
+                                        <?php endforeach; ?>
                                     </tbody>
                                     <tfoot>
                                         <tr>

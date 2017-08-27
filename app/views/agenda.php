@@ -191,8 +191,8 @@
                                                 <?php $coluna5 = trim($aOrde[$f]["cdorde"]); ?>
                                                
                                                 <?php $ver = "agendaa.php?acao=ver&chave=".$coluna5; ?>
-                                                <?php $edita = "ordema.php?acao=edita&chave=".$coluna5; ?>
-                                                <?php $apaga = "ordema.php?acao=apaga&chave=".$coluna5; ?>
+                                                <?php $edita = "ordemacoes.php?acao=edita&chave=".$coluna5; ?>
+                                                <?php $apaga = "ordemacoes.php?acao=apaga&chave=".$coluna5; ?>
                                                 <?php $imprime = "ordemp.php?acao=imprime&chave=".$coluna5; ?>
 
                                                 <td><?php print $coluna1; ?></td>

@@ -11,9 +11,11 @@ include 'config.php';
 
 $con = new Controller();
 $usu = new Usuario();
+$result = $con->buscarOrdemCindice('7');
 
-$senha = md5(preg_replace('/[^[:alpha:]_]/', '', '123'));
-var_dump($senha);
-$result = $usu->validaAcesso('364', $senha);
 //$result = $usu->listaUsuarios();
-var_dump($result);
+echo "<pre>";
+print_r($result);
+echo "<pre/>";
+
+echo $result[0];

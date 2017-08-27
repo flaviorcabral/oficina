@@ -17,9 +17,9 @@
 		$dtcada = date('Y-m-d');
 		$Flag = true;
 
-		$aCditem=$_POST["cditem"];
-		$aQtitem=$_POST["qtitem"];
-		$aVlitem=$_POST["vlitem"];
+		$codItem=$_POST["cditem"];
+		$qtdItem=$_POST["qtitem"];
+		$vlrItem=$_POST["vlitem"];
 
 		$cdclie = $_POST["cdclie"];
 		$dtorde = $_POST["dtorde"];
@@ -34,8 +34,8 @@
 
 		$qtitem = 0;
 		for ($f =1; $f <= 20; $f++) {
-			$primeiro = $aCditem[$f];
-			$aPrimeiro = explode("|", $aCditem[$f]);
+			$primeiro = $codItem[$f];
+			$aPrimeiro = explode("|", $codItem[$f]);
 			if ($aPrimeiro[0] !== 'X'){
 				$qtitem++;
 			}
@@ -43,21 +43,21 @@
 
 		if ( $qtitem <= 0) {
 			$demens = "É preciso informar os itens da OS!";
-			$detitu = "Demonstração Auto Mecânica&copy; | Cadastro de OS";
+			$detitu = "Template Oficina | Cadastro de OS";
 			header('Location: mensagem.php?demens='.$demens.'&detitu='.$detitu);
 			$Flag=false;
 		}
 
 		if ( empty($cdclie) == true) {
 			$demens = "É preciso informar o Cliente!";
-			$detitu = "Demonstração Auto Mecânica&copy; | Cadastro de OS";
+			$detitu = "Template Oficina | Cadastro de OS";
 			header('Location: mensagem.php?demens='.$demens.'&detitu='.$detitu);
 			$Flag=false;
 		}
 
 		if ( empty(strtotime($dtorde)) == true) {
 			$demens = "É preciso informar a data da OS!";
-			$detitu = "Demonstração Auto Mecânica&copy; | Cadastro de OS";
+			$detitu = "Template Oficina | Cadastro de OS";
 			header('Location: mensagem.php?demens='.$demens.'&detitu='.$detitu);
 			$Flag=false;
 		}
@@ -109,19 +109,14 @@
 
 			IncluirDados("ordem", $aDados, $aNomes);
 
-			//$aTrab= ConsultarDados("", "", "","select max(cdorde) cdorde from ordem where cdclie = '{$cdclie}' and dtorde = '{$dtorde}'");
-			//$cdorde = $aTrab[0]["cdorde"];
 			$nritem=1;
 			for ($f =1; $f <= 20; $f++) {
-				$primeiro = $aCditem[$f];
-				$aPrimeiro = explode("|", $aCditem[$f]);
+				$primeiro = $codItem[$f];
+				$aPrimeiro = explode("|", $codItem[$f]);
 				if ($aPrimeiro[0] !== 'X'){
 					$cdpeca = $aPrimeiro[2];
-					$qtpeca = $aQtitem[$f];
-					$vlpeca = $aVlitem[$f];
-
-					//$vlpeca = str_replace(".","",$vlpeca);
-					//$vlpeca = str_replace(",",".",$vlpeca);
+					$qtpeca = $qtdItem[$f];
+					$vlpeca = $vlrItem[$f];
 
 					$vltota = $qtpeca*$vlpeca;
 
@@ -152,7 +147,6 @@
 
 			for ($f =1; $f <= $qtform; $f++) {
 				$vlcont = $aTrab[0]["vlorde"]/$qtform;
-				//$vlcont = number_format($vlcont,2,',','.');
 
 			    $dtcont=strtotime($dtorde . "+ {$f} months");
 			    $dtcont=date("Y-m-d", $dtcont);
@@ -181,7 +175,7 @@
 			}
 
 			$demens = "Alteração efetuada com sucesso!";
-			$detitu = "Demonstração Auto Mecânica&copy; | Cadastro de OS";
+			$detitu = "Template Oficinas | Cadastro de OS";
 			$devolt = "ordem.php";
 			header('Location: mensagem.php?demens='.$demens.'&detitu='.$detitu.'&devolt='.$devolt);
 		}
@@ -200,7 +194,7 @@
 	}
 
 	if ($flag2 == false) {
-		$detitu = "Demonstração Auto Mecânica&copy; | Cadastro de OS";
+		$detitu = "Template Oficina; | Cadastro de OS";
 		$devolt = "ordem.php";
 		header('Location: mensagem.php?demens='.$demens.'&detitu='.$detitu.'&devolt='.$devolt);
 	}

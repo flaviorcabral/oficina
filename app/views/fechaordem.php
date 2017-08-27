@@ -197,9 +197,9 @@
                                                 <?php $coluna5 = trim($aOrde[$f]["cdsitu"]); ?>
                                                 <?php $coluna6 = date("d/m/Y",$datap); ?>
                                                
-                                                <?php $ver = "ordema.php?acao=ver&chave=".$coluna1; ?>
+                                                <?php $ver = "ordemacoes.php?acao=ver&chave=".$coluna1; ?>
                                                 <?php $edita = "fechaordema.php?acao=edita&chave=".$coluna1; ?>
-                                                <?php $apaga = "ordema.php?acao=apaga&chave=".$coluna1; ?>
+                                                <?php $apaga = "ordemacoes.php?acao=apaga&chave=".$coluna1; ?>
                                                 <?php $imprime = "ordemp.php?acao=imprime&chave=".$coluna1; ?>
 
                                                 <td><?php print $coluna1; ?></td>

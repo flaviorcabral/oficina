@@ -27,3 +27,6 @@ Scripts utilizados:
 *home.php
 *meusdados.php
 *minhasenha.php
+*ordem.php
+*ordemacoes.php
+*ordemp.php
