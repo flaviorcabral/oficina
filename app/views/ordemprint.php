@@ -1,5 +1,11 @@
 <?php
 
+    include_once '../../config.php';
+
+    ini_set ('display_errors', 1 );
+    error_reporting ( E_ALL | E_STRICT );
+    //error_reporting (0);
+
     // identificando dispositivo
     $iphone = strpos($_SERVER['HTTP_USER_AGENT'],"iPhone");
     $ipad = strpos($_SERVER['HTTP_USER_AGENT'],"iPad");
@@ -14,83 +20,17 @@
         $eMovel="S";
     }
 
-    // incluindo bibliotecas de apoio
-    include "banco.php";
-    include "util.php";
+    $con = new Controller();
 
-    $acao = $_GET["acao"];
     $chave = trim($_GET["chave"]);
 
-    switch ($acao) {
-    case 'ver':
-        $titulo = "Consulta";
-        break;
-    case 'edita':
-        $titulo = "Alteração";
-        break;
-    case 'apaga':
-        $titulo = "Exclusão";
-        break;
-    case 'imprime':
-        $titulo = "Impressão";
-        break;
-    default:
-        header('Location: fichacadastral.php');
-    }
+    $aItem = $con->buscarOrdemTbli($chave);
 
-    //codigo do usuario
-    if (isset($_COOKIE['cdusua'])) {
-        $cdusua = $_COOKIE['cdusua'];
-    }
-
-    // nome do usuario
-    if (isset($_COOKIE['deusua'])) {
-        $deusua = $_COOKIE['deusua'];
-    }
-
-    //localização da foto
-    if (isset($_COOKIE['defoto'])) {
-        $defoto = $_COOKIE['defoto'];
-    }
-
-    //tipo de usuario
-    if (isset($_COOKIE['cdtipo'])) {
-        $cdtipo = $_COOKIE['cdtipo'];
-    }
-
-    //email de usuario
-    if (isset($_COOKIE['demail'])) {
-        $demail = $_COOKIE['demail'];
-    }
-
-    $detipo="Tipo Não Identificado";
-    if ($cdtipo == "A") {
-        $detipo="Administrador";
-    }
-    if ($cdtipo == "F") {
-        $detipo="Funcionário";
-    }
-    if ($cdtipo == "O") {
-        $detipo="Oficina";
-    }
-    if ($cdtipo == "M") {
-        $detipo="Mecânico";
-    }
-    if ($cdtipo == "C") {
-        $detipo="Cliente";
-    }
-
-    // reduzir o tamanho do nome do usuario
-    $deusua1=$deusua;
-    $deusua = substr($deusua, 0,15);
-
-    $aItem = ConsultarDados("ordemi", "cdorde", $chave);
-
-    $aOrde = ConsultarDados("ordem", "cdorde", $chave);
+    $aOrde = $con->buscarOrdemCindice($chave);
     $pos = strpos($aOrde[0]["cdclie"], "-");
     $cdclie = substr($aOrde[0]["cdclie"], 0, $pos-1);
 
-    $aClie = ConsultarDados("clientes", "cdclie", $cdclie);
+    $aClie = $con->buscarCliente($cdclie);
     $declie = $aClie[0]["declie"];
 
     $dtorde = $aOrde[0]["dtorde"];
@@ -113,19 +53,19 @@
         $dtpago="  ABERTA  ";
     }
 
-    $aPara = ConsultarDados("", "", "", "select * from parametros");
+    $aPara = $con->infoEmpresa();
     $cdprop=$aPara[0]["cdprop"];
 
     if (strlen($cdclie) > 11 ) {
-        $cdclie=formata($cdclie,"cnpj");
+        $cdclie=$con->formata($cdclie,"cnpj");
     } Else {
-        $cdclie=formata($cdclie,"cpf");
+        $cdclie=$con->formata($cdclie,"cpf");
     }
 
     if (strlen($cdprop) > 11 ) {
-        $cdprop=formata($cdprop,"cnpj");
+        $cdprop=$con->formata($cdprop,"cnpj");
     } Else {
-        $cdprop=formata($cdprop,"cpf");
+        $cdprop=$con->formata($cdprop,"cpf");
     }
 
 ?>
@@ -148,7 +88,7 @@
 </head>
 
 <body class="white-bg">
-    <center><img src="templates/img/logoalianca.png" alt="aliança logo" width="160px" heigth="160px"></center>
+    <center><img src="../../templates/img/logomarca.jpg" alt="aliança logo" width="160px" heigth="160px"></center>
     <center><strong><?php echo $aPara[0]["deprop"]; ?></strong></center>
     <center><h2 class="text-navy"><?php echo 'Ordem de Serviço No. '.$aOrde[0]["cdorde"]; ?></h2></center>
 

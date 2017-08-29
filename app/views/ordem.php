@@ -176,7 +176,7 @@
                                             <th>Valor</th>
                                             <th>Placa do Veículo</th>
                                             <th>Data de Abertura</th>
-                                            <th class="text-right" data-sort-ignore="true">Ação</th>
+                                            <th class="text-center" data-sort-ignore="true">Ação</th>
                                         </tr>
                                     </thead>
                                     <tbody>
@@ -192,14 +192,14 @@
                                                 <?php $ver = "ordemacoes.php?acao=ver&chave=".$coluna1; ?>
                                                 <?php $edita = "ordemacoes.php?acao=edita&chave=".$coluna1; ?>
                                                 <?php $apaga = "ordemacoes.php?acao=apaga&chave=".$coluna1; ?>
-                                                <?php $imprime = "ordemp.php?acao=imprime&chave=".$coluna1; ?>
+                                                <?php $imprime = "ordemprint.php?acao=imprime&chave=".$coluna1; ?>
 
                                                 <td><?php print $coluna1; ?></td>
                                                 <td><?php print $coluna2; ?></td>
                                                 <td><?php print $coluna3; ?></td>
                                                 <td><?php print $coluna4; ?></td>
                                                 <td><?php print $coluna5; ?></td>
-                                                <td class="text-right">
+                                                <td class="text-center">
                                                     <div class="btn-group">
                                                         <button class="fa fa-eye btn-white btn btn-xs" name="ver" type="button" onclick="window.open('<?php echo $ver;?>','_parent')"></button>
                                                         <button class="fa fa-edit btn-white btn btn-xs" name="edita" type="button" onclick="window.open('<?php echo $edita;?>','_parent')"></button>
@@ -217,7 +217,7 @@
                                             <th>Valor</th>
                                             <th>Placa do Veículo</th>
                                             <th>Data de Abertura</th>
-                                            <th class="text-right" data-sort-ignore="true">Ação</th>
+                                            <th class="text-center" data-sort-ignore="true">Ação</th>
                                         </tr>
                                     </tfoot>
                                 </table>
@@ -328,8 +328,8 @@
                 buttons: [
                     { extend: 'copy'},
                     {extend: 'csv'},
-                    {extend: 'excel', title: 'ExampleFile'},
-                    {extend: 'pdf', title: 'ExampleFile'},
+                    {extend: 'excel', title: 'Template Oficina'},
+                    {extend: 'pdf', title: 'Template Oficina'},
 
                     {extend: 'print',
                      customize: function (win){

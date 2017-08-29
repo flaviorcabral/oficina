@@ -11,11 +11,11 @@ include 'config.php';
 
 $con = new Controller();
 $usu = new Usuario();
-$result = $con->buscarOrdemCindice('7');
+$result = $con->buscarCliente("123");
 
 //$result = $usu->listaUsuarios();
 echo "<pre>";
-print_r($result);
+var_dump($result);
 echo "<pre/>";
 
-echo $result[0];
+//echo $result[0];

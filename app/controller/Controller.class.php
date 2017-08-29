@@ -4,6 +4,7 @@ class Controller
 {
     public $ordem = null;
     public $itens = null;
+    public $cliente = null;
     public $clientes = null;
     public $pecas = null;
     public $servicos = null;
@@ -160,6 +161,14 @@ class Controller
                 }
             }
         }
+    }
+
+    //Traz informações da empresa
+    function infoEmpresa()
+    {
+        $param = new Parametros();
+        $result = $param->informaçõesEmp();
+        return $result;
     }
 
     //Inserir dados tbl ordem
@@ -328,6 +337,112 @@ class Controller
         return $result;
     }
 
+    //Salvar novo cliente
+    function salvarCliente($dados, $nomes)
+    {
+
+        $sql="insert into "."clientes"." (";
+        $campos="";
+        $total=count($nomes)-1;
+
+        for ($i=0 ; $i < count($nomes) ; $i++ ) {
+
+            $campos=$campos.$nomes[$i];
+
+            if ($i < $total) {
+                $campos=$campos.", ";
+            }
+
+        }
+
+        $sql=$sql.$campos.") values (";
+
+        $campos="";
+
+        for ($x =0 ; $x < count($dados) ; $x++ ) {
+
+            $campo="'".$dados[$x]."'";
+
+            if ($x < $total) {
+                $campos=$campos.$campo.", ";
+            } Else {
+                $campos=$campos.$campo.")";
+            }
+        }
+
+
+        $sql=$sql.$campos;
+
+        $cliente = new Cliente();
+
+        $result = $cliente->insertCliente($sql);
+
+        /*$cdusua="99999999999";
+        $chave=$dados[0];
+        $delog = "Inclusão dos dados da tabela ["."{$tabela}"."] para a chave ["."{$chave}"."]";
+        if (isset($_COOKIE['cdusua'])) {
+            $cdusua = $_COOKIE['cdusua'];
+        }
+
+        if ($tabela !== "log") {
+            GravarLog($cdusua, $delog);
+        }*/
+
+        return $result;
+    }
+
+    //Excluir cliente
+    function excluirCliente($cod)
+    {
+        $cliente = new Cliente();
+        $result = $cliente->deleteCliente($cod);
+        return $result;
+    }
+    //BUscar cliente por codigo
+    function buscarCliente($codigo)
+    {
+        $cliente = new Cliente();
+        $result = $cliente->buscarCliente($codigo);
+        return $result;
+    }
+
+    //Atualizar info cliente
+    function updateCliente($nomes, $dados, $codigo)
+    {
+        $campos="";
+        $total=count($dados)-1;
+
+        $sql="update "."clientes"." set ";
+
+        for ($i =0 ; $i < count($dados) ; $i++ ) {
+
+            $campos=$campos.$nomes[$i]." = '".$dados[$i]."'";
+
+            if ($i < $total) {
+                $campos=$campos.", ";
+            }
+        }
+
+        $sql=$sql.$campos." where cdclie = "."'{$codigo}'";
+
+        $cliente = new Cliente();
+
+        if($cliente->updateCliente($sql)) {
+
+            /*$cdusua = "99999999999";
+            $delog = "Alteração dos dados da tabela clientes  para a chave [" . "{$codigo}" . "]";
+            if (isset($_COOKIE['cdusua'])) {
+                $cdusua = $_COOKIE['cdusua'];
+            }
+
+            if ($tabela !== "log") {
+                GravarLog($cdusua, $delog);
+            }*/
+
+            return true;
+        }
+    }
+
     //Lista todos os clientes cadastrados no sistema
     function listarClientes()
     {
@@ -349,6 +464,14 @@ class Controller
     {
         $pecas = new Peca();
         $result = $pecas->listarPecas();
+        return $result;
+    }
+
+    //Lista estados brasileiros
+    function listarEstadosBra()
+    {
+        $est = new Estados();
+        $result = $est->listarEstados();
         return $result;
     }
 
@@ -1351,22 +1474,22 @@ class Controller
             }
 
             if ( $qtitem <= 0) {
-                $demens = "É preciso informar os itens do fornecedores!";
-                $detitu = "Demonstração Auto Mecânica&copy; | Cadastro de fornecedoress";
+                $demens = "É preciso informar os itens da O.S.!";
+                $detitu = "Template Oficina | Lançamendo de Ordem de serviço";
                 header('Location: mensagem.php?demens='.$demens.'&detitu='.$detitu);
                 $Flag=false;
             }
 
             if ( empty($cdclie) == true) {
-                $demens = "É preciso informar o fornecedor!";
-                $detitu = "Demonstração Auto Mecânica&copy; | Cadastro de fornecedoress";
+                $demens = "É preciso informar o cliente!";
+                $detitu = "Template Oficina | Lançamendo de Ordem de serviço";
                 header('Location: mensagem.php?demens='.$demens.'&detitu='.$detitu);
                 $Flag=false;
             }
 
             if ( empty(strtotime($dtorde)) == true) {
-                $demens = "É preciso informar a data do fornecedores!";
-                $detitu = "Demonstração Auto Mecânica&copy; | Cadastro de fornecedoress";
+                $demens = "É preciso informar a data de abertura O.S.!";
+                $detitu = "Template Oficina | Lançamendo de Ordem de serviço";
                 header('Location: mensagem.php?demens='.$demens.'&detitu='.$detitu);
                 $Flag=false;
             }
@@ -1419,7 +1542,7 @@ class Controller
                 //IncluirDados("ordem", $aDados, $aNomes);
 
                 $result = $this->buscarMaiorOrdemPorCliente($cdclie, $dtorde);
-                //$aTrab= ConsultarDados("", "", "","select max(cdorde) cdorde from ordem where cdclie = '{$cdclie}' and dtorde = '{$dtorde}'");
+                //$cliente= ConsultarDados("", "", "","select max(cdorde) cdorde from ordem where cdclie = '{$cdclie}' and dtorde = '{$dtorde}'");
                 $cdorde = $result[0]["cdorde"];
                 $nritem=1;
                 for ($f =1; $f <= 20; $f++) {
@@ -1495,5 +1618,226 @@ class Controller
             }
         }
 
+    }
+
+    public function pagCliente()
+    {
+        $data = date('Y-m-d');
+        $acao = $_REQUEST['acao'];
+
+        $flag = true;
+        $flag2 = false;
+
+        if ($flag == true) {
+
+            if ($acao == 'ver' or $acao == 'edita' or $acao == 'apaga') {
+                $chave = $_REQUEST['chave'];
+                $this->cliente = $this->buscarCliente($chave);
+            }
+
+            if (isset($_REQUEST['editar']))
+            {
+                $cdclie = $_POST["cdclie"];
+
+                if (strlen($cdclie) < 12) {
+                    $cdclie = $this->RetirarMascara($cdclie, "cpf");
+                    if ($this->validaCPF($cdclie) == false) {
+                        $demens = "Cpf inválido!";
+                        $detitu = "Template Oficina | Cadastro de Clientes";
+                        header('Location: mensagem.php?demens=' . $demens . '&detitu=' . $detitu);
+                        $flag = false;
+                    }
+                } Else {
+                    $cdclie = $this->RetirarMascara($cdclie, "cnpj");
+                    if ($this->validaCNPJ($cdclie) == false) {
+                        $demens = "Cnpj inválido!";
+                        $detitu = "Template Oficina | Cadastro de Clientes";
+                        header('Location: mensagem.php?demens=' . $demens . '&detitu=' . $detitu);
+                        $flag = false;
+                    }
+                }
+
+                if ($flag2 == true) {
+                } Else {
+
+                    //campos da tabela
+                    $aNomes = array();
+
+                    $aNomes[]= "cdclie";
+                    $aNomes[] = "declie";
+                    $aNomes[] = "cdtipo";
+                    $aNomes[] = "nrinsc";
+                    $aNomes[] = "nrccm";
+                    $aNomes[] = "nrrg";
+                    $aNomes[] = "deende";
+                    $aNomes[] = "nrende";
+                    $aNomes[] = "decomp";
+                    $aNomes[] = "debair";
+                    $aNomes[] = "decida";
+                    $aNomes[] = "cdesta";
+                    $aNomes[] = "nrcepi";
+                    $aNomes[] = "nrtele";
+                    $aNomes[] = "nrcelu";
+                    $aNomes[] = "demail";
+                    $aNomes[] = "deobse";
+                    $aNomes[] = "flativ";
+                    $aNomes[] = "dtcada";
+
+                    //dados da tabela
+                    $aDados = array();
+                    $aDados[]= $_POST["cdclie"];
+                    $aDados[] = $_POST["declie"];
+                    $aDados[] = $_POST["cdtipo"];
+                    $aDados[] = $_POST["nrinsc"];
+                    $aDados[] = $_POST["nrccm"];
+                    $aDados[] = $_POST["nrrg"];
+                    $aDados[] = $_POST["deende"];
+                    $aDados[] = $_POST["nrende"];
+                    $aDados[] = $_POST["decomp"];
+                    $aDados[] = $_POST["debair"];
+                    $aDados[] = $_POST["decida"];
+                    $aDados[] = $_POST["cdesta"];
+                    $aDados[] = $_POST["nrcepi"];
+                    $aDados[] = $_POST["nrtele"];
+                    $aDados[] = $_POST["nrcelu"];
+                    $aDados[] = $_POST["demail"];
+                    $aDados[] = $_POST["deobse"];
+                    $aDados[] = "S";
+                    $aDados[] = $data;
+
+                    $result = $this->updateCliente($aNomes, $aDados, $chave);
+                    //AlterarDados("clientes", $aDados, $aNomes, "cdclie", $cdclie);
+                }
+
+                if($result){
+                    //gravar log
+                    //GravarIPLog($cdusua, "Alterar Meus Dados:");
+
+                    if ($flag2 == false) {
+                        $demens = "Atualização efetuada com sucesso!";
+                        $detitu = "Template Oficina | Cadastro de Clientes";
+                        $devolt = "cliente.php";
+                        header('Location: mensagem.php?demens=' . $demens . '&detitu=' . $detitu . '&devolt=' . $devolt);
+                    }
+                }
+
+            }
+
+            if (isset($_REQUEST['apagar'])) {
+
+                $cdclie = $_POST["cdclie"];
+
+                $result = $this->excluirCliente($cdclie);
+                //ExcluirDados("clientes", "cdclie", $cdclie);
+
+                if ($flag2 == false and $result == true) {
+
+                    //gravar log
+                    //GravarIPLog($cdusua, "Alterar Meus Dados:");
+
+                    $demens = "Exclusão efetuada com sucesso!";
+                    $detitu = "Template Oficina | Cadastro de Clientes";
+                    $devolt = "cliente.php";
+                    header('Location: mensagem.php?demens=' . $demens . '&detitu=' . $detitu . '&devolt=' . $devolt);
+                }
+
+            }
+
+            if (isset($_REQUEST['salvar'])) {
+
+                $cdclie = $_POST["cdclie"];
+
+                $Flag = true;
+
+                if (strlen($cdclie) < 12) {
+                    $cdclie = $this->RetirarMascara($cdclie, "cpf");
+                    if ($this->validaCPF($cdclie) == false) {
+                        $demens = "Cpf inválido!";
+                        $detitu = "Template Oficina | Cadastro de Clientes";
+                        header('Location: mensagem.php?demens=' . $demens . '&detitu=' . $detitu);
+                        $Flag = false;
+                    }
+                } Else {
+                    $cdclie = $this->RetirarMascara($cdclie, "cnpj");
+                    if ($this->validaCNPJ($cdclie) == false) {
+                        $demens = "Cnpj inválido!";
+                        $detitu = "Template Oficina | Cadastro de Clientes";
+                        header('Location: mensagem.php?demens=' . $demens . '&detitu=' . $detitu);
+                        $Flag = false;
+                    }
+                }
+
+                $result = $this->buscarCliente($cdclie);
+
+                if ($result) {
+                    $demens = "Cpf/Cnpj já cadastrado!";
+                    $detitu = "Template Oficina | Cadastro de Clientes";
+                    header('Location: mensagem.php?demens=' . $demens . '&detitu=' . $detitu);
+                    $Flag = false;
+                }
+
+                if ($Flag == true) {
+
+                    //campos da tabela
+                    $aNomes = array();
+                    $aNomes[] = "cdclie";
+                    $aNomes[] = "declie";
+                    $aNomes[] = "cdtipo";
+                    $aNomes[] = "nrinsc";
+                    $aNomes[] = "nrccm";
+                    $aNomes[] = "nrrg";
+                    $aNomes[] = "deende";
+                    $aNomes[] = "nrende";
+                    $aNomes[] = "decomp";
+                    $aNomes[] = "debair";
+                    $aNomes[] = "decida";
+                    $aNomes[] = "cdesta";
+                    $aNomes[] = "nrcepi";
+                    $aNomes[] = "nrtele";
+                    $aNomes[] = "nrcelu";
+                    $aNomes[] = "demail";
+                    $aNomes[] = "deobse";
+                    $aNomes[] = "flativ";
+                    $aNomes[] = "dtcada";
+
+                    //dados da tabela
+                    $aDados = array();
+                    $aDados[] = $_POST["cdclie"];
+                    $aDados[] = $_POST["declie"];
+                    $aDados[] = $_POST["cdtipo"];
+                    $aDados[] = $_POST["nrinsc"];
+                    $aDados[] = $_POST["nrccm"];
+                    $aDados[] = $_POST["nrrg"];
+                    $aDados[] = $_POST["deende"];
+                    $aDados[] = $_POST["nrende"];
+                    $aDados[] = $_POST["decomp"];
+                    $aDados[] = $_POST["debair"];
+                    $aDados[] = $_POST["decida"];
+                    $aDados[] = $_POST["cdesta"];
+                    $aDados[] = $_POST["nrcepi"];
+                    $aDados[] = $_POST["nrtele"];
+                    $aDados[] = $_POST["nrcelu"];
+                    $aDados[] = $_POST["demail"];
+                    $aDados[] = $_POST["deobse"];
+                    $aDados[] = "S";
+                    $aDados[] = $data;
+
+
+                    if($this->salvarCliente($aDados, $aNomes)){
+
+                        //gravar log
+                        //GravarIPLog($cdusua, "Alterar Meus Dados:");
+
+                        $demens = "Cadastro efetuado com sucesso!";
+                        $detitu = "Template Oficina | Cadastro de Clientes";
+                        $devolt = "cliente.php";
+                        header('Location: mensagem.php?demens=' . $demens . '&detitu=' . $detitu . '&devolt=' . $devolt);
+
+                    }
+                }
+
+            }
+
+        }
     }
 }

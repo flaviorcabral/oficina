@@ -1,5 +1,11 @@
 <?php
 
+    include_once '../../config.php';
+
+    ini_set ('display_errors', 1 );
+    error_reporting ( E_ALL | E_STRICT );
+    //error_reporting (0);
+
     // identificando dispositivo
     $iphone = strpos($_SERVER['HTTP_USER_AGENT'],"iPhone");
     $ipad = strpos($_SERVER['HTTP_USER_AGENT'],"iPad");
@@ -14,9 +20,8 @@
         $eMovel="S";
     }
 
-    // incluindo bibliotecas de apoio
-    include "banco.php";
-    include "util.php";
+    $con = new Controller();
+    $ordens = $con->listarOrdensServico();
 
     //codigo do usuario
     if (isset($_COOKIE['cdusua'])) {
@@ -75,7 +80,7 @@
     $deusua1=$deusua;
     $deusua = substr($deusua, 0,15);
 
-    $aClie= ConsultarDados("", "", "","select * from clientes where left(flativ,1) = 'S' order by cdclie");
+    $clientes = $con->listarClientes();
 
 ?>
 <!DOCTYPE html>
@@ -86,7 +91,7 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-    <title>Demonstração Auto Mecânica&copy; | Principal </title>
+    <title>Template Oficina | Principal </title>
 
     <link href="../../templates/css/bootstrap.min.css" rel="stylesheet">
     <link href="../../templates/font-awesome/css/font-awesome.css" rel="stylesheet">
@@ -135,9 +140,9 @@
                         <br>
                         <li>
                             <?php if (strlen($cdusua) == 14 ) {;?>
-                                <span><?php echo  formatar($cdusua,"cnpj")." - ";?></span>
+                                <span><?php echo  $con->formatar($cdusua,"cnpj")." - ";?></span>
                             <?php } Else {?>
-                                <span><?php echo  formatar($cdusua,"cpf")." - ";?></span>
+                                <span><?php echo  $con->formatar($cdusua,"cpf")." - ";?></span>
                             <?php }?>
                         </li>
                         <li>
@@ -146,7 +151,7 @@
                     </ul>
                     <ul class="nav navbar-top-links navbar-right">
                         <li>
-                            <span class="m-r-sm text-muted welcome-message">Benvindo ao <strong>Demonstração Auto Mecânica&copy;</strong></span>
+                            <span class="m-r-sm text-muted welcome-message">Benvindo ao <strong>Template Oficina</strong></span>
                         </li>
                         <li>
                             <a href="../../index.php">
@@ -167,8 +172,7 @@
 
                         <div class="ibox-content">
                             <div class="pull-left">
-                                <a onclick="#" href="clientei.php" class="btn btn-warning ">Incluir</a>
-                                <button class="btn btn-sm btn-warning " type="button" onClick="history.go(-1)"><strong>Retornar</strong></button>
+                                <a onclick="#" href="clienteacoes.php?acao=novo" class="btn btn-warning ">Incluir</a>
                             </div>
                             <br>
                             <br>
@@ -186,18 +190,18 @@
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        <?php for ($f =0; $f <= (count($aClie)-1); $f++) { ?>
+                                        <?php for ($f =0; $f <= (count($clientes)-1); $f++) { ?>
                                             <tr class="gradeX">
 
-                                                <?php $coluna1 = $aClie[$f]["cdclie"]; ?>
-                                                <?php $coluna2 = $aClie[$f]["declie"]; ?>
-                                                <?php $coluna3 = $aClie[$f]["cdtipo"]; ?>
-                                                <?php $coluna4 = $aClie[$f]["nrtele"]; ?>
-                                                <?php $coluna5 = $aClie[$f]["demail"]; ?>
+                                                <?php $coluna1 = $clientes[$f]["cdclie"]; ?>
+                                                <?php $coluna2 = $clientes[$f]["declie"]; ?>
+                                                <?php $coluna3 = $clientes[$f]["cdtipo"]; ?>
+                                                <?php $coluna4 = $clientes[$f]["nrtele"]; ?>
+                                                <?php $coluna5 = $clientes[$f]["demail"]; ?>
 
-                                                <?php $ver = "clientea.php?acao=ver&chave=".$coluna1; ?>
-                                                <?php $edita = "clientea.php?acao=edita&chave=".$coluna1; ?>
-                                                <?php $apaga = "clientea.php?acao=apaga&chave=".$coluna1; ?>
+                                                <?php $ver = "clienteacoes.php?acao=ver&chave=".$coluna1; ?>
+                                                <?php $edita = "clienteacoes.php?acao=edita&chave=".$coluna1; ?>
+                                                <?php $apaga = "clienteacoes.php?acao=apaga&chave=".$coluna1; ?>
 
                                                 <td><?php print $coluna1; ?></td>
                                                 <td><?php print $coluna2; ?></td>
@@ -332,8 +336,8 @@
                 buttons: [
                     { extend: 'copy'},
                     {extend: 'csv'},
-                    {extend: 'excel', title: 'ExampleFile'},
-                    {extend: 'pdf', title: 'ExampleFile'},
+                    {extend: 'excel', title: 'Template Oficina'},
+                    {extend: 'pdf', title: 'Template Oficina'},
 
                     {extend: 'print',
                      customize: function (win){

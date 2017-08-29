@@ -22,9 +22,6 @@
 
     $con = new Controller();
     $con->pagOrdemServico();
-    // incluindo bibliotecas de apoio
-    //include "banco.php";
-    //include "util.php";
 
     $acao = $_GET["acao"];
 
@@ -120,7 +117,7 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-    <title>Demonstração Auto Mecânica&copy; | Principal </title>
+    <title>Template Oficina | Principal </title>
 
     <link href="../../templates/css/bootstrap.min.css" rel="stylesheet">
     <link href="../../templates/font-awesome/css/font-awesome.css" rel="stylesheet">
@@ -204,6 +201,7 @@
                                         <?php }?>
                                         <?php if($acao == "nova") {?>
                                             <button class="btn btn-sm btn-danger" name = "salvar" type="submit"><strong>Salvar</strong></button>
+                                            <a class="btn btn-sm btn-success" href="clienteacoes.php?acao=novo"><strong>Novo Cliente</strong></a>
                                         <?php }?>
                                         <button class="btn btn-sm btn-warning " type="button" onClick="history.go(-1)"><strong>Retornar</strong></button>
                                     </center>
@@ -214,7 +212,7 @@
                                             <div class="form-group">
                                                 <label class="col-md-4 control-label" for="textinput">Número da OS</label>
                                                 <div class="col-md-4">
-                                                    <input id="cdorde" name="cdorde" value="<?php echo $ordem["cdorde"];?>" type="text" placeholder="" class="form-control" maxlength = "10" <?php if($acao == 'ver' or $acao == 'apaga'): ?>readonly=""<?php endif; ?>>
+                                                    <input id="cdorde" name="cdorde" value="<?php echo $ordem["cdorde"];?>" type="text" placeholder="" class="form-control" maxlength = "10" readonly="">
                                                 </div>
                                             </div>
 

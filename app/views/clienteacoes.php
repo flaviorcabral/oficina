@@ -1,5 +1,11 @@
 <?php
 
+    include_once '../../config.php';
+
+    ini_set ('display_errors', 1 );
+    error_reporting ( E_ALL | E_STRICT );
+    //error_reporting (0);
+
     // identificando dispositivo
     $iphone = strpos($_SERVER['HTTP_USER_AGENT'],"iPhone");
     $ipad = strpos($_SERVER['HTTP_USER_AGENT'],"iPad");
@@ -14,12 +20,10 @@
         $eMovel="S";
     }
 
-    // incluindo bibliotecas de apoio
-    include "banco.php";
-    include "util.php";
+    $con = new Controller();
+    $con->pagCliente();
 
     $acao = $_GET["acao"];
-    $chave = trim($_GET["chave"]);
 
     switch ($acao) {
     case 'ver':
@@ -30,6 +34,9 @@
         break;
     case 'apaga':
         $titulo = "Exclusão";
+        break;
+    case 'novo':
+        $titulo = "Incluir";
         break;
     default:
         header('Location: fichacadastral.php');
@@ -92,8 +99,20 @@
     $deusua1=$deusua;
     $deusua = substr($deusua, 0,15);
 
-    $aClie = ConsultarDados("clientes", "cdclie", $chave);
-    $aEsta = ConsultarDados("", "", "","select * from estados order by cdesta");
+
+    if($acao != "novo")
+    {
+        $chave = trim($_GET["chave"]);
+        $cliente = $con->cliente;
+        $estados = $con->listarEstadosBra();
+    }
+
+    if($acao == "novo")
+    {
+        $cliente = $con->cliente;
+        $clientes = $con->clientes;
+        $estados = $con->listarEstadosBra();
+    }
 
 ?>
 <!DOCTYPE html>
@@ -104,7 +123,7 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-    <title>Demonstração Auto Mecânica&copy; | Principal </title>
+    <title>Template Oficina | Principal </title>
 
     <link href="../../templates/css/bootstrap.min.css" rel="stylesheet">
     <link href="../../templates/font-awesome/css/font-awesome.css" rel="stylesheet">
@@ -153,9 +172,9 @@
                         <br>
                         <li>
                             <?php if (strlen($cdusua) == 14 ) {;?>
-                                <span><?php echo  formatar($cdusua,"cnpj")." - ";?></span>
+                                <span><?php echo  $con->formatar($cdusua,"cnpj")." - ";?></span>
                             <?php } Else {?>
-                                <span><?php echo  formatar($cdusua,"cpf")." - ";?></span>
+                                <span><?php echo  $con->formatar($cdusua,"cpf")." - ";?></span>
                             <?php }?>
                         </li>
                         <li>
@@ -164,7 +183,7 @@
                     </ul>
                     <ul class="nav navbar-top-links navbar-right">
                         <li>
-                            <span class="m-r-sm text-muted welcome-message">Benvindo ao <strong>Demonstração Auto Mecânica&copy;</strong></span>
+                            <span class="m-r-sm text-muted welcome-message">Benvindo ao <strong>Template Oficina</strong></span>
                         </li>
                         <li>
                             <a href="../../index.php">
@@ -184,47 +203,49 @@
                         </div>
 
                         <div class="ibox-content">
-                            <form class="form-horizontal" method="POST" enctype="multipart/form-data" action="clienteaa.php">
+                            <form class="form-horizontal" method="POST" enctype="multipart/form-data">
                                 <div>
                                     <center>
                                         <?php if($acao == "edita") {?>
-                                            <button class="btn btn-sm btn-primary" name = "edita" type="submit"><strong>Alterar</strong></button>
+                                            <button class="btn btn-sm btn-primary" name = "editar" type="submit"><strong>Alterar</strong></button>
                                         <?php }?>
                                         <?php if($acao == "apaga") {?>
-                                            <button class="btn btn-sm btn-danger" name = "apaga" type="submit"><strong>Apagar</strong></button>
+                                            <button class="btn btn-sm btn-danger" name = "apagar" type="submit"><strong>Apagar</strong></button>
+                                        <?php }?>
+                                        <?php if($acao == "novo") {?>
+                                            <button class="btn btn-sm btn-danger" name = "salvar" type="submit"><strong>Salvar</strong></button>
                                         <?php }?>
                                         <button class="btn btn-sm btn-warning " type="button" onClick="history.go(-1)"><strong>Retornar</strong></button>
                                     </center>
                                 </div>
                                 <br>
-                                <?php if($acao == "edita") {?>
                                     <div class="row">
                                         <!--div class="col-lg-6"-->
                                             <br>
                                             <div class="form-group">
                                                 <label class="col-md-2 control-label" for="textinput">Cpf/Cnpj</label>
                                                 <div class="col-md-3">
-                                                    <input id="cdclie" name="cdclie" type="text" value="<?php echo $aClie[0]["cdclie"];?>" placeholder="" class="form-control" maxlength = "14" autofocus readonly="">
+                                                    <input id="cdclie" name="cdclie" type="text" value="<?php echo $cliente["cdclie"];?>" placeholder="" class="form-control" maxlength = "14" autofocus <?php if($acao == 'ver' or $acao == 'apaga'): ?>readonly=""<?php endif; ?>>
                                                 </div>
                                             </div>
 
                                             <div class="form-group">
                                                 <label class="col-md-2 control-label" for="textinput">Nome/Razão Social</label>
                                                 <div class="col-md-8 ">
-                                                    <input id="declie" name="declie" value="<?php echo $aClie[0]["declie"];?>" type="text" placeholder="" class="form-control" maxlength = "100" required="">
+                                                    <input id="declie" name="declie" value="<?php echo $cliente["declie"];?>" type="text" placeholder="" class="form-control" maxlength = "100" required="" <?php if($acao == 'ver' or $acao == 'apaga'): ?>readonly=""<?php endif; ?>>
                                                 </div>
                                             </div>
 
                                             <div class="form-group">
                                                 <label class="col-md-2 control-label" for="textinput">Tipo de Empresa</label>
                                                 <div class="col-md-10">
-                                                    <select name="cdtipo" id="cdtipo">
-                                                        <?php if (substr($aClie[0]["cdtipo"], 0,1) == "J") {?>
-                                                            <option selected= "selected">Jurídica</option>
-                                                            <option>Física</option>
+                                                    <select name="cdtipo" id="cdtipo" <?php if($acao == 'ver' or $acao == 'apaga'): ?>disabled<?php endif; ?>>
+                                                        <?php if (substr($cliente["cdtipo"], 0,1) == "J") {?>
+                                                            <option selected= "selected" value="juridica">Juridica</option>
+                                                            <option value="Fisica">Fisica</option>
                                                         <?php } Else {?>
-                                                            <option>Jurídica</option>
-                                                            <option  selected= "selected">Física</option>
+                                                            <option value="Juridica">Juridica</option>
+                                                            <option  selected= "selected" value="Fisica">Fisica</option>
                                                         <?php }?>
                                                     </select>
                                                 </div>
@@ -233,254 +254,118 @@
                                             <div class="form-group">
                                                 <label class="col-md-2 control-label" for="textinput">Inscrição Estadual</label>
                                                 <div class="col-md-8">
-                                                    <input id="nrinsc" name="nrinsc" value="<?php echo $aClie[0]["nrinsc"];?>" type="text" placeholder="Isento" class="form-control" maxlength = "20">
+                                                    <input id="nrinsc" name="nrinsc" value="<?php echo $cliente["nrinsc"];?>" type="text" placeholder="Isento" class="form-control" maxlength = "20" <?php if($acao == 'ver' or $acao == 'apaga'): ?>readonly=""<?php endif; ?>>
                                                 </div>
                                             </div>
 
                                             <div class="form-group">
                                                 <label class="col-md-2 control-label" for="textinput">Inscrição Municipal</label>
                                                 <div class="col-md-8">
-                                                    <input id="nrccm" name="nrccm" value="<?php echo $aClie[0]["nrccm"];?>" type="text" placeholder="" class="form-control" maxlength = "20">
+                                                    <input id="nrccm" name="nrccm" value="<?php echo $cliente["nrccm"];?>" type="text" placeholder="" class="form-control" maxlength = "20" <?php if($acao == 'ver' or $acao == 'apaga'): ?>readonly=""<?php endif; ?>>
                                                 </div>
                                             </div>
 
                                             <div class="form-group">
                                                 <label class="col-md-2 control-label" for="textinput">RG</label>
                                                 <div class="col-md-8">
-                                                    <input id="nrrg" name="nrrg" value="<?php echo $aClie[0]["nrrg"];?>" type="text" placeholder="" class="form-control" maxlength = "20">
+                                                    <input id="nrrg" name="nrrg" value="<?php echo $cliente["nrrg"];?>" type="text" placeholder="" class="form-control" maxlength = "20" <?php if($acao == 'ver' or $acao == 'apaga'): ?>readonly=""<?php endif; ?>>
                                                 </div>
                                             </div>
 
                                             <div class="form-group">
                                                 <label class="col-md-2 control-label" for="textinput">Cep</label>
                                                 <div class="col-md-2">
-                                                    <input id="nrcepi" name="nrcepi" value="<?php echo $aClie[0]["nrcepi"];?>" onblur="pesquisacep(this.value);" type="text" placeholder="" class="form-control" maxlength = "08">
+                                                    <input id="nrcepi" name="nrcepi" value="<?php echo $cliente["nrcepi"];?>" onblur="pesquisacep(this.value);" type="text" placeholder="" class="form-control" maxlength = "08" <?php if($acao == 'ver' or $acao == 'apaga'): ?>readonly=""<?php endif; ?>>
                                                 </div>
                                             </div>
 
                                             <div class="form-group">
                                                 <label class="col-md-2 control-label" for="textinput">Endereço</label>
                                                 <div class="col-md-8">
-                                                    <input id="deende" name="deende" value="<?php echo $aClie[0]["deende"];?>" type="text" placeholder="" class="form-control" maxlength = "100">
+                                                    <input id="deende" name="deende" value="<?php echo $cliente["deende"];?>" type="text" placeholder="" class="form-control" maxlength = "100" <?php if($acao == 'ver' or $acao == 'apaga'): ?>readonly=""<?php endif; ?>>
                                                 </div>
                                             </div>
 
                                             <div class="form-group">
                                                 <label class="col-md-2 control-label" for="textinput">Número</label>
                                                 <div class="col-md-2">
-                                                    <input id="nrende" name="nrende" value="<?php echo $aClie[0]["nrende"];?>" type="number" placeholder="" class="form-control" maxlength = "10">
+                                                    <input id="nrende" name="nrende" value="<?php echo $cliente["nrende"];?>" type="number" placeholder="" class="form-control" maxlength = "10" <?php if($acao == 'ver' or $acao == 'apaga'): ?>readonly=""<?php endif; ?>>
                                                 </div>
                                             </div>
 
                                             <div class="form-group">
                                                 <label class="col-md-2 control-label" for="textinput">Complemento</label>
                                                 <div class="col-md-4">
-                                                    <input id="decomp" name="decomp" value="<?php echo $aClie[0]["decomp"];?>" type="text" placeholder="" class="form-control" maxlength = "50">
+                                                    <input id="decomp" name="decomp" value="<?php echo $cliente["decomp"];?>" type="text" placeholder="" class="form-control" maxlength = "50" <?php if($acao == 'ver' or $acao == 'apaga'): ?>readonly=""<?php endif; ?>>
                                                 </div>
                                             </div>
 
                                             <div class="form-group">
                                                 <label class="col-md-2 control-label" for="textinput">Bairro</label>
                                                 <div class="col-md-4">
-                                                    <input id="debair" name="debair" value="<?php echo $aClie[0]["debair"];?>" type="text" placeholder="" class="form-control" maxlength = "50">
+                                                    <input id="debair" name="debair" value="<?php echo $cliente["debair"];?>" type="text" placeholder="" class="form-control" maxlength = "50" <?php if($acao == 'ver' or $acao == 'apaga'): ?>readonly=""<?php endif; ?>>
                                                 </div>
                                             </div>
 
                                             <div class="form-group">
                                                 <label class="col-md-2 control-label" for="textinput">Cidade</label>
                                                 <div class="col-md-4">
-                                                    <input id="decida" name="decida" value="<?php echo $aClie[0]["decida"];?>" type="text" placeholder="" class="form-control" maxlength = "50">
+                                                    <input id="decida" name="decida" value="<?php echo $cliente["decida"];?>" type="text" placeholder="" class="form-control" maxlength = "50" <?php if($acao == 'ver' or $acao == 'apaga'): ?>readonly=""<?php endif; ?>>
                                                 </div>
                                             </div>
 
                                             <div class="form-group">
                                                 <label class="col-md-2 control-label" for="textinput">Estado</label>
                                                 <div class="col-md-4">
-                                                    <input id="cdesta" name="cdesta" value="<?php echo $aClie[0]["cdesta"];?>" type="text" placeholder="" class="form-control" maxlength = "02">
-                                                    <!--select name="cdesta" id="cdesta" style="width:350px;"-->
-                                                        <!--?php for($i=0;$i < count($aEsta);$i++) { ?-->
-                                                          <!--?php if ($aClie[0]["cdesta"] == str_pad($aEsta[$i]["cdesta"],02," ",STR_PAD_LEFT)." - ".$aEsta[$i]["deesta"]) {?-->
-                                                            <!--option selected =""><?php echo str_pad($aEsta[$i]["cdesta"],02," ",STR_PAD_LEFT)." - ".$aEsta[$i]["deesta"];?></option-->
-                                                          <!--?php } Else {?-->
-                                                            <!--option><?php echo str_pad($aEsta[$i]["cdesta"],02," ",STR_PAD_LEFT)." - ".$aEsta[$i]["deesta"];?></option-->
-                                                          <!--?php }?-->
-                                                        <!--?php }?-->
-                                                    <!--/select-->
-                                                </div>
-                                            </div>
-
-                                            <div class="form-group">
-                                                <label class="col-md-2 control-label" for="textinput">Telefone</label>
-                                                <div class="col-md-4">
-                                                    <input id="nrtele" name="nrtele" value="<?php echo $aClie[0]["nrtele"];?>" type="text" placeholder="(11) 1234-1234" class="form-control" maxlength = "20">
-                                                </div>
-                                            </div>
-
-                                            <div class="form-group">
-                                                <label class="col-md-2 control-label" for="textinput">Celular</label>
-                                                <div class="col-md-4">
-                                                    <input id="nrcelu" name="nrcelu" value="<?php echo $aClie[0]["nrcelu"];?>" type="text" placeholder="(11) 9-1234-1234" class="form-control" maxlength = "20">
-                                                </div>
-                                            </div>
-
-                                            <div class="form-group">
-                                                <label class="col-md-2 control-label" for="textinput">E-Mail</label>
-                                                <div class="col-md-8">
-                                                    <input id="demail" name="demail" value="<?php echo $aClie[0]["demail"];?>" type="email" placeholder="seuemail@seuprovedor.com.br" class="form-control" maxlength = "255">
-                                                </div>
-                                            </div>
-
-                                            <div class="form-group">
-                                                <label class="col-md-2 control-label" for="textinput">Observações</label>
-                                                <div class="col-md-8">
-                                                    <textarea class="form-control" id="deobse" wrap="physical" cols=50 rows=3 name="deobse" placeholder=""><?php echo $aClie[0]["deobse"];?></textarea>
-                                                </div>
-                                            </div>
-
-                                        <!--/div-->
-                                    </div>
-                                <?php }?>
-                                <?php if($acao !== "edita") {?>
-                                    <div class="row">
-                                        <!--div class="col-lg-6"-->
-                                            <br>
-                                            <div class="form-group">
-                                                <label class="col-md-2 control-label" for="textinput">Cpf/Cnpj</label>
-                                                <div class="col-md-3">
-                                                    <input id="cdclie" name="cdclie" type="text" value="<?php echo $aClie[0]["cdclie"];?>" placeholder="" class="form-control" maxlength = "14" autofocus readonly="">
-                                                </div>
-                                            </div>
-
-                                            <div class="form-group">
-                                                <label class="col-md-2 control-label" for="textinput">Nome/Razão Social</label>
-                                                <div class="col-md-8 ">
-                                                    <input id="declie" name="declie" value="<?php echo $aClie[0]["declie"];?>" type="text" placeholder="" class="form-control" maxlength = "100" readonly="">
-                                                </div>
-                                            </div>
-
-                                            <div class="form-group">
-                                                <label class="col-md-2 control-label" for="textinput">Tipo de Empresa</label>
-                                                <div class="col-md-10">
-                                                    <select name="cdtipo" id="cdtipo" disabled ="">
-                                                        <?php if (substr($aClie[0]["cdtipo"], 0,1) == "J") {?>
-                                                            <option selected= "selected">Jurídica</option>
-                                                            <option>Física</option>
-                                                        <?php } Else {?>
-                                                            <option>Jurídica</option>
-                                                            <option  selected= "selected">Física</option>
-                                                        <?php }?>
+                                                    <select name="cdesta" id="cdesta" style="width:350px;" <?php if($acao == 'ver' or $acao == 'apaga'): ?>disabled<?php endif; ?>>
+                                                        <option selected ="" value="<?php $cliente["cdesta"]; ?>"><?php echo $cliente["cdesta"]; ?></option>
+                                                        <?php for($i=0;$i < count($estados);$i++) { ?>
+                                                            <option value="<?php echo str_pad($estados[$i]["cdesta"],02," ",STR_PAD_LEFT); ?>"><?php echo str_pad($estados[$i]["cdesta"],02," ",STR_PAD_LEFT)." - ".$estados[$i]["deesta"];?></option>
+                                                        <?php } ?>
                                                     </select>
                                                 </div>
                                             </div>
 
                                             <div class="form-group">
-                                                <label class="col-md-2 control-label" for="textinput">Inscrição Estadual</label>
-                                                <div class="col-md-8">
-                                                    <input id="nrinsc" name="nrinsc" value="<?php echo $aClie[0]["nrinsc"];?>" type="text" placeholder="Isento" class="form-control" maxlength = "20" readonly="">
-                                                </div>
-                                            </div>
-
-                                            <div class="form-group">
-                                                <label class="col-md-2 control-label" for="textinput">Inscrição Municipal</label>
-                                                <div class="col-md-8">
-                                                    <input id="nrccm" name="nrccm" value="<?php echo $aClie[0]["nrccm"];?>" type="text" placeholder="" class="form-control" maxlength = "20" readonly="">
-                                                </div>
-                                            </div>
-
-                                            <div class="form-group">
-                                                <label class="col-md-2 control-label" for="textinput">RG</label>
-                                                <div class="col-md-8">
-                                                    <input id="nrrg" name="nrrg" value="<?php echo $aClie[0]["nrrg"];?>" type="text" placeholder="" class="form-control" maxlength = "20" readonly="">
-                                                </div>
-                                            </div>
-
-                                            <div class="form-group">
-                                                <label class="col-md-2 control-label" for="textinput">Endereço</label>
-                                                <div class="col-md-8">
-                                                    <input id="deende" name="deende" value="<?php echo $aClie[0]["deende"];?>" type="text" placeholder="" class="form-control" maxlength = "100" readonly="">
-                                                </div>
-                                            </div>
-
-                                            <div class="form-group">
-                                                <label class="col-md-2 control-label" for="textinput">Número</label>
-                                                <div class="col-md-2">
-                                                    <input id="nrende" name="nrende" value="<?php echo $aClie[0]["nrende"];?>" type="number" placeholder="" class="form-control" maxlength = "10" readonly="">
-                                                </div>
-                                            </div>
-
-                                            <div class="form-group">
-                                                <label class="col-md-2 control-label" for="textinput">Complemento</label>
-                                                <div class="col-md-4">
-                                                    <input id="decomp" name="decomp" value="<?php echo $aClie[0]["decomp"];?>" type="text" placeholder="" class="form-control" maxlength = "50" readonly="">
-                                                </div>
-                                            </div>
-
-                                            <div class="form-group">
-                                                <label class="col-md-2 control-label" for="textinput">Bairro</label>
-                                                <div class="col-md-4">
-                                                    <input id="debair" name="debair" value="<?php echo $aClie[0]["debair"];?>" type="text" placeholder="" class="form-control" maxlength = "50" readonly="">
-                                                </div>
-                                            </div>
-
-                                            <div class="form-group">
-                                                <label class="col-md-2 control-label" for="textinput">Cidade</label>
-                                                <div class="col-md-4">
-                                                    <input id="decida" name="decida" value="<?php echo $aClie[0]["decida"];?>" type="text" placeholder="" class="form-control" maxlength = "50" readonly="">
-                                                </div>
-                                            </div>
-
-                                            <div class="form-group">
-                                                <label class="col-md-2 control-label" for="textinput">Cep</label>
-                                                <div class="col-md-2">
-                                                    <input id="nrcepi" name="nrcepi" value="<?php echo $aClie[0]["nrcepi"];?>" type="text" placeholder="" class="form-control" maxlength = "08" readonly="">
-                                                </div>
-                                            </div>
-
-                                            <div class="form-group">
-                                                <label class="col-md-2 control-label" for="textinput">Estado</label>
-                                                <div class="col-md-4">
-                                                    <input id="cdesta" name="cdesta" value="<?php echo $aClie[0]["cdesta"];?>" type="text" placeholder="" class="form-control" maxlength = "02" readonly="">
-                                                </div>
-                                            </div>
-
-                                            <div class="form-group">
                                                 <label class="col-md-2 control-label" for="textinput">Telefone</label>
                                                 <div class="col-md-4">
-                                                    <input id="nrtele" name="nrtele" value="<?php echo $aClie[0]["nrtele"];?>" type="text" placeholder="(11) 1234-1234" class="form-control" maxlength = "20" readonly="">
+                                                    <input id="nrtele" name="nrtele" value="<?php echo $cliente["nrtele"];?>" type="text" placeholder="(11) 1234-1234" class="form-control" maxlength = "20" <?php if($acao == 'ver' or $acao == 'apaga'): ?>readonly=""<?php endif; ?>>
                                                 </div>
                                             </div>
 
                                             <div class="form-group">
                                                 <label class="col-md-2 control-label" for="textinput">Celular</label>
                                                 <div class="col-md-4">
-                                                    <input id="nrcelu" name="nrcelu" value="<?php echo $aClie[0]["nrcelu"];?>" type="text" placeholder="(11) 9-1234-1234" class="form-control" maxlength = "20" readonly="">
+                                                    <input id="nrcelu" name="nrcelu" value="<?php echo $cliente["nrcelu"];?>" type="text" placeholder="(11) 9-1234-1234" class="form-control" maxlength = "20" <?php if($acao == 'ver' or $acao == 'apaga'): ?>readonly=""<?php endif; ?>>
                                                 </div>
                                             </div>
 
                                             <div class="form-group">
                                                 <label class="col-md-2 control-label" for="textinput">E-Mail</label>
                                                 <div class="col-md-8">
-                                                    <input id="demail" name="demail" value="<?php echo $aClie[0]["demail"];?>" type="email" placeholder="seuemail@seuprovedor.com.br" class="form-control" maxlength = "255" readonly="">
+                                                    <input id="demail" name="demail" value="<?php echo $cliente["demail"];?>" type="email" placeholder="seuemail@seuprovedor.com.br" class="form-control" maxlength = "255" <?php if($acao == 'ver' or $acao == 'apaga'): ?>readonly=""<?php endif; ?>>
                                                 </div>
                                             </div>
 
                                             <div class="form-group">
                                                 <label class="col-md-2 control-label" for="textinput">Observações</label>
                                                 <div class="col-md-8">
-                                                    <textarea class="form-control" id="deobse" wrap="physical" cols=50 rows=3 name="deobse" placeholder="" readonly=""><?php echo $aClie[0]["deobse"];?></textarea>
+                                                    <textarea class="form-control" id="deobse" wrap="physical" cols=50 rows=3 name="deobse" placeholder="" <?php if($acao == 'ver' or $acao == 'apaga'): ?>readonly=""<?php endif; ?>><?php echo $cliente["deobse"];?></textarea>
                                                 </div>
                                             </div>
 
                                         <!--/div-->
                                     </div>
-                                <?php }?>
                                 <div>
                                     <center>
                                         <?php if($acao == "edita") {?>
-                                            <button class="btn btn-sm btn-primary" name = "edita" type="submit"><strong>Alterar</strong></button>
+                                            <button class="btn btn-sm btn-primary" name = "editar" type="submit"><strong>Alterar</strong></button>
                                         <?php }?>
                                         <?php if($acao == "apaga") {?>
-                                            <button class="btn btn-sm btn-danger" name = "apaga" type="submit"><strong>Apagar</strong></button>
+                                            <button class="btn btn-sm btn-danger" name = "apagar" type="submit"><strong>Apagar</strong></button>
+                                        <?php }?>
+                                        <?php if($acao == "novo") {?>
+                                            <button class="btn btn-sm btn-danger" name = "salvar" type="submit"><strong>Salvar</strong></button>
                                         <?php }?>
                                         <button class="btn btn-sm btn-warning " type="button" onClick="history.go(-1)"><strong>Retornar</strong></button>
                                     </center>
