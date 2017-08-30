@@ -30,3 +30,7 @@ Scripts utilizados:
 *ordem.php
 *ordemacoes.php
 *ordemp.php
+
+
+CORREÇÕES
+*Corrigir função valida CPF

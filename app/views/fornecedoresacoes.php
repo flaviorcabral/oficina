@@ -1,5 +1,11 @@
 <?php
 
+    include_once '../../config.php';
+
+    ini_set ('display_errors', 1 );
+    error_reporting ( E_ALL | E_STRICT );
+    //error_reporting (0);
+
     // identificando dispositivo
     $iphone = strpos($_SERVER['HTTP_USER_AGENT'],"iPhone");
     $ipad = strpos($_SERVER['HTTP_USER_AGENT'],"iPad");
@@ -14,9 +20,11 @@
         $eMovel="S";
     }
 
-    // incluindo bibliotecas de apoio
-    include "banco.php";
-    include "util.php";
+    $con = new Controller();
+    $con->pagFornecedor();
+
+    $fornecedor = $con->fornecedor;
+    $estados = $con->estados;
 
     $acao = $_GET["acao"];
     $chave = trim($_GET["chave"]);
@@ -30,6 +38,9 @@
         break;
     case 'apaga':
         $titulo = "Exclusão";
+        break;
+    case 'novo':
+        $titulo = "Incluir";
         break;
     default:
         header('Location: fichacadastral.php');
@@ -92,9 +103,6 @@
     $deusua1=$deusua;
     $deusua = substr($deusua, 0,15);
 
-    $aForn = ConsultarDados("fornecedores", "cdforn", $chave);
-    $aEsta = ConsultarDados("", "", "","select * from estados order by cdesta");
-
 ?>
 <!DOCTYPE html>
 <html>
@@ -104,7 +112,7 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-    <title>Demonstração Auto Mecânica&copy; | Principal </title>
+    <title>Template Oficina | Principal </title>
 
     <link href="../../templates/css/bootstrap.min.css" rel="stylesheet">
     <link href="../../templates/font-awesome/css/font-awesome.css" rel="stylesheet">
@@ -153,18 +161,18 @@
                         <br>
                         <li>
                             <?php if (strlen($cdusua) == 14 ) {;?>
-                                <span><?php echo  formatar($cdusua,"cnpj")." - ";?></span>
+                                <span><?php echo  $con->formatar($cdusua,"cnpj")." - ";?></span>
                             <?php } Else {?>
-                                <span><?php echo  formatar($cdusua,"cpf")." - ";?></span>
+                                <span><?php echo  $con->formatar($cdusua,"cpf")." - ";?></span>
                             <?php }?>
                         </li>
                         <li>
-                            <span><?php echo  $deusua1 ;?></span>
+                            <span><?php echo  $deusua ;?></span>
                         </li>
                     </ul>
                     <ul class="nav navbar-top-links navbar-right">
                         <li>
-                            <span class="m-r-sm text-muted welcome-message">Benvindo ao <strong>Demonstração Auto Mecânica&copy;</strong></span>
+                            <span class="m-r-sm text-muted welcome-message">Benvindo ao <strong>Template Oficina</strong></span>
                         </li>
                         <li>
                             <a href="../../index.php">
@@ -184,34 +192,36 @@
                         </div>
 
                         <div class="ibox-content">
-                            <form class="form-horizontal" method="POST" enctype="multipart/form-data" action="fornecedoresaa.php">
+                            <form class="form-horizontal" method="POST" enctype="multipart/form-data">
                                 <div>
                                     <center>
                                         <?php if($acao == "edita") {?>
-                                            <button class="btn btn-sm btn-primary" name = "edita" type="submit"><strong>Alterar</strong></button>
+                                            <button class="btn btn-sm btn-primary" name = "editar" type="submit"><strong>Alterar</strong></button>
                                         <?php }?>
                                         <?php if($acao == "apaga") {?>
-                                            <button class="btn btn-sm btn-danger" name = "apaga" type="submit"><strong>Apagar</strong></button>
+                                            <button class="btn btn-sm btn-danger" name = "apagar" type="submit"><strong>Apagar</strong></button>
+                                        <?php }?>
+                                        <?php if($acao == "novo") {?>
+                                            <button class="btn btn-sm btn-danger" name = "salvar" type="submit"><strong>Salvar</strong></button>
                                         <?php }?>
                                         <button class="btn btn-sm btn-warning " type="button" onClick="history.go(-1)"><strong>Retornar</strong></button>
                                     </center>
                                 </div>
                                 <br>
-                                <?php if($acao == "edita") {?>
                                     <div class="row">
                                         <!--div class="col-lg-6"-->
                                             <br>
                                             <div class="form-group">
                                                 <label class="col-md-2 control-label" for="textinput">Cpf/Cnpj</label>
                                                 <div class="col-md-3">
-                                                    <input id="cdforn" name="cdforn" type="text" value="<?php echo $aForn[0]["cdforn"];?>" placeholder="" class="form-control" maxlength = "14" autofocus readonly="">
+                                                    <input id="cdforn" name="cdforn" type="text" value="<?php echo $fornecedor["cdforn"];?>" placeholder="" class="form-control" maxlength = "14" autofocus <?php if($acao == 'ver' or $acao == 'apaga'): ?>readonly=""<?php endif; ?>>
                                                 </div>
                                             </div>
 
                                             <div class="form-group">
                                                 <label class="col-md-2 control-label" for="textinput">Nome/Razão Social</label>
                                                 <div class="col-md-8 ">
-                                                    <input id="deforn" name="deforn" value="<?php echo $aForn[0]["deforn"];?>" type="text" placeholder="" class="form-control" maxlength = "100" required="">
+                                                    <input id="deforn" name="deforn" value="<?php echo $fornecedor["deforn"];?>" type="text" placeholder="" class="form-control" maxlength = "100" required="">
                                                 </div>
                                             </div>
 
@@ -219,7 +229,7 @@
                                                 <label class="col-md-2 control-label" for="textinput">Tipo de Empresa</label>
                                                 <div class="col-md-10">
                                                     <select name="cdtipo" id="cdtipo">
-                                                        <?php if (substr($aForn[0]["cdtipo"], 0,1) == "J") {?>
+                                                        <?php if (substr($fornecedor["cdtipo"], 0,1) == "J") {?>
                                                             <option selected= "selected">Jurídica</option>
                                                             <option>Física</option>
                                                         <?php } Else {?>
@@ -233,268 +243,122 @@
                                             <div class="form-group">
                                                 <label class="col-md-2 control-label" for="textinput">Inscrição Estadual</label>
                                                 <div class="col-md-8">
-                                                    <input id="nrinsc" name="nrinsc" value="<?php echo $aForn[0]["nrinsc"];?>" type="text" placeholder="Isento" class="form-control" maxlength = "20">
+                                                    <input id="nrinsc" name="nrinsc" value="<?php echo $fornecedor["nrinsc"];?>" type="text" placeholder="Isento" class="form-control" maxlength = "20">
                                                 </div>
                                             </div>
 
                                             <div class="form-group">
                                                 <label class="col-md-2 control-label" for="textinput">Inscrição Municipal</label>
                                                 <div class="col-md-8">
-                                                    <input id="nrccm" name="nrccm" value="<?php echo $aForn[0]["nrccm"];?>" type="text" placeholder="" class="form-control" maxlength = "20">
+                                                    <input id="nrccm" name="nrccm" value="<?php echo $fornecedor["nrccm"];?>" type="text" placeholder="" class="form-control" maxlength = "20">
                                                 </div>
                                             </div>
 
                                             <div class="form-group">
                                                 <label class="col-md-2 control-label" for="textinput">RG</label>
                                                 <div class="col-md-8">
-                                                    <input id="nrrg" name="nrrg" value="<?php echo $aForn[0]["nrrg"];?>" type="text" placeholder="" class="form-control" maxlength = "20">
+                                                    <input id="nrrg" name="nrrg" value="<?php echo $fornecedor["nrrg"];?>" type="text" placeholder="" class="form-control" maxlength = "20">
                                                 </div>
                                             </div>
 
                                             <div class="form-group">
                                                 <label class="col-md-2 control-label" for="textinput">Cep</label>
                                                 <div class="col-md-2">
-                                                    <input id="nrcepi" name="nrcepi" value="<?php echo $aClie[0]["nrcepi"];?>" onblur="pesquisacep(this.value);" type="text" placeholder="" class="form-control" maxlength = "08">
+                                                    <input id="nrcepi" name="nrcepi" value="<?php echo $fornecedor["nrcepi"];?>" onblur="pesquisacep(this.value);" type="text" placeholder="" class="form-control" maxlength = "08">
                                                 </div>
                                             </div>
 
                                             <div class="form-group">
                                                 <label class="col-md-2 control-label" for="textinput">Endereço</label>
                                                 <div class="col-md-8">
-                                                    <input id="deende" name="deende" value="<?php echo $aForn[0]["deende"];?>" type="text" placeholder="" class="form-control" maxlength = "100">
+                                                    <input id="deende" name="deende" value="<?php echo $fornecedor["deende"];?>" type="text" placeholder="" class="form-control" maxlength = "100">
                                                 </div>
                                             </div>
 
                                             <div class="form-group">
                                                 <label class="col-md-2 control-label" for="textinput">Número</label>
                                                 <div class="col-md-2">
-                                                    <input id="nrende" name="nrende" value="<?php echo $aForn[0]["nrende"];?>" type="number" placeholder="" class="form-control" maxlength = "10">
+                                                    <input id="nrende" name="nrende" value="<?php echo $fornecedor["nrende"];?>" type="number" placeholder="" class="form-control" maxlength = "10">
                                                 </div>
                                             </div>
 
                                             <div class="form-group">
                                                 <label class="col-md-2 control-label" for="textinput">Complemento</label>
                                                 <div class="col-md-4">
-                                                    <input id="decomp" name="decomp" value="<?php echo $aForn[0]["decomp"];?>" type="text" placeholder="" class="form-control" maxlength = "50">
+                                                    <input id="decomp" name="decomp" value="<?php echo $fornecedor["decomp"];?>" type="text" placeholder="" class="form-control" maxlength = "50">
                                                 </div>
                                             </div>
 
                                             <div class="form-group">
                                                 <label class="col-md-2 control-label" for="textinput">Bairro</label>
                                                 <div class="col-md-4">
-                                                    <input id="debair" name="debair" value="<?php echo $aForn[0]["debair"];?>" type="text" placeholder="" class="form-control" maxlength = "50">
+                                                    <input id="debair" name="debair" value="<?php echo $fornecedor["debair"];?>" type="text" placeholder="" class="form-control" maxlength = "50">
                                                 </div>
                                             </div>
 
                                             <div class="form-group">
                                                 <label class="col-md-2 control-label" for="textinput">Cidade</label>
                                                 <div class="col-md-4">
-                                                    <input id="decida" name="decida" value="<?php echo $aForn[0]["decida"];?>" type="text" placeholder="" class="form-control" maxlength = "50">
+                                                    <input id="decida" name="decida" value="<?php echo $fornecedor["decida"];?>" type="text" placeholder="" class="form-control" maxlength = "50">
                                                 </div>
                                             </div>
 
                                             <div class="form-group">
                                                 <label class="col-md-2 control-label" for="textinput">Estado</label>
                                                 <div class="col-md-4">
-                                                    <input id="cdesta" name="cdesta" value="<?php echo $aClie[0]["cdesta"];?>" type="text" placeholder="" class="form-control" maxlength = "02">
-                                                    <!--select name="cdesta" id="cdesta" style="width:350px;"-->
-                                                        <!--?php for($i=0;$i < count($aEsta);$i++) { ?-->
-                                                          <!--?php if ($aClie[0]["cdesta"] == str_pad($aEsta[$i]["cdesta"],02," ",STR_PAD_LEFT)." - ".$aEsta[$i]["deesta"]) {?-->
-                                                            <!--option selected =""><?php echo str_pad($aEsta[$i]["cdesta"],02," ",STR_PAD_LEFT)." - ".$aEsta[$i]["deesta"];?></option-->
-                                                          <!--?php } Else {?-->
-                                                            <!--option><?php echo str_pad($aEsta[$i]["cdesta"],02," ",STR_PAD_LEFT)." - ".$aEsta[$i]["deesta"];?></option-->
-                                                          <!--?php }?-->
-                                                        <!--?php }?-->
-                                                    <!--/select-->
-                                                </div>
-                                            </div>
-
-                                            <div class="form-group">
-                                                <label class="col-md-2 control-label" for="textinput">Telefone</label>
-                                                <div class="col-md-4">
-                                                    <input id="nrtele" name="nrtele" value="<?php echo $aForn[0]["nrtele"];?>" type="text" placeholder="(11) 1234-1234" class="form-control" maxlength = "20">
-                                                </div>
-                                            </div>
-
-                                            <div class="form-group">
-                                                <label class="col-md-2 control-label" for="textinput">Celular</label>
-                                                <div class="col-md-4">
-                                                    <input id="nrcelu" name="nrcelu" value="<?php echo $aForn[0]["nrcelu"];?>" type="text" placeholder="(11) 9-1234-1234" class="form-control" maxlength = "20">
-                                                </div>
-                                            </div>
-
-                                            <div class="form-group">
-                                                <label class="col-md-2 control-label" for="textinput">E-Mail</label>
-                                                <div class="col-md-8">
-                                                    <input id="demail" name="demail" value="<?php echo $aForn[0]["demail"];?>" type="email" placeholder="seuemail@seuprovedor.com.br" class="form-control" maxlength = "255">
-                                                </div>
-                                            </div>
-
-                                            <div class="form-group">
-                                                <label class="col-md-2 control-label" for="textinput">Observações</label>
-                                                <div class="col-md-8">
-                                                    <textarea class="form-control" id="deobse" wrap="physical" cols=50 rows=3 name="deobse" placeholder=""><?php echo $aForn[0]["deobse"];?></textarea>
-                                                </div>
-                                            </div>
-
-                                        <!--/div-->
-                                    </div>
-                                <?php }?>
-                                <?php if($acao !== "edita") {?>
-                                    <div class="row">
-                                        <!--div class="col-lg-6"-->
-                                            <br>
-                                            <div class="form-group">
-                                                <label class="col-md-2 control-label" for="textinput">Cpf/Cnpj</label>
-                                                <div class="col-md-3">
-                                                    <input id="cdforn" name="cdforn" type="text" value="<?php echo $aForn[0]["cdforn"];?>" placeholder="" class="form-control" maxlength = "14" autofocus readonly="">
-                                                </div>
-                                            </div>
-
-                                            <div class="form-group">
-                                                <label class="col-md-2 control-label" for="textinput">Nome/Razão Social</label>
-                                                <div class="col-md-8 ">
-                                                    <input id="deforn" name="deforn" value="<?php echo $aForn[0]["deforn"];?>" type="text" placeholder="" class="form-control" maxlength = "100" readonly="">
-                                                </div>
-                                            </div>
-
-                                            <div class="form-group">
-                                                <label class="col-md-2 control-label" for="textinput">Tipo de Empresa</label>
-                                                <div class="col-md-10">
-                                                    <select name="cdtipo" id="cdtipo" disabled ="">
-                                                        <?php if (substr($aForn[0]["cdtipo"], 0,1) == "J") {?>
-                                                            <option selected= "selected">Jurídica</option>
-                                                            <option>Física</option>
-                                                        <?php } Else {?>
-                                                            <option>Jurídica</option>
-                                                            <option  selected= "selected">Física</option>
-                                                        <?php }?>
+                                                    <select name="cdesta" id="cdesta" style="width:350px;" <?php if($acao == 'ver' or $acao == 'apaga'): ?>disabled<?php endif; ?>>
+                                                        <option selected ="" value="<?php $fornecedor["cdesta"]; ?>"><?php echo $fornecedor["cdesta"]; ?></option>
+                                                        <?php for($i=0;$i < count($estados);$i++) { ?>
+                                                            <option value="<?php echo str_pad($estados[$i]["cdesta"],02," ",STR_PAD_LEFT); ?>"><?php echo str_pad($estados[$i]["cdesta"],02," ",STR_PAD_LEFT)." - ".$estados[$i]["deesta"];?></option>
+                                                        <?php } ?>
                                                     </select>
                                                 </div>
                                             </div>
 
                                             <div class="form-group">
-                                                <label class="col-md-2 control-label" for="textinput">Inscrição Estadual</label>
-                                                <div class="col-md-8">
-                                                    <input id="nrinsc" name="nrinsc" value="<?php echo $aForn[0]["nrinsc"];?>" type="text" placeholder="Isento" class="form-control" maxlength = "20" readonly="">
-                                                </div>
-                                            </div>
-
-                                            <div class="form-group">
-                                                <label class="col-md-2 control-label" for="textinput">Inscrição Municipal</label>
-                                                <div class="col-md-8">
-                                                    <input id="nrccm" name="nrccm" value="<?php echo $aForn[0]["nrccm"];?>" type="text" placeholder="" class="form-control" maxlength = "20" readonly="">
-                                                </div>
-                                            </div>
-
-                                            <div class="form-group">
-                                                <label class="col-md-2 control-label" for="textinput">RG</label>
-                                                <div class="col-md-8">
-                                                    <input id="nrrg" name="nrrg" value="<?php echo $aForn[0]["nrrg"];?>" type="text" placeholder="" class="form-control" maxlength = "20" readonly="">
-                                                </div>
-                                            </div>
-
-                                            <div class="form-group">
-                                                <label class="col-md-2 control-label" for="textinput">Cep</label>
-                                                <div class="col-md-2">
-                                                    <input id="nrcepi" name="nrcepi" value="<?php echo $aClie[0]["nrcepi"];?>" onblur="pesquisacep(this.value);" type="text" placeholder="" class="form-control" maxlength = "08">
-                                                </div>
-                                            </div>
-
-                                            <div class="form-group">
-                                                <label class="col-md-2 control-label" for="textinput">Endereço</label>
-                                                <div class="col-md-8">
-                                                    <input id="deende" name="deende" value="<?php echo $aForn[0]["deende"];?>" type="text" placeholder="" class="form-control" maxlength = "100" readonly="">
-                                                </div>
-                                            </div>
-
-                                            <div class="form-group">
-                                                <label class="col-md-2 control-label" for="textinput">Número</label>
-                                                <div class="col-md-2">
-                                                    <input id="nrende" name="nrende" value="<?php echo $aForn[0]["nrende"];?>" type="number" placeholder="" class="form-control" maxlength = "10" readonly="">
-                                                </div>
-                                            </div>
-
-                                            <div class="form-group">
-                                                <label class="col-md-2 control-label" for="textinput">Complemento</label>
-                                                <div class="col-md-4">
-                                                    <input id="decomp" name="decomp" value="<?php echo $aForn[0]["decomp"];?>" type="text" placeholder="" class="form-control" maxlength = "50" readonly="">
-                                                </div>
-                                            </div>
-
-                                            <div class="form-group">
-                                                <label class="col-md-2 control-label" for="textinput">Bairro</label>
-                                                <div class="col-md-4">
-                                                    <input id="debair" name="debair" value="<?php echo $aForn[0]["debair"];?>" type="text" placeholder="" class="form-control" maxlength = "50" readonly="">
-                                                </div>
-                                            </div>
-
-                                            <div class="form-group">
-                                                <label class="col-md-2 control-label" for="textinput">Cidade</label>
-                                                <div class="col-md-4">
-                                                    <input id="decida" name="decida" value="<?php echo $aForn[0]["decida"];?>" type="text" placeholder="" class="form-control" maxlength = "50" readonly="">
-                                                </div>
-                                            </div>
-
-                                            <div class="form-group">
-                                                <label class="col-md-2 control-label" for="textinput">Estado</label>
-                                                <div class="col-md-4">
-                                                    <input id="cdesta" name="cdesta" value="<?php echo $aClie[0]["cdesta"];?>" type="text" placeholder="" class="form-control" maxlength = "02" readonly="">
-                                                    <!--select name="cdesta" id="cdesta" style="width:350px;"-->
-                                                        <!--?php for($i=0;$i < count($aEsta);$i++) { ?-->
-                                                          <!--?php if ($aClie[0]["cdesta"] == str_pad($aEsta[$i]["cdesta"],02," ",STR_PAD_LEFT)." - ".$aEsta[$i]["deesta"]) {?-->
-                                                            <!--option selected =""><?php echo str_pad($aEsta[$i]["cdesta"],02," ",STR_PAD_LEFT)." - ".$aEsta[$i]["deesta"];?></option-->
-                                                          <!--?php } Else {?-->
-                                                            <!--option><?php echo str_pad($aEsta[$i]["cdesta"],02," ",STR_PAD_LEFT)." - ".$aEsta[$i]["deesta"];?></option-->
-                                                          <!--?php }?-->
-                                                        <!--?php }?-->
-                                                    <!--/select-->
-                                                </div>
-                                            </div>
-
-                                            <div class="form-group">
                                                 <label class="col-md-2 control-label" for="textinput">Telefone</label>
                                                 <div class="col-md-4">
-                                                    <input id="nrtele" name="nrtele" value="<?php echo $aForn[0]["nrtele"];?>" type="text" placeholder="(11) 1234-1234" class="form-control" maxlength = "20" readonly="">
+                                                    <input id="nrtele" name="nrtele" value="<?php echo $fornecedor["nrtele"];?>" type="text" placeholder="(11) 1234-1234" class="form-control" maxlength = "20">
                                                 </div>
                                             </div>
 
                                             <div class="form-group">
                                                 <label class="col-md-2 control-label" for="textinput">Celular</label>
                                                 <div class="col-md-4">
-                                                    <input id="nrcelu" name="nrcelu" value="<?php echo $aForn[0]["nrcelu"];?>" type="text" placeholder="(11) 9-1234-1234" class="form-control" maxlength = "20" readonly="">
+                                                    <input id="nrcelu" name="nrcelu" value="<?php echo $fornecedor["nrcelu"];?>" type="text" placeholder="(11) 9-1234-1234" class="form-control" maxlength = "20">
                                                 </div>
                                             </div>
 
                                             <div class="form-group">
                                                 <label class="col-md-2 control-label" for="textinput">E-Mail</label>
                                                 <div class="col-md-8">
-                                                    <input id="demail" name="demail" value="<?php echo $aForn[0]["demail"];?>" type="email" placeholder="seuemail@seuprovedor.com.br" class="form-control" maxlength = "255" readonly="">
+                                                    <input id="demail" name="demail" value="<?php echo $fornecedor["demail"];?>" type="email" placeholder="seuemail@seuprovedor.com.br" class="form-control" maxlength = "255">
                                                 </div>
                                             </div>
 
                                             <div class="form-group">
                                                 <label class="col-md-2 control-label" for="textinput">Observações</label>
                                                 <div class="col-md-8">
-                                                    <textarea class="form-control" id="deobse" wrap="physical" cols=50 rows=3 name="deobse" placeholder="" readonly=""><?php echo $aForn[0]["deobse"];?></textarea>
+                                                    <textarea class="form-control" id="deobse" wrap="physical" cols=50 rows=3 name="deobse" placeholder=""><?php echo $fornecedor["deobse"];?></textarea>
                                                 </div>
                                             </div>
 
                                         <!--/div-->
                                     </div>
-                                <?php }?>
                                 <div>
                                     <center>
                                         <?php if($acao == "edita") {?>
-                                            <button class="btn btn-sm btn-primary" name = "edita" type="submit"><strong>Alterar</strong></button>
+                                            <button class="btn btn-sm btn-primary" name = "editar" type="submit"><strong>Alterar</strong></button>
                                         <?php }?>
                                         <?php if($acao == "apaga") {?>
-                                            <button class="btn btn-sm btn-danger" name = "apaga" type="submit"><strong>Apagar</strong></button>
+                                            <button class="btn btn-sm btn-danger" name = "apagar" type="submit"><strong>Apagar</strong></button>
+                                        <?php }?>
+                                        <?php if($acao == "novo") {?>
+                                            <button class="btn btn-sm btn-danger" name = "salvar" type="submit"><strong>Salvar</strong></button>
                                         <?php }?>
                                         <button class="btn btn-sm btn-warning " type="button" onClick="history.go(-1)"><strong>Retornar</strong></button>
                                     </center>
                                 </div>
-
                             </form>
                         </div>
                     </div>

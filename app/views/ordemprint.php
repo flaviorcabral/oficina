@@ -31,7 +31,7 @@
     $cdclie = substr($aOrde[0]["cdclie"], 0, $pos-1);
 
     $aClie = $con->buscarCliente($cdclie);
-    $declie = $aClie[0]["declie"];
+    $declie = $aClie["declie"];
 
     $dtorde = $aOrde[0]["dtorde"];
     $dtorde = strtotime($dtorde);
@@ -111,13 +111,13 @@
                 <div class="col-sm-6 text-right">
                     <span><strong>CLIENTE</strong></span>
                     <address>
-                        <?php echo $aClie[0]["declie"]; ?><br>
+                        <?php echo $aClie["declie"]; ?><br>
                         <?php echo $cdclie; ?> <br>
-                        <?php echo $aClie[0]["deende"].", ".$aClie[0]["nrende"].", ".$aClie[0]["debair"]; ?><br>
-                        <?php echo $aClie[0]["decida"].", ".$aClie[0]["cdesta"].", ".$aClie[0]["nrcepi"]; ?><br>
-                        <span title="Telefone"></span> <?php echo $aClie[0]["nrtele"]; ?><br>
-                        <span title="Celular"></span> <?php echo $aClie[0]["nrcelu"]; ?><br>
-                        <span title="E-mail"></span> <?php echo $aClie[0]["demail"]; ?><br>
+                        <?php echo $aClie["deende"].", ".$aClie["nrende"].", ".$aClie["debair"]; ?><br>
+                        <?php echo $aClie["decida"].", ".$aClie["cdesta"].", ".$aClie["nrcepi"]; ?><br>
+                        <span title="Telefone"></span> <?php echo $aClie["nrtele"]; ?><br>
+                        <span title="Celular"></span> <?php echo $aClie["nrcelu"]; ?><br>
+                        <span title="E-mail"></span> <?php echo $aClie["demail"]; ?><br>
                         <span><strong>VEÍCULO : </strong>
                             <?php echo $aOrde[0]["veplac"].", ".$aOrde[0]["vemarc"].", ".$aOrde[0]["vemode"]; ?>
                             <?php echo $aOrde[0]["vecorv"].", ".$aOrde[0]["veanom"].", ".$aOrde[0]["veanof"]; ?>

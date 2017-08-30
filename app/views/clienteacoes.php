@@ -22,6 +22,7 @@
 
     $con = new Controller();
     $con->pagCliente();
+    $estados = $con->estados;
 
     $acao = $_GET["acao"];
 
@@ -104,14 +105,11 @@
     {
         $chave = trim($_GET["chave"]);
         $cliente = $con->cliente;
-        $estados = $con->listarEstadosBra();
     }
 
     if($acao == "novo")
     {
         $cliente = $con->cliente;
-        $clientes = $con->clientes;
-        $estados = $con->listarEstadosBra();
     }
 
 ?>

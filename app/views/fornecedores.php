@@ -1,5 +1,11 @@
 <?php
 
+    include_once '../../config.php';
+
+    ini_set ('display_errors', 1 );
+    error_reporting ( E_ALL | E_STRICT );
+    //error_reporting (0);
+
     // identificando dispositivo
     $iphone = strpos($_SERVER['HTTP_USER_AGENT'],"iPhone");
     $ipad = strpos($_SERVER['HTTP_USER_AGENT'],"iPad");
@@ -14,9 +20,8 @@
         $eMovel="S";
     }
 
-    // incluindo bibliotecas de apoio
-    include "banco.php";
-    include "util.php";
+    $con = new Controller();
+    $fornecedores= $con->listaFornecedores();
 
     //codigo do usuario
     if (isset($_COOKIE['cdusua'])) {
@@ -75,8 +80,6 @@
     $deusua1=$deusua;
     $deusua = substr($deusua, 0,15);
 
-    $aForn= ConsultarDados("", "", "","select * from fornecedores where left(flativ,1) = 'S' order by cdforn");
-
 ?>
 <!DOCTYPE html>
 <html>
@@ -86,7 +89,7 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-    <title>Demonstração Auto Mecânica&copy; | Principal </title>
+    <title>Template Oficina | Principal </title>
 
     <link href="../../templates/css/bootstrap.min.css" rel="stylesheet">
     <link href="../../templates/font-awesome/css/font-awesome.css" rel="stylesheet">
@@ -135,9 +138,9 @@
                         <br>
                         <li>
                             <?php if (strlen($cdusua) == 14 ) {;?>
-                                <span><?php echo  formatar($cdusua,"cnpj")." - ";?></span>
+                                <span><?php echo  $con->formatar($cdusua,"cnpj")." - ";?></span>
                             <?php } Else {?>
-                                <span><?php echo  formatar($cdusua,"cpf")." - ";?></span>
+                                <span><?php echo  $con->formatar($cdusua,"cpf")." - ";?></span>
                             <?php }?>
                         </li>
                         <li>
@@ -146,7 +149,7 @@
                     </ul>
                     <ul class="nav navbar-top-links navbar-right">
                         <li>
-                            <span class="m-r-sm text-muted welcome-message">Benvindo ao <strong>Demonstração Auto Mecânica&copy;</strong></span>
+                            <span class="m-r-sm text-muted welcome-message">Benvindo ao <strong>Template Oficina</strong></span>
                         </li>
                         <li>
                             <a href="../../index.php">
@@ -167,7 +170,7 @@
 
                         <div class="ibox-content">
                             <div class="pull-left">
-                                <a onclick="#" href="fornecedoresi.php" class="btn btn-warning ">Incluir</a>
+                                <a onclick="#" href="fornecedoresacoes.php?acao=novo" class="btn btn-warning ">Incluir</a>
                             </div>
                             <br>
                             <br>
@@ -185,18 +188,18 @@
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        <?php for ($f =0; $f <= (count($aForn)-1); $f++) { ?>
+                                        <?php for ($f =0; $f <= (count($fornecedores)-1); $f++) { ?>
                                             <tr class="gradeX">
 
-                                                <?php $coluna1 = $aForn[$f]["cdforn"]; ?>
-                                                <?php $coluna2 = $aForn[$f]["deforn"]; ?>
-                                                <?php $coluna3 = $aForn[$f]["cdtipo"]; ?>
-                                                <?php $coluna4 = $aForn[$f]["nrtele"]; ?>
-                                                <?php $coluna5 = $aForn[$f]["demail"]; ?>
+                                                <?php $coluna1 = $fornecedores[$f]["cdforn"]; ?>
+                                                <?php $coluna2 = $fornecedores[$f]["deforn"]; ?>
+                                                <?php $coluna3 = $fornecedores[$f]["cdtipo"]; ?>
+                                                <?php $coluna4 = $fornecedores[$f]["nrtele"]; ?>
+                                                <?php $coluna5 = $fornecedores[$f]["demail"]; ?>
 
-                                                <?php $ver = "fornecedoresa.php?acao=ver&chave=".$coluna1; ?>
-                                                <?php $edita = "fornecedoresa.php?acao=edita&chave=".$coluna1; ?>
-                                                <?php $apaga = "fornecedoresa.php?acao=apaga&chave=".$coluna1; ?>
+                                                <?php $ver = "fornecedoresacoes.php?acao=ver&chave=".$coluna1; ?>
+                                                <?php $edita = "fornecedoresacoes.php?acao=edita&chave=".$coluna1; ?>
+                                                <?php $apaga = "fornecedoresacoes.php?acao=apaga&chave=".$coluna1; ?>
 
                                                 <td><?php print $coluna1; ?></td>
                                                 <td><?php print $coluna2; ?></td>
@@ -331,8 +334,8 @@
                 buttons: [
                     { extend: 'copy'},
                     {extend: 'csv'},
-                    {extend: 'excel', title: 'ExampleFile'},
-                    {extend: 'pdf', title: 'ExampleFile'},
+                    {extend: 'excel', title: 'Template Oficina'},
+                    {extend: 'pdf', title: 'Template Oficina'},
 
                     {extend: 'print',
                      customize: function (win){

@@ -22,6 +22,7 @@
 
     $con = new Controller();
     $ordens = $con->listarOrdensServico();
+    $clientes = $con->listarClientes();
 
     //codigo do usuario
     if (isset($_COOKIE['cdusua'])) {
@@ -79,8 +80,6 @@
     // reduzir o tamanho do nome do usuario
     $deusua1=$deusua;
     $deusua = substr($deusua, 0,15);
-
-    $clientes = $con->listarClientes();
 
 ?>
 <!DOCTYPE html>
