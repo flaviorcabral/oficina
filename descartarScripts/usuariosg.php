@@ -46,6 +46,7 @@
 
 		$defoto1=basename($_FILES['defotom']['name']);
 		$desenh=md5(strtolower(substr($_POST["deusua"], 0,3)));
+
 		if (empty($defoto1) == true){
 		  $defoto="img/semfoto.jpg";
 		} Else {

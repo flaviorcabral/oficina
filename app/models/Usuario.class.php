@@ -12,9 +12,10 @@ class Usuario
         $this->con = $conexao->getConexao();
     }
 
-    function validaAcesso($mat){
+    //Valida permissão de acesso
+    function validaAcesso($login){
 
-        $result = $this->con->query("SELECT * FROM usuarios WHERE cdusua = '{$mat}'");
+        $result = $this->con->query("SELECT * FROM usuarios WHERE delogin = '{$login}'");
 
         if (count($result) > 0) {
 
@@ -25,6 +26,17 @@ class Usuario
 
     }
 
+    //Salvar novo usuario
+    function insertUsuario($sql)
+    {
+        if ($this->con->exec($sql)){
+            return true;
+        }
+
+        return false;
+    }
+
+    //Lista todos os usuarios
     function listaUsuarios()
     {
         $lista = $this->con->query("SELECT * FROM usuarios");
@@ -37,6 +49,7 @@ class Usuario
         return FALSE;
     }
 
+    //Busca usuario pela Matricula
     function buscaUsuario($mat)
     {
         $busca = $this->con->query("SELECT * FROM usuarios WHERE cdusua = '{$mat}'");
@@ -50,7 +63,18 @@ class Usuario
 
     }
 
-    function updateUsuario($mat, $nome, $email, $telefone, $camfoto)
+    //Atualiza dados pelo admin
+    function updateDados($sql)
+    {
+        if ($this->con->exec($sql)){
+            return true;
+        }
+
+        return false;
+    }
+
+    //Atualiza dados pelo usuario
+    function updateMeusDados($mat, $nome, $email, $telefone, $camfoto)
     {
 
         if ($this->con->exec("UPDATE usuarios SET deusua = '{$nome}' , demail = '{$email}', nrtele = '{$telefone}', defoto = '{$camfoto}' WHERE cdusua = '{$mat}'")) {
@@ -61,6 +85,7 @@ class Usuario
         return FALSE;
     }
 
+    //Atualiza senha do usuario
     function updateSenha($mat, $nvsenha)
     {
         if ($this->con->exec("UPDATE usuarios SET desenh = '{$nvsenha}' WHERE cdusua = '{$mat}'")) {
@@ -71,4 +96,14 @@ class Usuario
         return FALSE;
     }
 
+    //Delete usuario
+    function deleteUsuario($codigo)
+    {
+        if ($this->con->exec("DELETE FROM usuarios WHERE cdusua = '{$codigo}'")) {
+
+            return TRUE;
+        }
+
+        return FALSE;
+    }
 }

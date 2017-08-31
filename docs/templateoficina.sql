@@ -1,24 +1,23 @@
-
 -- phpMyAdmin SQL Dump
--- version 3.5.2.2
+-- version 4.5.1
 -- http://www.phpmyadmin.net
 --
--- Servidor: localhost
--- Tempo de Geração: 28/05/2017 às 21:21:12
--- Versão do Servidor: 10.0.28-MariaDB
--- Versão do PHP: 5.2.17
+-- Host: 127.0.0.1
+-- Generation Time: 31-Ago-2017 às 15:41
+-- Versão do servidor: 10.1.16-MariaDB
+-- PHP Version: 5.6.24
 
-SET SQL_MODE="NO_AUTO_VALUE_ON_ZERO";
+SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 SET time_zone = "+00:00";
 
 
 /*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
 /*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
 /*!40101 SET @OLD_COLLATION_CONNECTION=@@COLLATION_CONNECTION */;
-/*!40101 SET NAMES utf8 */;
+/*!40101 SET NAMES utf8mb4 */;
 
 --
--- Banco de Dados: `u449569243_of`
+-- Database: `oficina`
 --
 
 -- --------------------------------------------------------
@@ -27,7 +26,7 @@ SET time_zone = "+00:00";
 -- Estrutura da tabela `clientes`
 --
 
-CREATE TABLE IF NOT EXISTS `clientes` (
+CREATE TABLE `clientes` (
   `cdclie` varchar(14) NOT NULL,
   `declie` varchar(100) DEFAULT NULL,
   `cdtipo` varchar(15) DEFAULT NULL,
@@ -46,8 +45,7 @@ CREATE TABLE IF NOT EXISTS `clientes` (
   `demail` varchar(255) DEFAULT NULL,
   `deobse` varchar(500) DEFAULT NULL,
   `flativ` varchar(10) DEFAULT NULL,
-  `dtcada` date DEFAULT NULL,
-  PRIMARY KEY (`cdclie`)
+  `dtcada` date DEFAULT NULL
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
 --
@@ -57,11 +55,12 @@ CREATE TABLE IF NOT EXISTS `clientes` (
 INSERT INTO `clientes` (`cdclie`, `declie`, `cdtipo`, `nrinsc`, `nrccm`, `nrrg`, `deende`, `nrende`, `decomp`, `debair`, `decida`, `cdesta`, `nrcepi`, `nrtele`, `nrcelu`, `demail`, `deobse`, `flativ`, `dtcada`) VALUES
 ('12121', 'AILTON F SILVA', 'Jurídica', '', '', '', 'Rua São Francisco', 0, '', 'São Geraldo', 'Juazeiro', 'BA', '48905660', '1212121', '12121212121', '1212@ailton.com', 'asasa', 'S', '2016-12-27'),
 ('26812855000100', 'AILTON F SILVA', 'Jurídica', 'Isento', 'asasa', '26812855000100', 'Rua São Francisco', 12, 'Sala 2, Conjunto A', 'São Geraldo', 'Juazeiro', 'BA', '48905660', '11 1234-9876', '(12) 2-2222-2222', '1@1.com', 'asasa', 'S', '2016-12-27'),
-('618276112111', 'Fausto Lage Lange', 'Física', '6', '6', '6', 'Rua Miguel Palhares de Almeida', 345, 'Casa 4', 'Parque São Lourenço', 'São Paulo', 'SP - São Paulo', '07871234', '11 9876-1234', '11 9-7656-1234', 'fausto@lange.com', 'Bom cliente!', 'S', '2016-11-04'),
-('87827611211', 'Valter Prebianca', 'Física', '8', '8', '8', 'Travessa Tardes de Lindóia', 124, 'Casa 2', 'Jardim da Conquista', 'São Paulo', 'SP - São Paulo', '08333000', '11 34563211', '11 9-8765-1234', 'valter@prebianca.com', 'Bom cliente!', 'S', '2016-11-04'),
-('00535888688', 'Em teste', 'Física', '', '', '', '', 0, '', '', '', '', '', '', '', '', '', 'S', '2017-05-10'),
-('1111111111', 'Anderson', 'Jurídica', '', '', '', '', 0, '', '', '', '', '', '', '', '', '', 'S', '2017-05-10'),
-('29466545833', 'jefersonbatista', 'Jurídica', '', '', '', 'Rua 27 de Agosto', 0, '', 'Dos Casa', 'São Bernardo do Campo', 'SP', '09840712', '', '', 'suporte@tecnosegura.com.br', '', 'S', '2017-05-27');
+('618276112111', 'Fausto Lage Lange', 'Física', '6', '6', '6', 'Rua Miguel Palhares de Almeida', 345, 'Casa 4', 'Parque São Lourenço', 'São Paulo', 'SP', '07871234', '11 9876-1234', '11 9-7656-1234', 'fausto@lange.com', 'Bom cliente!', 'S', '2016-11-04'),
+('87827611211', 'Valter Prebianca', 'Física', '8', '8', '8', 'Travessa Tardes de Lindóia', 124, 'Casa 2', 'Jardim da Conquista', 'São Paulo', 'SP', '08333000', '11 34563211', '11 9-8765-1234', 'valter@prebianca.com', 'Bom cliente!', 'S', '2016-11-04'),
+('29466545833', 'jefersonbatista', 'Jurídica', '', '', '', 'Rua 27 de Agosto', 0, '', 'Dos Casa', 'São Bernardo do Campo', 'SP', '09840712', '', '', 'suporte@tecnosegura.com.br', '', 'S', '2017-05-27'),
+('123.456.108-23', 'Empresa teste', 'Fisica', '', '', '', 'Rua sexquicentenario', 0, '', 'centro', 'Natuba', 'PB', '58494000', '', '', 'email@email.com.br', '', 'S', '2017-08-29'),
+('35112099876', 'ganja master', 'Jurídica', '', '', '278766134444', 'Rua Chile', 0, '', 'Jardim Helena', 'Carapicuíba', 'SP', '06342150', '11 45467899', '11 987876543', 'contato@oficina.com.br', 'teste', 'S', '2017-07-17'),
+('113', 'Empresa teste', 'Fisica', '', '', '', '', 0, '', '', 'Natuba', 'PB', '58494000', '', '', 'email@email.com.br', '', 'S', '2017-08-30');
 
 -- --------------------------------------------------------
 
@@ -69,8 +68,8 @@ INSERT INTO `clientes` (`cdclie`, `declie`, `cdtipo`, `nrinsc`, `nrccm`, `nrrg`,
 -- Estrutura da tabela `contas`
 --
 
-CREATE TABLE IF NOT EXISTS `contas` (
-  `cdcont` bigint(20) NOT NULL AUTO_INCREMENT,
+CREATE TABLE `contas` (
+  `cdcont` bigint(20) NOT NULL,
   `decont` varchar(50) DEFAULT NULL,
   `dtcont` date DEFAULT NULL,
   `vlcont` decimal(15,2) DEFAULT NULL,
@@ -81,12 +80,8 @@ CREATE TABLE IF NOT EXISTS `contas` (
   `cdorig` varchar(100) DEFAULT NULL,
   `deobse` varchar(500) DEFAULT NULL,
   `flativ` varchar(15) DEFAULT NULL,
-  `dtcada` date DEFAULT NULL,
-  PRIMARY KEY (`cdcont`),
-  KEY `icontas1` (`decont`,`dtcont`),
-  KEY `icontas2` (`dtcont`,`cdquem`),
-  KEY `icontas3` (`dtcont`,`cdorig`)
-) ENGINE=MyISAM  DEFAULT CHARSET=utf8 AUTO_INCREMENT=205 ;
+  `dtcada` date DEFAULT NULL
+) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
 --
 -- Extraindo dados da tabela `contas`
@@ -182,26 +177,6 @@ INSERT INTO `contas` (`cdcont`, `decont`, `dtcont`, `vlcont`, `cdtipo`, `vlpago`
 (125, 'Cliente a Receber', '2017-01-31', '9265.94', 'Receber', NULL, NULL, '87827611211 - Cliente Vizinho 12111', '10', NULL, 'Sim', '2016-10-31'),
 (126, 'Cliente a Receber', '2017-03-03', '9265.94', 'Receber', NULL, NULL, '87827611211 - Cliente Vizinho 12111', '10', NULL, 'Sim', '2016-10-31'),
 (127, 'Cliente a Receber', '2017-03-31', '9265.94', 'Receber', NULL, NULL, '87827611211 - Cliente Vizinho 12111', '10', NULL, 'Sim', '2016-10-31'),
-(128, 'Pedido a Pagar', '2016-12-01', '5506.12', 'Pagar', NULL, NULL, '11111111111111 - 1111111111111111111111111111111', '18', NULL, 'Sim', '2016-10-31'),
-(129, 'Pedido a Pagar', '2016-12-31', '5506.12', 'Pagar', NULL, NULL, '11111111111111 - 1111111111111111111111111111111', '18', NULL, 'Sim', '2016-10-31'),
-(130, 'Pedido a Pagar', '2017-01-31', '5506.12', 'Pagar', NULL, NULL, '11111111111111 - 1111111111111111111111111111111', '18', NULL, 'Sim', '2016-10-31'),
-(131, 'Pedido a Pagar', '2017-03-03', '5506.12', 'Pagar', NULL, NULL, '11111111111111 - 1111111111111111111111111111111', '18', NULL, 'Sim', '2016-10-31'),
-(132, 'Pedido a Pagar', '2017-03-31', '5506.12', 'Pagar', NULL, NULL, '11111111111111 - 1111111111111111111111111111111', '18', NULL, 'Sim', '2016-10-31'),
-(133, 'Pedido a Pagar', '2017-05-01', '5506.12', 'Pagar', NULL, NULL, '11111111111111 - 1111111111111111111111111111111', '18', NULL, 'Sim', '2016-10-31'),
-(134, 'Pedido a Pagar', '2017-05-31', '5506.12', 'Pagar', NULL, NULL, '11111111111111 - 1111111111111111111111111111111', '18', NULL, 'Sim', '2016-10-31'),
-(135, 'Pedido a Pagar', '2017-07-01', '5506.12', 'Pagar', NULL, NULL, '11111111111111 - 1111111111111111111111111111111', '18', NULL, 'Sim', '2016-10-31'),
-(136, 'Pedido a Pagar', '2017-07-31', '5506.12', 'Pagar', NULL, NULL, '11111111111111 - 1111111111111111111111111111111', '18', NULL, 'Sim', '2016-10-31'),
-(137, 'Pedido a Pagar', '2017-08-31', '5506.12', 'Pagar', NULL, NULL, '11111111111111 - 1111111111111111111111111111111', '18', NULL, 'Sim', '2016-10-31'),
-(138, 'Pedido a Pagar', '2017-10-01', '5506.12', 'Pagar', NULL, NULL, '11111111111111 - 1111111111111111111111111111111', '18', NULL, 'Sim', '2016-10-31'),
-(139, 'Pedido a Pagar', '2017-10-31', '5506.12', 'Pagar', NULL, NULL, '11111111111111 - 1111111111111111111111111111111', '18', NULL, 'Sim', '2016-10-31'),
-(140, 'Pedido a Pagar', '2017-12-01', '5506.12', 'Pagar', NULL, NULL, '11111111111111 - 1111111111111111111111111111111', '18', NULL, 'Sim', '2016-10-31'),
-(141, 'Pedido a Pagar', '2017-12-31', '5506.12', 'Pagar', NULL, NULL, '11111111111111 - 1111111111111111111111111111111', '18', NULL, 'Sim', '2016-10-31'),
-(142, 'Pedido a Pagar', '2018-01-31', '5506.12', 'Pagar', NULL, NULL, '11111111111111 - 1111111111111111111111111111111', '18', NULL, 'Sim', '2016-10-31'),
-(143, 'Pedido a Pagar', '2018-03-03', '5506.12', 'Pagar', NULL, NULL, '11111111111111 - 1111111111111111111111111111111', '18', NULL, 'Sim', '2016-10-31'),
-(144, 'Pedido a Pagar', '2018-03-31', '5506.12', 'Pagar', NULL, NULL, '11111111111111 - 1111111111111111111111111111111', '18', NULL, 'Sim', '2016-10-31'),
-(145, 'Pedido a Pagar', '2018-05-01', '5506.12', 'Pagar', NULL, NULL, '11111111111111 - 1111111111111111111111111111111', '18', NULL, 'Sim', '2016-10-31'),
-(146, 'Pedido a Pagar', '2018-05-31', '5506.12', 'Pagar', NULL, NULL, '11111111111111 - 1111111111111111111111111111111', '18', NULL, 'Sim', '2016-10-31'),
-(147, 'Pedido a Pagar', '2018-07-01', '5506.12', 'Pagar', NULL, NULL, '11111111111111 - 1111111111111111111111111111111', '18', NULL, 'Sim', '2016-10-31'),
 (148, 'Cliente a Receber', '2016-12-04', '9265.94', 'Receber', NULL, NULL, '87827611211 - Cliente Vizinho 12111', '10', NULL, 'Sim', '2016-11-04'),
 (149, 'Cliente a Receber', '2017-01-04', '9265.94', 'Receber', NULL, NULL, '87827611211 - Cliente Vizinho 12111', '10', NULL, 'Sim', '2016-11-04'),
 (150, 'Cliente a Receber', '2017-02-04', '9265.94', 'Receber', NULL, NULL, '87827611211 - Cliente Vizinho 12111', '10', NULL, 'Sim', '2016-11-04'),
@@ -256,7 +231,44 @@ INSERT INTO `contas` (`cdcont`, `decont`, `dtcont`, `vlcont`, `cdtipo`, `vlpago`
 (201, 'Cliente a Receber', '2017-06-10', '100.00', 'Receber', NULL, NULL, '1111111111 - Anderson', '20', NULL, 'Sim', '2017-05-10'),
 (202, 'Cliente a Receber', '2017-06-25', '2600.00', 'Receber', NULL, NULL, '26812855000100 - AILTON F SILVA', '21', NULL, 'Sim', '2017-05-25'),
 (203, 'Cliente a Receber', '2017-06-27', '199.00', 'Receber', NULL, NULL, '00535888688 - Em teste', '22', NULL, 'Sim', '2017-05-27'),
-(204, 'Cliente a Receber', '2017-06-27', '299.00', 'Receber', NULL, NULL, '29466545833 - jefersonbatista', '23', NULL, 'Sim', '2017-05-27');
+(204, 'Cliente a Receber', '2017-06-27', '299.00', 'Receber', NULL, NULL, '29466545833 - jefersonbatista', '23', NULL, 'Sim', '2017-05-27'),
+(205, 'Cliente a Receber', '2017-07-19', '7902.82', 'Receber', NULL, NULL, '87827611211 - Cliente Vizinho 12111', '7', NULL, 'Sim', '2017-06-19'),
+(206, 'Cliente a Receber', '2017-08-19', '7902.82', 'Receber', NULL, NULL, '87827611211 - Cliente Vizinho 12111', '7', NULL, 'Sim', '2017-06-19'),
+(207, 'Cliente a Receber', '2017-09-19', '7902.82', 'Receber', NULL, NULL, '87827611211 - Cliente Vizinho 12111', '7', NULL, 'Sim', '2017-06-19'),
+(208, 'Cliente a Receber', '2017-10-19', '7902.82', 'Receber', NULL, NULL, '87827611211 - Cliente Vizinho 12111', '7', NULL, 'Sim', '2017-06-19'),
+(209, 'Cliente a Receber', '2017-11-19', '7902.82', 'Receber', NULL, NULL, '87827611211 - Cliente Vizinho 12111', '7', NULL, 'Sim', '2017-06-19'),
+(210, 'Cliente a Receber', '2017-12-19', '7902.82', 'Receber', NULL, NULL, '87827611211 - Cliente Vizinho 12111', '7', NULL, 'Sim', '2017-06-19'),
+(211, 'Cliente a Receber', '2018-01-19', '7902.82', 'Receber', NULL, NULL, '87827611211 - Cliente Vizinho 12111', '7', NULL, 'Sim', '2017-06-19'),
+(212, 'Cliente a Receber', '2017-07-19', '36779327.71', 'Receber', NULL, NULL, '87827611211 - Cliente Vizinho 12111', '7', NULL, 'Sim', '2017-06-19'),
+(213, 'Cliente a Receber', '2017-08-19', '36779327.71', 'Receber', NULL, NULL, '87827611211 - Cliente Vizinho 12111', '7', NULL, 'Sim', '2017-06-19'),
+(214, 'Cliente a Receber', '2017-09-19', '36779327.71', 'Receber', NULL, NULL, '87827611211 - Cliente Vizinho 12111', '7', NULL, 'Sim', '2017-06-19'),
+(215, 'Cliente a Receber', '2017-10-19', '36779327.71', 'Receber', NULL, NULL, '87827611211 - Cliente Vizinho 12111', '7', NULL, 'Sim', '2017-06-19'),
+(216, 'Cliente a Receber', '2017-11-19', '36779327.71', 'Receber', NULL, NULL, '87827611211 - Cliente Vizinho 12111', '7', NULL, 'Sim', '2017-06-19'),
+(217, 'Cliente a Receber', '2017-12-19', '36779327.71', 'Receber', NULL, NULL, '87827611211 - Cliente Vizinho 12111', '7', NULL, 'Sim', '2017-06-19'),
+(218, 'Cliente a Receber', '2018-01-19', '36779327.71', 'Receber', NULL, NULL, '87827611211 - Cliente Vizinho 12111', '7', NULL, 'Sim', '2017-06-19'),
+(219, 'Cliente a Receber', '2017-07-21', '100.00', 'Receber', NULL, NULL, '00535888688 - Em teste', '24', NULL, 'Sim', '2017-06-21'),
+(220, 'Cliente a Receber', '2017-08-04', '250.00', 'Receber', NULL, NULL, '29466545833 - jefersonbatista', '25', NULL, 'Sim', '2017-07-04'),
+(221, 'Cliente a Receber', '2017-08-04', '319.00', 'Receber', NULL, NULL, '29466545833 - jefersonbatista', '23', NULL, 'Sim', '2017-07-04'),
+(222, 'Cliente a Receber', '2017-08-17', '2200.00', 'Receber', NULL, NULL, '35112099876 - ganja master', '26', NULL, 'Sim', '2017-07-17'),
+(226, 'Cliente a Receber', '2017-08-25', '100.00', 'Receber', NULL, NULL, '00535888688 - Em teste', '29', NULL, 'Sim', '2017-07-25'),
+(224, 'Cliente a Receber', '2017-08-18', '100.00', 'Receber', NULL, NULL, '12121 - AILTON F SILVA', '28', NULL, 'Sim', '2017-07-18'),
+(225, 'Cliente a Receber', '2017-09-18', '100.00', 'Receber', NULL, NULL, '12121 - AILTON F SILVA', '28', NULL, 'Sim', '2017-07-18'),
+(227, 'Cliente a Receber', '2017-08-26', '100.00', 'Receber', NULL, NULL, '87827611211 - Valter Prebianca', '30', NULL, 'Sim', '2017-07-26'),
+(228, 'Cliente a Receber', '2017-08-27', '10.00', 'Receber', NULL, NULL, '00535888688 - Em teste', '31', NULL, 'Sim', '2017-07-27'),
+(229, 'Cliente a Receber', '2017-09-23', '36779327.71', 'Receber', NULL, NULL, '87827611211 - Cliente Vizinho 12111', '7', NULL, 'Sim', '2017-08-23'),
+(230, 'Cliente a Receber', '2017-10-23', '36779327.71', 'Receber', NULL, NULL, '87827611211 - Cliente Vizinho 12111', '7', NULL, 'Sim', '2017-08-23'),
+(231, 'Cliente a Receber', '2017-11-23', '36779327.71', 'Receber', NULL, NULL, '87827611211 - Cliente Vizinho 12111', '7', NULL, 'Sim', '2017-08-23'),
+(232, 'Cliente a Receber', '2017-12-23', '36779327.71', 'Receber', NULL, NULL, '87827611211 - Cliente Vizinho 12111', '7', NULL, 'Sim', '2017-08-23'),
+(233, 'Cliente a Receber', '2018-01-23', '36779327.71', 'Receber', NULL, NULL, '87827611211 - Cliente Vizinho 12111', '7', NULL, 'Sim', '2017-08-23'),
+(234, 'Cliente a Receber', '2018-02-23', '36779327.71', 'Receber', NULL, NULL, '87827611211 - Cliente Vizinho 12111', '7', NULL, 'Sim', '2017-08-23'),
+(235, 'Cliente a Receber', '2018-03-23', '36779327.71', 'Receber', NULL, NULL, '87827611211 - Cliente Vizinho 12111', '7', NULL, 'Sim', '2017-08-23'),
+(236, 'Cliente a Receber', '2017-09-30', '36779327.71', 'Receber', NULL, NULL, '87827611211 - Cliente Vizinho 12111', '7', NULL, 'Sim', '2017-08-30'),
+(237, 'Cliente a Receber', '2017-10-30', '36779327.71', 'Receber', NULL, NULL, '87827611211 - Cliente Vizinho 12111', '7', NULL, 'Sim', '2017-08-30'),
+(238, 'Cliente a Receber', '2017-11-30', '36779327.71', 'Receber', NULL, NULL, '87827611211 - Cliente Vizinho 12111', '7', NULL, 'Sim', '2017-08-30'),
+(239, 'Cliente a Receber', '2017-12-30', '36779327.71', 'Receber', NULL, NULL, '87827611211 - Cliente Vizinho 12111', '7', NULL, 'Sim', '2017-08-30'),
+(240, 'Cliente a Receber', '2018-01-30', '36779327.71', 'Receber', NULL, NULL, '87827611211 - Cliente Vizinho 12111', '7', NULL, 'Sim', '2017-08-30'),
+(241, 'Cliente a Receber', '2018-03-02', '36779327.71', 'Receber', NULL, NULL, '87827611211 - Cliente Vizinho 12111', '7', NULL, 'Sim', '2017-08-30'),
+(242, 'Cliente a Receber', '2018-03-30', '36779327.71', 'Receber', NULL, NULL, '87827611211 - Cliente Vizinho 12111', '7', NULL, 'Sim', '2017-08-30');
 
 -- --------------------------------------------------------
 
@@ -264,10 +276,9 @@ INSERT INTO `contas` (`cdcont`, `decont`, `dtcont`, `vlcont`, `cdtipo`, `vlpago`
 -- Estrutura da tabela `estados`
 --
 
-CREATE TABLE IF NOT EXISTS `estados` (
+CREATE TABLE `estados` (
   `cdesta` char(2) NOT NULL,
-  `deesta` char(35) DEFAULT NULL,
-  PRIMARY KEY (`cdesta`)
+  `deesta` char(35) DEFAULT NULL
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
 --
@@ -309,7 +320,7 @@ INSERT INTO `estados` (`cdesta`, `deesta`) VALUES
 -- Estrutura da tabela `fornecedores`
 --
 
-CREATE TABLE IF NOT EXISTS `fornecedores` (
+CREATE TABLE `fornecedores` (
   `cdforn` varchar(14) NOT NULL,
   `deforn` varchar(100) DEFAULT NULL,
   `cdtipo` varchar(15) DEFAULT NULL,
@@ -328,8 +339,7 @@ CREATE TABLE IF NOT EXISTS `fornecedores` (
   `demail` varchar(255) DEFAULT NULL,
   `deobse` varchar(500) DEFAULT NULL,
   `flativ` varchar(10) DEFAULT NULL,
-  `dtcada` date DEFAULT NULL,
-  PRIMARY KEY (`cdforn`)
+  `dtcada` date DEFAULT NULL
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
 --
@@ -337,10 +347,9 @@ CREATE TABLE IF NOT EXISTS `fornecedores` (
 --
 
 INSERT INTO `fornecedores` (`cdforn`, `deforn`, `cdtipo`, `nrinsc`, `nrccm`, `nrrg`, `deende`, `nrende`, `decomp`, `debair`, `decida`, `cdesta`, `nrcepi`, `nrtele`, `nrcelu`, `demail`, `deobse`, `flativ`, `dtcada`) VALUES
-('1', '2', 'Física', '12', '12', '2', '2', 2, '2', '2', '2', 'MG - Minas Gerais', '2', '2', '2', '26812855000100@a.com', '2222222222222221\r\n12\r\n123\r\n1234\r\n12345\r\n', 'S', '2016-10-30'),
-('11111111111111', '1111111111111111111111111111111', 'Física', 'Isento', '1234567', '1234557', '111111111111111111111', 11111, '11111111111111111111111', '11111111111111111111111', '1111111111111111111111111111111111', 'SC - Santa Catarina', '11111111', '111111111111111', '11111111111111111', '11111111@111111.com', '11111111111111111\r\n1111111111111111111111\r\n11111111111111111111111111', 'S', '2016-10-31'),
-('e2e2', 'grtrt', 'Jurídica', '', '', '', 'Avenida João Paulino Vieira Filho', 0, '', 'Zona 01', 'Maringá', 'PR', '87020015', '', '', '', '', 'S', '2017-03-30'),
-('45453465', 'grtrt', 'Jurídica', '', '', '', 'Avenida João Paulino Vieira Filho', 0, '', 'Zona 01', 'Maringá', 'PR', '87020015', '', '', '', '', 'S', '2017-03-30');
+('185.629.304-15', 'Pedro da Silva Cabral Pereira', 'FÃ­sica', '', '', '', 'Rua FuncionÃ¡rio Carlos Alberto dos Santos', 131, '', 'Mangabeira', 'JoÃ£o Pessoa', '', '58058540', '', '', 'email@email.com.br', '', 'S', '2017-08-30'),
+('45453465', 'grtrt', 'Jurídica', '', '', '', 'Avenida João Paulino Vieira Filho', 0, '', 'Zona 01', 'Maringá', 'PR', '87020015', '', '', '', '', 'S', '2017-03-30'),
+('24234234234234', 'teste', 'Física', '', 'tetetet', '343434343', '43434343', 1, 'casas', 'aasas', 'Montenegro', 'RS', '95780000', 'sasasas', 'asasas', '', 'tess', 'S', '2017-06-22');
 
 -- --------------------------------------------------------
 
@@ -348,8 +357,8 @@ INSERT INTO `fornecedores` (`cdforn`, `deforn`, `cdtipo`, `nrinsc`, `nrccm`, `nr
 -- Estrutura da tabela `ordem`
 --
 
-CREATE TABLE IF NOT EXISTS `ordem` (
-  `cdorde` bigint(20) NOT NULL AUTO_INCREMENT,
+CREATE TABLE `ordem` (
+  `cdorde` bigint(20) NOT NULL,
   `cdclie` varchar(100) DEFAULT NULL,
   `veplac` char(7) DEFAULT NULL,
   `vemarc` varchar(30) DEFAULT NULL,
@@ -366,20 +375,14 @@ CREATE TABLE IF NOT EXISTS `ordem` (
   `dtpago` date DEFAULT NULL,
   `deobse` varchar(500) DEFAULT NULL,
   `flativ` varchar(15) DEFAULT NULL,
-  `dtcada` date NOT NULL,
-  PRIMARY KEY (`cdorde`),
-  KEY `iordem1` (`cdclie`,`dtorde`),
-  KEY `iordem2` (`cdform`,`dtorde`),
-  KEY `iordem3` (`cdclie`,`dtpago`),
-  KEY `iordem4` (`cdform`,`dtpago`)
-) ENGINE=MyISAM  DEFAULT CHARSET=utf8 AUTO_INCREMENT=24 ;
+  `dtcada` date NOT NULL
+) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
 --
 -- Extraindo dados da tabela `ordem`
 --
 
 INSERT INTO `ordem` (`cdorde`, `cdclie`, `veplac`, `vemarc`, `vemode`, `veanom`, `veanof`, `vecorv`, `cdsitu`, `dtorde`, `vlorde`, `cdform`, `qtform`, `vlpago`, `dtpago`, `deobse`, `flativ`, `dtcada`) VALUES
-(7, '87827611211 - Cliente Vizinho 12111', 'LOK1234', 'Fiat', 'Uno Mille', '2015', '2015', 'vecorv', 'Andamento', '2017-05-03', '57893.72', 'Débito', 7, '80026.64', '2016-10-31', 'tudo ok\r\nrapaz vem amanhã!', 'Sim', '2017-05-03'),
 (8, '1 - AILTON FERREIRA DA SILVA', 'PIC9876', 'Fiat', 'UNO', '1999', '1988', 'Verde', 'Pendente', '2016-12-27', '68937.89', 'Débito', 2, '0.00', '2016-10-27', 'ok.\r\ntudo certo.', 'Sim', '2016-12-27'),
 (9, '1 - AILTON FERREIRA DA SILVA', 'TER8765', 'Audi', 'A3', '2009', '2009', 'Prata', 'Concluída', '2016-10-31', '16322.30', 'Débito', 9, '0.00', '0000-00-00', '9999\r\n999999\r\n9999999', 'Sim', '2016-10-31'),
 (10, '87827611211 - Cliente Vizinho 12111', 'TAK9876', 'Fiat', 'Strada', '2017', '2016', 'Verde', 'Entregue', '2016-08-08', '70.85', 'Dinheiro', 1, '70.85', '2016-11-04', 'Verificar barulho nas portas.\r\nColocar motor no ponto.\r\nAjustar cabos da bateria.\r\nTrocar rolamento da roda dianteira.\r\nTrocar as velas.\r\nTrocar bateria.', 'Sim', '2016-11-04'),
@@ -390,10 +393,17 @@ INSERT INTO `ordem` (`cdorde`, `cdclie`, `veplac`, `vemarc`, `vemode`, `veanom`,
 (15, '1 - AILTON FERREIRA DA SILVA', '', '', '', '', '', '', 'Orçamento', '2017-03-31', '107.00', 'Dinheiro', 1, '0.00', '0000-00-00', '', 'Sim', '2017-03-31'),
 (20, '1111111111 - Anderson', 'lad6676', 'fiat ', 'uno', '99', '99', 'azul', 'Orçamento', '2017-05-10', '100.00', 'Dinheiro', 1, '14.00', '2017-01-31', '', 'Sim', '2017-05-10'),
 (19, '12121 - AILTON F SILVA', 'dcm0113', 'Fiat', 'palio', '2000', '2001', 'preto', 'Andamento', '2017-05-05', '2000.00', 'Dinheiro', 10, '200.00', '2017-05-05', '', 'Sim', '2017-05-05'),
-(18, '12121 - AILTON F SILVA', '', '', '', '', '', '', 'Orçamento', '2017-04-21', '10.00', 'Dinheiro', 1, '0.00', '0000-00-00', '', 'Sim', '2017-04-21'),
 (21, '26812855000100 - AILTON F SILVA', '', '', '', '', '', '', 'Orçamento', '2017-05-25', '2600.00', 'Dinheiro', 1, '0.00', '0000-00-00', '', 'Sim', '2017-05-25'),
 (22, '00535888688 - Em teste', 'ede4477', 'fiat', 'idea', '', '', '', 'Orçamento', '2017-05-27', '199.00', 'Dinheiro', 1, '0.00', '0000-00-00', '', 'Sim', '2017-05-27'),
-(23, '29466545833 - jefersonbatista', '', '', '', '', '', '', 'Orçamento', '2017-05-27', '299.00', 'Dinheiro', 1, '0.00', '0000-00-00', '', 'Sim', '2017-05-27');
+(23, '29466545833 - jefersonbatista', '', '', '', '', '', '', 'Concluído', '2017-07-04', '319.00', 'Dinheiro', 1, '0.00', '0000-00-00', '', 'Sim', '2017-07-04'),
+(24, '00535888688 - Em teste', '', '', '', '', '', '', 'Orçamento', '2017-06-21', '100.00', 'Dinheiro', 1, '0.00', '0000-00-00', '', 'Sim', '2017-06-21'),
+(25, '29466545833 - jefersonbatista', '', '', '', '2012', '2012', '', 'Orçamento', '2017-07-04', '250.00', 'Dinheiro', 1, '250.00', '2017-07-04', '', 'Sim', '2017-07-04'),
+(26, '35112099876 - ganja master', 'DBS3456', 'volkswagen', 'fox', '2012', '2012', 'cinza', 'Orçamento', '2017-07-17', '2200.00', 'Dinheiro', 1, '0.00', '2017-07-17', 'teste', 'Sim', '2017-07-17'),
+(29, '00535888688 - Em teste', '', '', '', '', '', '', 'Orçamento', '2017-07-25', '100.00', 'Crédito', 1, '0.00', '0000-00-00', '', 'Sim', '2017-07-25'),
+(28, '12121 - AILTON F SILVA', 'hiv0069', 'Fiat', 'Palio', '2017', '2017', 'Vermelho', 'Orçamento', '2017-07-18', '200.00', 'Dinheiro', 2, '100.00', '2017-07-18', 'foi dado ao cliente 20% de desconto', 'Sim', '2017-07-18'),
+(30, '87827611211 - Valter Prebianca', '', '', '', '', '', '', 'Orçamento', '2017-07-26', '100.00', 'Dinheiro', 1, '0.00', '0000-00-00', '', 'Sim', '2017-07-26'),
+(31, '00535888688 - Em teste', '', '', '', '', '', '', 'Orçamento', '2017-07-27', '10.00', 'Dinheiro', 1, '0.00', '0000-00-00', '', 'Sim', '2017-07-27'),
+(7, '87827611211 - Cliente Vizinho 12111', 'LOK1234', 'Fiat', 'Uno Mille 1', '2015', '2015', 'vecorv', '', '2017-08-30', '257455293.98', '', 7, '80026.64', '2016-10-31', 'tudo ok\r\nrapaz vem amanhï¿½!', 'Sim', '2017-08-30');
 
 -- --------------------------------------------------------
 
@@ -401,14 +411,13 @@ INSERT INTO `ordem` (`cdorde`, `cdclie`, `veplac`, `vemarc`, `vemode`, `veanom`,
 -- Estrutura da tabela `ordemi`
 --
 
-CREATE TABLE IF NOT EXISTS `ordemi` (
+CREATE TABLE `ordemi` (
   `cdorde` bigint(20) DEFAULT NULL,
   `nritem` int(11) DEFAULT NULL,
   `cdpeca` varchar(100) DEFAULT NULL,
   `qtpeca` int(11) DEFAULT NULL,
   `vlpeca` decimal(15,2) DEFAULT NULL,
-  `vltota` decimal(15,2) DEFAULT NULL,
-  KEY `iordemi1` (`cdorde`,`nritem`,`cdpeca`)
+  `vltota` decimal(15,2) DEFAULT NULL
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
 --
@@ -433,7 +442,6 @@ INSERT INTO `ordemi` (`cdorde`, `nritem`, `cdpeca`, `qtpeca`, `vlpeca`, `vltota`
 (8, 3, '9 - 9', 18765, '2.33', '43722.45'),
 (8, 4, '5 - 5', 66, '1.29', '85.14'),
 (8, 5, '6 - 6', 14545, '1.55', '22544.75'),
-(7, 2, '6 - 6', 6666, '6.00', '39996.00'),
 (7, 3, '1 - 1', 1111, '1.00', '1111.00'),
 (7, 4, '7 - 7', 7777, '1.81', '14076.37'),
 (12, 2, '1010 - Tampa do Reservatório do Óleo', 1, '35.00', '35.00'),
@@ -446,19 +454,28 @@ INSERT INTO `ordemi` (`cdorde`, `nritem`, `cdpeca`, `qtpeca`, `vlpeca`, `vltota`
 (15, 1, '7 - 7', 1, '7.00', '7.00'),
 (15, 2, '1 - Alinhamento', 1, '100.00', '100.00'),
 (7, 5, '1 - Alinhamento', 1, '100.00', '100.00'),
-(7, 1, '3 - 3', 3333, '0.78', '2599.74'),
-(18, 1, '4 - 4', 1, '10.00', '10.00'),
 (7, 6, '7 - 7', 1, '7.00', '7.00'),
 (7, 7, '5 - 5', 1, '1.29', '1.29'),
-(7, 8, '5 - 5', 1, '1.29', '1.29'),
-(7, 9, '4 - 4', 1, '1.03', '1.03'),
 (19, 1, '2 - reparo geral', 1, '2000.00', '2000.00'),
 (20, 1, '1 - Alinhamento', 1, '100.00', '100.00'),
 (21, 1, '1 - Alinhamento', 1, '100.00', '100.00'),
 (21, 2, '1233 - motor completo', 1, '2500.00', '2500.00'),
 (22, 1, '003 - COXIM DO MOTOR', 1, '199.00', '199.00'),
+(23, 2, '003 - COXIM DO MOTOR', 1, '199.00', '199.00'),
 (23, 1, '1 - Alinhamento', 1, '100.00', '100.00'),
-(23, 2, '003 - COXIM DO MOTOR', 1, '199.00', '199.00');
+(7, 1, '3 - 3', 330000000, '0.78', '257400000.00'),
+(7, 2, '6 - 6', 6666, '6.00', '39996.00'),
+(24, 1, '1 - Alinhamento', 1, '100.00', '100.00'),
+(25, 1, '10 - 10', 1, '10.00', '10.00'),
+(26, 1, '1 - Alinhamento', 2, '100.00', '200.00'),
+(26, 2, '2 - reparo geral', 1, '2000.00', '2000.00'),
+(29, 1, '1 - Alinhamento', 1, '100.00', '100.00'),
+(28, 1, '1 - Alinhamento', 2, '100.00', '200.00'),
+(30, 1, '2 - reparo geral', 1, '100.00', '100.00'),
+(31, 1, '003 - COXIM DO MOTOR', 1, '10.00', '10.00'),
+(31, 2, '80973102937012938 - Bucha da rebimboca da parafuseta', 1, '0.00', '0.00'),
+(7, 8, '5 - 5', 1, '1.29', '1.29'),
+(7, 9, '4 - 4', 1, '1.03', '1.03');
 
 -- --------------------------------------------------------
 
@@ -466,7 +483,7 @@ INSERT INTO `ordemi` (`cdorde`, `nritem`, `cdpeca`, `qtpeca`, `vlpeca`, `vltota`
 -- Estrutura da tabela `parametros`
 --
 
-CREATE TABLE IF NOT EXISTS `parametros` (
+CREATE TABLE `parametros` (
   `cdprop` varchar(14) NOT NULL,
   `deprop` varchar(100) DEFAULT NULL,
   `nrinsc` varchar(20) DEFAULT NULL,
@@ -480,8 +497,7 @@ CREATE TABLE IF NOT EXISTS `parametros` (
   `nrcepi` varchar(8) DEFAULT NULL,
   `nrtele` varchar(20) DEFAULT NULL,
   `nrcelu` varchar(20) DEFAULT NULL,
-  `demail` varchar(255) DEFAULT NULL,
-  PRIMARY KEY (`cdprop`)
+  `demail` varchar(255) DEFAULT NULL
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
 --
@@ -489,7 +505,7 @@ CREATE TABLE IF NOT EXISTS `parametros` (
 --
 
 INSERT INTO `parametros` (`cdprop`, `deprop`, `nrinsc`, `nrccm`, `deende`, `nrende`, `decomp`, `debair`, `decida`, `cdesta`, `nrcepi`, `nrtele`, `nrcelu`, `demail`) VALUES
-('61843256000155', 'Oficina Mecânica Nova Aliança', 'Isento', '2345', 'Rua Anecy Rocha', 1520, '', 'Jardim Nova Vitória', 'São Paulo', 'SP - São Paulo', '08372-20', '11 2734-3353', '11 9-8448-3928', 'of.mecanicanovaalianca@hotmail.com');
+('00000000000000', 'Oficina Template', 'Isento', '2345', 'Rua da rua', 1520, '', 'Centro', 'Cidade', 'SP - São Paulo', '00000-00', '00-0000', '00-0000', 'email@email.com');
 
 -- --------------------------------------------------------
 
@@ -497,14 +513,13 @@ INSERT INTO `parametros` (`cdprop`, `deprop`, `nrinsc`, `nrccm`, `deende`, `nren
 -- Estrutura da tabela `pecas`
 --
 
-CREATE TABLE IF NOT EXISTS `pecas` (
+CREATE TABLE `pecas` (
   `cdpeca` varchar(30) NOT NULL,
   `depeca` varchar(100) DEFAULT NULL,
   `vlpeca` decimal(15,2) DEFAULT NULL,
   `qtpeca` int(11) DEFAULT NULL,
   `flativ` varchar(15) DEFAULT NULL,
-  `dtcada` date DEFAULT NULL,
-  PRIMARY KEY (`cdpeca`)
+  `dtcada` date DEFAULT NULL
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
 --
@@ -525,7 +540,8 @@ INSERT INTO `pecas` (`cdpeca`, `depeca`, `vlpeca`, `qtpeca`, `flativ`, `dtcada`)
 ('1010', 'Tampa do Reservatório do Óleo', '15.00', 1, NULL, NULL),
 ('1233', 'motor completo', '2500.00', 5, NULL, NULL),
 ('80973102937012938', 'Bucha da rebimboca da parafuseta', '195.43', 299, NULL, NULL),
-('003', 'COXIM DO MOTOR', '199.00', 2, NULL, NULL);
+('003', 'COXIM DO MOTOR', '199.00', 2, NULL, NULL),
+('', 'aaa', '100.00', 1, NULL, NULL);
 
 -- --------------------------------------------------------
 
@@ -533,8 +549,8 @@ INSERT INTO `pecas` (`cdpeca`, `depeca`, `vlpeca`, `qtpeca`, `flativ`, `dtcada`)
 -- Estrutura da tabela `pedidos`
 --
 
-CREATE TABLE IF NOT EXISTS `pedidos` (
-  `cdpedi` bigint(20) NOT NULL AUTO_INCREMENT,
+CREATE TABLE `pedidos` (
+  `cdpedi` bigint(20) NOT NULL,
   `cdforn` varchar(100) DEFAULT NULL,
   `dtpedi` date DEFAULT NULL,
   `vlpedi` decimal(15,2) DEFAULT NULL,
@@ -546,17 +562,14 @@ CREATE TABLE IF NOT EXISTS `pedidos` (
   `dtentr` date DEFAULT NULL,
   `deobse` varchar(500) DEFAULT NULL,
   `flativ` varchar(15) DEFAULT NULL,
-  `dtcada` date DEFAULT NULL,
-  PRIMARY KEY (`cdpedi`),
-  KEY `ipedidos1` (`cdforn`,`cdpedi`,`dtpedi`)
-) ENGINE=MyISAM  DEFAULT CHARSET=utf8 AUTO_INCREMENT=19 ;
+  `dtcada` date DEFAULT NULL
+) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
 --
 -- Extraindo dados da tabela `pedidos`
 --
 
 INSERT INTO `pedidos` (`cdpedi`, `cdforn`, `dtpedi`, `vlpedi`, `vlpago`, `dtpago`, `cdform`, `qtform`, `decont`, `dtentr`, `deobse`, `flativ`, `dtcada`) VALUES
-(15, '11111111111111 - 1111111111111111111111111111111', '2016-10-31', '36775.00', '0.00', '0000-00-00', 'Dinheiro', 3, 'Ailton Almeida Nobre', '0000-00-00', '', 'Sim', '2016-10-31'),
 (16, '11111111111111 - 1111111111111111111111111111111', '2016-10-31', '58018.00', '0.00', '0000-00-00', 'Dinheiro', 3, 'Ailton Almeida Nobre', '0000-00-00', '', 'Sim', '2016-10-31'),
 (17, '1 - 2', '2016-10-31', '241108.70', '0.00', '0000-00-00', 'Dinheiro', 3, 'Pedido Ailton Dois', '0000-00-00', 'Pedido Ailton Dois Produção', 'Sim', '2016-10-31'),
 (18, '11111111111111 - 1111111111111111111111111111111', '2016-10-31', '110122.32', '0.00', '0000-00-00', 'Dinheiro', 20, '', '0000-00-00', 'teste', 'Sim', '2016-10-31');
@@ -567,14 +580,13 @@ INSERT INTO `pedidos` (`cdpedi`, `cdforn`, `dtpedi`, `vlpedi`, `vlpago`, `dtpago
 -- Estrutura da tabela `pedidosi`
 --
 
-CREATE TABLE IF NOT EXISTS `pedidosi` (
+CREATE TABLE `pedidosi` (
   `cdpedi` bigint(20) DEFAULT NULL,
   `nritem` int(11) DEFAULT NULL,
   `cdpeca` varchar(100) DEFAULT NULL,
   `qtpeca` int(11) DEFAULT NULL,
   `vlpeca` decimal(15,2) DEFAULT NULL,
-  `vltota` decimal(15,2) DEFAULT NULL,
-  KEY `ipedidosi1` (`cdpedi`,`nritem`,`cdpeca`)
+  `vltota` decimal(15,2) DEFAULT NULL
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
 --
@@ -582,9 +594,6 @@ CREATE TABLE IF NOT EXISTS `pedidosi` (
 --
 
 INSERT INTO `pedidosi` (`cdpedi`, `nritem`, `cdpeca`, `qtpeca`, `vlpeca`, `vltota`) VALUES
-(15, 1, '10 - 10', 10000, '2.58', '25800.00'),
-(15, 2, '5 - 5', 5000, '1.29', '6450.00'),
-(15, 3, '7 - 7', 2500, '1.81', '4525.00'),
 (16, 1, '10 - 10', 10000, '2.58', '25800.00'),
 (16, 2, '5 - 5', 5000, '1.29', '6450.00'),
 (16, 3, '7 - 7', 2500, '1.81', '4525.00'),
@@ -604,14 +613,13 @@ INSERT INTO `pedidosi` (`cdpedi`, `nritem`, `cdpeca`, `qtpeca`, `vlpeca`, `vltot
 -- Estrutura da tabela `servicos`
 --
 
-CREATE TABLE IF NOT EXISTS `servicos` (
+CREATE TABLE `servicos` (
   `cdserv` varchar(30) NOT NULL,
   `deserv` varchar(100) DEFAULT NULL,
   `vlserv` decimal(15,2) DEFAULT NULL,
   `qtserv` int(11) DEFAULT NULL,
   `flativ` varchar(15) DEFAULT NULL,
-  `dtcada` date DEFAULT NULL,
-  PRIMARY KEY (`cdserv`)
+  `dtcada` date DEFAULT NULL
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
 --
@@ -622,7 +630,7 @@ INSERT INTO `servicos` (`cdserv`, `deserv`, `vlserv`, `qtserv`, `flativ`, `dtcad
 ('1', 'Alinhamento', '100.00', 1, NULL, NULL),
 ('10', '10', '10.00', 10, NULL, NULL),
 ('2', 'reparo geral', '2000.00', 1, NULL, NULL),
-('3', '3', '3.00', 3, NULL, NULL),
+('3', '3', '300.00', 3, NULL, NULL),
 ('4', '4', '4.00', 4, NULL, NULL),
 ('5', '5', '5.00', 5, NULL, NULL),
 ('6', '6', '6.00', 6, NULL, NULL),
@@ -636,32 +644,134 @@ INSERT INTO `servicos` (`cdserv`, `deserv`, `vlserv`, `qtserv`, `flativ`, `dtcad
 -- Estrutura da tabela `usuarios`
 --
 
-CREATE TABLE IF NOT EXISTS `usuarios` (
-  `cdusua` char(14) NOT NULL,
+CREATE TABLE `usuarios` (
+  `cdusua` int(14) NOT NULL,
   `deusua` varchar(100) DEFAULT NULL,
   `demail` varchar(255) DEFAULT NULL,
   `nrtele` varchar(20) DEFAULT NULL,
   `cdtipo` varchar(30) DEFAULT NULL,
   `defoto` varchar(500) DEFAULT NULL,
+  `delogin` varchar(100) NOT NULL,
   `desenh` varchar(500) DEFAULT NULL,
   `flativ` varchar(15) DEFAULT NULL,
-  `dtcada` date DEFAULT NULL,
-  PRIMARY KEY (`cdusua`)
+  `dtcada` date DEFAULT NULL
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
 --
 -- Extraindo dados da tabela `usuarios`
 --
 
-INSERT INTO `usuarios` (`cdusua`, `deusua`, `demail`, `nrtele`, `cdtipo`, `defoto`, `desenh`, `flativ`, `dtcada`) VALUES
-('1', 'Usuário Demonstração', 'adm@adm.com', '11 1234-1234', 'Administrador', 'img/1rato.png', '202cb962ac59075b964b07152d234b70', 'Sim', '2016-10-28'),
-('2', 'Usuário Demonstração 2', 'fabio@admin.com.br', '11 2367-3107', 'Administrador', 'img/2_a1.jpg', '202cb962ac59075b964b07152d234b70', 'Sim', '2016-10-28'),
-('77', '77777777777777777777777', '77@77.com', '77777777', 'Administrador', 'img/77_progerio.jpg', '28dd2c7955ce926456240b2ff0100bde', 'Sim', '2017-01-09'),
-('999', 'Almeida Prado', 'almeida@prado.com', '11 9-7787-0268', 'Administrador', 'img/999_a4.jpg', '202cb962ac59075b964b07152d234b70', 'Sim', '2016-10-28'),
-('88', '88888888888888888888888', '88@88.com.br', '88 8888-8888', 'Administrador', 'img/88_Koala.jpg', '0a113ef6b61820daa5611c870ed8d5ee', 'S', '2017-01-09'),
-('001', 'Anderson', 'anderson@hotmail.com', '219999999', 'Funcionário', 'img/semfoto.jpg', 'be5d5d37542d75f93a87094459f76678', 'S', '2017-05-10'),
-('12', 't', '', '', 'Administrador', 'img/semfoto.jpg', '202cb962ac59075b964b07152d234b70', 'S', '2017-05-25');
+INSERT INTO `usuarios` (`cdusua`, `deusua`, `demail`, `nrtele`, `cdtipo`, `defoto`, `delogin`, `desenh`, `flativ`, `dtcada`) VALUES
+(2, 'Empresa teste', 'email@email.com.br', '', 'Administrador', 'img/semfoto.jpg', 'flavio', '202cb962ac59075b964b07152d234b70', 'S', '2017-08-31');
 
+--
+-- Indexes for dumped tables
+--
+
+--
+-- Indexes for table `clientes`
+--
+ALTER TABLE `clientes`
+  ADD PRIMARY KEY (`cdclie`);
+
+--
+-- Indexes for table `contas`
+--
+ALTER TABLE `contas`
+  ADD PRIMARY KEY (`cdcont`),
+  ADD KEY `icontas1` (`decont`,`dtcont`),
+  ADD KEY `icontas2` (`dtcont`,`cdquem`),
+  ADD KEY `icontas3` (`dtcont`,`cdorig`);
+
+--
+-- Indexes for table `estados`
+--
+ALTER TABLE `estados`
+  ADD PRIMARY KEY (`cdesta`);
+
+--
+-- Indexes for table `fornecedores`
+--
+ALTER TABLE `fornecedores`
+  ADD PRIMARY KEY (`cdforn`);
+
+--
+-- Indexes for table `ordem`
+--
+ALTER TABLE `ordem`
+  ADD PRIMARY KEY (`cdorde`),
+  ADD KEY `iordem1` (`cdclie`,`dtorde`),
+  ADD KEY `iordem2` (`cdform`,`dtorde`),
+  ADD KEY `iordem3` (`cdclie`,`dtpago`),
+  ADD KEY `iordem4` (`cdform`,`dtpago`);
+
+--
+-- Indexes for table `ordemi`
+--
+ALTER TABLE `ordemi`
+  ADD KEY `iordemi1` (`cdorde`,`nritem`,`cdpeca`);
+
+--
+-- Indexes for table `parametros`
+--
+ALTER TABLE `parametros`
+  ADD PRIMARY KEY (`cdprop`);
+
+--
+-- Indexes for table `pecas`
+--
+ALTER TABLE `pecas`
+  ADD PRIMARY KEY (`cdpeca`);
+
+--
+-- Indexes for table `pedidos`
+--
+ALTER TABLE `pedidos`
+  ADD PRIMARY KEY (`cdpedi`),
+  ADD KEY `ipedidos1` (`cdforn`,`cdpedi`,`dtpedi`);
+
+--
+-- Indexes for table `pedidosi`
+--
+ALTER TABLE `pedidosi`
+  ADD KEY `ipedidosi1` (`cdpedi`,`nritem`,`cdpeca`);
+
+--
+-- Indexes for table `servicos`
+--
+ALTER TABLE `servicos`
+  ADD PRIMARY KEY (`cdserv`);
+
+--
+-- Indexes for table `usuarios`
+--
+ALTER TABLE `usuarios`
+  ADD PRIMARY KEY (`cdusua`);
+
+--
+-- AUTO_INCREMENT for dumped tables
+--
+
+--
+-- AUTO_INCREMENT for table `contas`
+--
+ALTER TABLE `contas`
+  MODIFY `cdcont` bigint(20) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=243;
+--
+-- AUTO_INCREMENT for table `ordem`
+--
+ALTER TABLE `ordem`
+  MODIFY `cdorde` bigint(20) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=33;
+--
+-- AUTO_INCREMENT for table `pedidos`
+--
+ALTER TABLE `pedidos`
+  MODIFY `cdpedi` bigint(20) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=19;
+--
+-- AUTO_INCREMENT for table `usuarios`
+--
+ALTER TABLE `usuarios`
+  MODIFY `cdusua` int(14) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
 /*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;

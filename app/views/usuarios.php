@@ -1,5 +1,11 @@
 <?php
 
+    include_once '../../config.php';
+
+    ini_set ('display_errors', 1 );
+    error_reporting ( E_ALL | E_STRICT );
+    //error_reporting (0);
+
     // identificando dispositivo
     $iphone = strpos($_SERVER['HTTP_USER_AGENT'],"iPhone");
     $ipad = strpos($_SERVER['HTTP_USER_AGENT'],"iPad");
@@ -14,9 +20,8 @@
         $eMovel="S";
     }
 
-    // incluindo bibliotecas de apoio
-    include "banco.php";
-    include "util.php";
+    $con = new Controller();
+    $usuarios = $con->listarUsuarios();
 
     //codigo do usuario
     if (isset($_COOKIE['cdusua'])) {
@@ -75,8 +80,6 @@
     $deusua1=$deusua;
     $deusua = substr($deusua, 0,15);
 
-    // usuarios
-    $aUsua= ConsultarDados("", "", "","select * from usuarios order by cdusua");
 ?>
 <!DOCTYPE html>
 <html>
@@ -86,7 +89,7 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-    <title>Demonstração&copy; | Principal </title>
+    <title>Template Oficina | Principal </title>
 
     <link href="../../templates/css/bootstrap.min.css" rel="stylesheet">
     <link href="../../templates/font-awesome/css/font-awesome.css" rel="stylesheet">
@@ -134,19 +137,12 @@
                     <ul class="nav navbar-top-links navbar-left">
                         <br>
                         <li>
-                            <?php if (strlen($cdusua) == 14 ) {;?>
-                                <span><?php echo  formatar($cdusua,"cnpj")." - ";?></span>
-                            <?php } Else {?>
-                                <span><?php echo  formatar($cdusua,"cpf")." - ";?></span>
-                            <?php }?>
-                        </li>
-                        <li>
                             <span><?php echo  $deusua1 ;?></span>
                         </li>
                     </ul>
                     <ul class="nav navbar-top-links navbar-right">
                         <li>
-                            <span class="m-r-sm text-muted welcome-message">Benvindo ao <strong>Demonstração Auto Mecânica&copy;</strong></span>
+                            <span class="m-r-sm text-muted welcome-message">Benvindo ao <strong>Template Oficina</strong></span>
                         </li>
                         <li>
                             <a href="../../index.php">
@@ -167,7 +163,7 @@
 
                         <div class="ibox-content">
                             <div class="pull-left">
-                                <a onclick="#" href="usuariosi.php" class="btn btn-warning ">Incluir</a>
+                                <a onclick="#" href="usuariosacoes.php?acao=novo" class="btn btn-warning ">Incluir</a>
                             </div>
                             <br>
                             <br>
@@ -181,36 +177,33 @@
                                             <th>E-mail</th>
                                             <th>Telefone</th>
                                             <th>Tipo</th>
-                                            <th>Foto</th>
-                                            <th>Situação</th>
+                                            <th>Ativo</th>
                                             <th>Data de Cadastro</th>
-                                            <th class="text-right" data-sort-ignore="true">Ação</th>
+                                            <th class="text-center" data-sort-ignore="true">Ação</th>
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        <?php for ($f =0; $f <= (count($aUsua)-1); $f++) { ?>
+                                        <?php for ($f =0; $f <= (count($usuarios)-1); $f++) { ?>
                                             <tr class="gradeX">
-                                                <?php $data = strtotime($aUsua[$f]["dtcada"]) ;?>
+                                                <?php $data = strtotime($usuarios[$f]["dtcada"]) ;?>
 
-                                                <?php $coluna1 = trim($aUsua[$f]["cdusua"]); ?>
-                                                <?php $coluna2 = trim($aUsua[$f]["deusua"]); ?>
-                                                <?php $coluna3 = trim($aUsua[$f]["demail"]); ?>
-                                                <?php $coluna4 = $aUsua[$f]["nrtele"]; ?>
-                                                <?php $coluna5 = $aUsua[$f]["cdtipo"]; ?>
-                                                <?php $coluna6 = $aUsua[$f]["defoto"]; ?>
-                                                <?php $coluna7 = $aUsua[$f]["flativ"]; ?>
+                                                <?php $coluna1 = trim($usuarios[$f]["cdusua"]); ?>
+                                                <?php $coluna2 = trim($usuarios[$f]["deusua"]); ?>
+                                                <?php $coluna3 = trim($usuarios[$f]["demail"]); ?>
+                                                <?php $coluna4 = $usuarios[$f]["nrtele"]; ?>
+                                                <?php $coluna5 = $usuarios[$f]["cdtipo"]; ?>
+                                                <?php $coluna7 = $usuarios[$f]["flativ"]; ?>
                                                 <?php $coluna8 = date("d/m/Y",$data); ?>
 
-                                                <?php $ver = "usuariosa.php?acao=ver&chave=".$coluna1; ?>
-                                                <?php $edita = "usuariosa.php?acao=edita&chave=".$coluna1; ?>
-                                                <?php $apaga = "usuariosa.php?acao=apaga&chave=".$coluna1; ?>
+                                                <?php $ver = "usuariosacoes.php?acao=ver&chave=".$coluna1; ?>
+                                                <?php $edita = "usuariosacoes.php?acao=edita&chave=".$coluna1; ?>
+                                                <?php $apaga = "usuariosacoes.php?acao=apaga&chave=".$coluna1; ?>
 
                                                 <td><?php print $coluna1; ?></td>
                                                 <td><?php print $coluna2; ?></td>
                                                 <td><?php print $coluna3; ?></td>
                                                 <td><?php print $coluna4; ?></td>
                                                 <td><?php print $coluna5; ?></td>
-                                                <td><img width="80px" height="80px" src="<?php print $coluna6; ?>" alt="<?php print $coluna2; ?>"></td>
                                                 <td><?php print $coluna7; ?></td>
                                                 <td style = "width:10%"><?php print $coluna8; ?></td>
                                                 <td class="text-right">
@@ -230,10 +223,9 @@
                                             <th>E-mail</th>
                                             <th>Telefone</th>
                                             <th>Tipo</th>
-                                            <th>Foto</th>
-                                            <th>Situação</th>
+                                            <th>Ativo</th>
                                             <th>Data de Cadastro</th>
-                                            <th class="text-right" data-sort-ignore="true">Ação</th>
+                                            <th class="text-center" data-sort-ignore="true">Ação</th>
                                         </tr>
                                     </tfoot>
                                 </table>
@@ -344,8 +336,8 @@
                 buttons: [
                     { extend: 'copy'},
                     {extend: 'csv'},
-                    {extend: 'excel', title: 'ExampleFile'},
-                    {extend: 'pdf', title: 'ExampleFile'},
+                    {extend: 'excel', title: 'Template Oficina'},
+                    {extend: 'pdf', title: 'Template Oficina'},
 
                     {extend: 'print',
                      customize: function (win){

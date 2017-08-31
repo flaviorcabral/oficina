@@ -42,7 +42,7 @@ $con->pagLogin();
             <p><strong>Informe os dados de acesso.</strong></p>
             <form class="m-t" role="form" method="post">
                 <div class="form-group">
-                    <input id="cdusua" name = "cdusua" type="text" class="form-control" placeholder="código" required="">
+                    <input id="login" name = "delogin" type="text" class="form-control" placeholder="login" required="">
                 </div>
                 <div class="form-group">
                     <input id="desenh" name = "desenh" type="password" class="form-control" placeholder="senha" required="">

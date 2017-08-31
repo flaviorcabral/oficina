@@ -1,5 +1,11 @@
 <?php
 
+    include_once '../../config.php';
+
+    ini_set ('display_errors', 1 );
+    error_reporting ( E_ALL | E_STRICT );
+    //error_reporting (0);
+
     // identificando dispositivo
     $iphone = strpos($_SERVER['HTTP_USER_AGENT'],"iPhone");
     $ipad = strpos($_SERVER['HTTP_USER_AGENT'],"iPad");
@@ -14,12 +20,10 @@
         $eMovel="S";
     }
 
-    // incluindo bibliotecas de apoio
-    include "banco.php";
-    include "util.php";
-
     $acao = $_GET["acao"];
-    $chave = trim($_GET["chave"]);
+
+    $con = new Controller();
+    $con->pagUsuario();
 
     switch ($acao) {
     case 'ver':
@@ -30,6 +34,9 @@
         break;
     case 'apaga':
         $titulo = "Exclusão";
+        break;
+    case 'novo':
+        $titulo = "Inlcuir";
         break;
     default:
         header('Location: fichacadastral.php');
@@ -92,11 +99,20 @@
     $deusua1=$deusua;
     $deusua = substr($deusua, 0,15);
 
-    $aUsua = ConsultarDados("usuarios", "cdusua", $chave);
+    if($acao != "novo")
+    {
+        $chave = trim($_GET["chave"]);
+        $usuario = $con->usuario;
+    }
 
-    $defotom=$aUsua[0]["defoto"];
-    $cdtipom=substr($aUsua[0]["cdtipo"],0,1);
-    $flativ=substr($aUsua[0]["flativ"],0,1);
+    if($acao == "novo")
+    {
+        $usuario = $con->usuario;;
+    }
+
+    $defotom = $usuario["defoto"];
+    $cdtipom=substr($usuario["cdtipo"],0,1);
+    $flativ=substr($usuario["flativ"],0,1);
 
 ?>
 <!DOCTYPE html>
@@ -107,7 +123,7 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-    <title>Demonstração Auto Mecânica&copy; | Principal </title>
+    <title>Template Oficina | Principal </title>
 
     <link href="../../templates/css/bootstrap.min.css" rel="stylesheet">
     <link href="../../templates/font-awesome/css/font-awesome.css" rel="stylesheet">
@@ -155,19 +171,12 @@
                     <ul class="nav navbar-top-links navbar-left">
                         <br>
                         <li>
-                            <?php if (strlen($cdusua) == 14 ) {;?>
-                                <span><?php echo  formatar($cdusua,"cnpj")." - ";?></span>
-                            <?php } Else {?>
-                                <span><?php echo  formatar($cdusua,"cpf")." - ";?></span>
-                            <?php }?>
-                        </li>
-                        <li>
                             <span><?php echo  $deusua1 ;?></span>
                         </li>
                     </ul>
                     <ul class="nav navbar-top-links navbar-right">
                         <li>
-                            <span class="m-r-sm text-muted welcome-message">Benvindo a <strong>Demonstração Auto Mecânica&copy;</strong></span>
+                            <span class="m-r-sm text-muted welcome-message">Benvindo a <strong>Template Oficina</strong></span>
                         </li>
                         <li>
                             <a href="../../index.php">
@@ -187,27 +196,29 @@
                         </div>
 
                         <div class="ibox-content">
-                            <form class="form-horizontal" method="POST" enctype="multipart/form-data" action="usuariosaa.php">
+                            <form class="form-horizontal" method="POST" enctype="multipart/form-data">
 
                                 <div>
                                     <center>
                                         <?php if($acao == "edita") {?>
-                                            <button class="btn btn-sm btn-primary" name = "edita" type="submit"><strong>Salvar</strong></button>
+                                            <button class="btn btn-sm btn-primary" name = "editar" type="submit"><strong>Alterar</strong></button>
                                         <?php }?>
                                         <?php if($acao == "apaga") {?>
-                                            <button class="btn btn-sm btn-danger" name = "apaga" type="submit"><strong>Apagar</strong></button>
+                                            <button class="btn btn-sm btn-danger" name = "apagar" type="submit"><strong>Apagar</strong></button>
+                                        <?php }?>
+                                        <?php if($acao == "novo") {?>
+                                            <button class="btn btn-sm btn-danger" name = "salvar" type="submit"><strong>Salvar</strong></button>
                                         <?php }?>
                                         <button class="btn btn-sm btn-warning " type="button" onClick="history.go(-1)"><strong>Retornar</strong></button>
                                     </center>
                                 </div>
                                 <br>
-                                <?php if($acao == "edita") {?>
                                     <div class="row">
 
                                             <div class="col-lg-4 text-center">
                                                 <!--h2><?php echo $deusua; ?></h2-->
                                                 <div class="m-b-sm">
-                                                    <img alt="image" class="img-square" src="<?php echo $defotom; ?>"
+                                                    <img alt="Não há foto" class="img-square" src="<?php echo $defotom; ?>"
                                                          style="width: 82px">
                                                 </div>
 
@@ -218,16 +229,15 @@
                                                         Alterar foto
                                                     </label>
                                                     <br>
-                                                    <!--label>"<?php echo $defoto; ?>"</label--> 
-                                                    <!--input id="defoto"  value="<?php echo $defoto; ?>" name="defoto" class="input-file" type="file"-->
                                                     <span><small>A foto será atualizada após a gravação</small></span>
                                                 </div>
                                             </div>
+
                                             <div class="col-lg-6">
                                                 <div class="form-group">
                                                     <label class="col-md-2 control-label" for="textinput">Código</label>
                                                     <div class="col-md-4 ">
-                                                        <input id="cdusua" name="cdusua" value="<?php echo $aUsua[0]["cdusua"]; ?>" type="text" placeholder="" class="form-control" maxlength = "15" autofocus readonly="">
+                                                        <input id="cdusua" name="cdusua" value="<?php echo $usuario["cdusua"]; ?>" type="text" placeholder="" class="form-control" maxlength = "15" autofocus readonly="">
                                                     </div>
                                                 </div>
 
@@ -235,34 +245,34 @@
                                                 <div class="form-group">
                                                     <label class="col-md-2 control-label" for="textinput">Nome</label>
                                                     <div class="col-md-8">
-                                                        <input id="deusua" name="deusua" value="<?php echo $aUsua[0]["deusua"]; ?>" type="text" placeholder="" class="form-control" maxlength = "100" autofocus required="">
+                                                        <input id="deusua" name="deusua" value="<?php echo $usuario["deusua"]; ?>" type="text" placeholder="" class="form-control" maxlength = "100" autofocus required="" <?php if($acao == 'ver' or $acao == 'apaga'): ?>readonly=""<?php endif; ?>>
                                                     </div>
                                                 </div>
 
                                                 <div class="form-group">
                                                     <label class="col-md-2 control-label" for="textinput">E-mail</label>
                                                     <div class="col-md-8 ">
-                                                        <input id="demail" name="demail" value="<?php echo $aUsua[0]["demail"]; ?>" type="email" placeholder="" class="form-control" maxlength = "255">
+                                                        <input id="demail" name="demail" value="<?php echo $usuario["demail"]; ?>" type="email" placeholder="" class="form-control" maxlength = "255" <?php if($acao == 'ver' or $acao == 'apaga'): ?>readonly=""<?php endif; ?>>
                                                     </div>
                                                 </div>
 
                                                 <div class="form-group">
                                                     <label class="col-md-2 control-label" for="textinput">Telefone</label>
                                                     <div class="col-md-8 ">
-                                                        <input id="nrtele" name="nrtele" value="<?php echo $aUsua[0]["nrtele"]; ?>" type="text" placeholder="" class="form-control" maxlength = "20">
+                                                        <input id="nrtele" name="nrtele" value="<?php echo $usuario["nrtele"]; ?>" type="text" placeholder="" class="form-control" maxlength = "20" <?php if($acao == 'ver' or $acao == 'apaga'): ?>readonly=""<?php endif; ?>>
                                                     </div>
                                                 </div>
 
                                                 <div class="form-group">
                                                     <label class="col-md-2 control-label" for="textinput">Ativo?</label>
                                                     <div class="col-md-4">
-                                                        <select name="flativ" id="flativ">
+                                                        <select name="flativ" id="flativ" <?php if($acao == 'ver' or $acao == 'apaga'): ?>disabled<?php endif; ?>>
                                                             <?php if ($flativ == "S") {?>
-                                                                <option selected= "selected">Sim</option>
-                                                                <option>Não</option>
+                                                                <option selected= "selected" value="S">Sim</option>
+                                                                <option value="N">Não</option>
                                                             <?php } Else {?>
-                                                                <option>Sim</option>
-                                                                <option selected= "selected">Não</option>
+                                                                <option value="S">Sim</option>
+                                                                <option selected= "selected" value="N">Não</option>
                                                             <?php }?>
                                                         </select>
                                                     </div>
@@ -271,105 +281,49 @@
                                                 <div class="form-group">
                                                     <label class="col-md-2 control-label" for="textinput">Tipo</label>
                                                     <div class="col-md-4">
-                                                        <select name="cdtipo" id="cdtipo">
+                                                        <select name="cdtipo" id="cdtipo" <?php if($acao == 'ver' or $acao == 'apaga'): ?>disabled<?php endif; ?>>
                                                             <?php if (empty($cdtipom) == true) {?>
-                                                                <option selected= "selected">Administrador</option>
-                                                                <option>Funcionário</option>
+                                                                <option selected= "selected" value="Administrador">Administrador</option>
+                                                                <option value="Funcionario">Funcionário</option>
                                                             <?php }?>
                                                             <?php if ($cdtipom == "A") {?>
-                                                                <option selected= "selected">Administrador</option>
-                                                                <option>Funcionário</option>
+                                                                <option selected= "selected" value="Administrador">Administrador</option>
+                                                                <option value="Funcionario">Funcionário</option>
                                                             <?php }?>
                                                             <?php if ($cdtipom == "F") {?>
-                                                                <option>Administrador</option>
-                                                                <option selected= "selected">Funcionário</option>
+                                                                <option value="Administrador">Administrador</option>
+                                                                <option selected= "selected" value="Funcionario">Funcionário</option>
                                                             <?php }?>
                                                         </select>
                                                     </div>
                                                 </div>
-                                            </div>
-                                    </div>
-                                <?php } Else {?>
-                                    <div class="row">
-
-                                            <div class="col-lg-4 text-center">
-                                                <!--h2><?php echo $deusua; ?></h2-->
-                                                <div class="m-b-sm">
-                                                    <img alt="image" class="img-square" src="<?php echo $defotom; ?>"
-                                                         style="width: 82px">
-                                                </div>
-
-                                            </div>
-                                            <div class="col-lg-6">
-                                                <div class="form-group">
-                                                    <label class="col-md-2 control-label" for="textinput">Código</label>
-                                                    <div class="col-md-4 ">
-                                                        <input id="cdusua" name="cdusua" value="<?php echo $aUsua[0]["cdusua"]; ?>" type="text" placeholder="" class="form-control" maxlength = "15" autofocus readonly="">
-                                                    </div>
-                                                </div>
-
 
                                                 <div class="form-group">
-                                                    <label class="col-md-2 control-label" for="textinput">Nome</label>
-                                                    <div class="col-md-8">
-                                                        <input id="deusua" name="deusua" value="<?php echo $aUsua[0]["deusua"]; ?>" type="text" placeholder="" class="form-control" maxlength = "100" autofocus readonly="">
-                                                    </div>
-                                                </div>
-
-                                                <div class="form-group">
-                                                    <label class="col-md-2 control-label" for="textinput">E-mail</label>
+                                                    <label class="col-md-2 control-label" for="textinput">Login</label>
                                                     <div class="col-md-8 ">
-                                                        <input id="demail" name="demail" value="<?php echo $aUsua[0]["demail"]; ?>" type="email" placeholder="" class="form-control" maxlength = "255" readonly="">
+                                                        <input id="login" name="login" value="<?php echo $usuario["delogin"]; ?>" type="text" placeholder="" class="form-control" maxlength = "20" <?php if($acao == 'ver' or $acao == 'apaga'): ?>readonly=""<?php endif; ?> <?php if($acao == 'novo'): ?>required<?php endif; ?>>
                                                     </div>
                                                 </div>
 
                                                 <div class="form-group">
-                                                    <label class="col-md-2 control-label" for="textinput">Telefone</label>
-                                                    <div class="col-md-8">
-                                                        <input id="nrtele" name="nrtele" value="<?php echo $aUsua[0]["nrtele"]; ?>" type="text" placeholder="" class="form-control" maxlength = "255" readonly="">
+                                                    <label class="col-md-2 control-label" for="textinput">Senha</label>
+                                                    <div class="col-md-8 ">
+                                                        <input id="password" name="password" type="password" placeholder="" class="form-control" maxlength = "20" <?php if($acao == 'ver' or $acao == 'apaga'): ?>readonly=""<?php endif; ?> <?php if($acao == 'novo'): ?>required<?php endif; ?>>
                                                     </div>
                                                 </div>
 
-                                                <div class="form-group">
-                                                    <label class="col-md-2 control-label" for="textinput">Ativo?</label>
-                                                    <div class="col-md-4">
-                                                        <select name="flativ" id="flativ" disabled ="">
-                                                            <?php if ($flativ == "S") {?>
-                                                                <option selected= "selected">Sim</option>
-                                                            <?php } Else {?>
-                                                                <option selected= "selected">Não</option>
-                                                            <?php }?>
-                                                        </select>
-                                                    </div>
-                                                </div>
-
-                                                <div class="form-group">
-                                                    <label class="col-md-2 control-label" for="textinput">Tipo</label>
-                                                    <div class="col-md-4">
-                                                        <select name="cdtipo" id="cdtipo" disabled ="">
-                                                            <?php if (empty($cdtipom) == true) {?>
-                                                                <option selected= "selected">Administrador</option>
-                                                            <?php }?>
-                                                            <?php if ($cdtipom == "A") {?>
-                                                                <option selected= "selected">Administrador</option>
-                                                            <?php }?>
-                                                            <?php if ($cdtipom == "F") {?>
-                                                                <option selected= "selected">Funcionário</option>
-                                                            <?php }?>
-                                                        </select>
-                                                    </div>
-                                                </div>
                                             </div>
                                     </div>
-                                <?php }?>
-
                                 <div>
                                     <center>
                                         <?php if($acao == "edita") {?>
-                                            <button class="btn btn-sm btn-primary" name = "edita" type="submit"><strong>Salvar</strong></button>
+                                            <button class="btn btn-sm btn-primary" name = "editar" type="submit"><strong>Alterar</strong></button>
                                         <?php }?>
                                         <?php if($acao == "apaga") {?>
-                                            <button class="btn btn-sm btn-danger" name = "apaga" type="submit"><strong>Apagar</strong></button>
+                                            <button class="btn btn-sm btn-danger" name = "apagar" type="submit"><strong>Apagar</strong></button>
+                                        <?php }?>
+                                        <?php if($acao == "novo") {?>
+                                            <button class="btn btn-sm btn-danger" name = "salvar" type="submit"><strong>Salvar</strong></button>
                                         <?php }?>
                                         <button class="btn btn-sm btn-warning " type="button" onClick="history.go(-1)"><strong>Retornar</strong></button>
                                     </center>
@@ -432,8 +386,8 @@
                 buttons: [
                     { extend: 'copy'},
                     {extend: 'csv'},
-                    {extend: 'excel', title: 'ExampleFile'},
-                    {extend: 'pdf', title: 'ExampleFile'},
+                    {extend: 'excel', title: 'Template Oficina'},
+                    {extend: 'pdf', title: 'Template Oficina'},
 
                     {extend: 'print',
                      customize: function (win){

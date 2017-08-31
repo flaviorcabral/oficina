@@ -7,6 +7,7 @@ class Controller
     public $cliente = null;
     public $clientes = null;
     public $fornecedor = null;
+    public $usuario = null;
     public $pecas = null;
     public $servicos = null;
     public $estados = null;
@@ -17,12 +18,12 @@ class Controller
 
         if(isset($_REQUEST['login'])){
 
-            $cdusua = preg_replace('/[^[:alnum:]_]/', '', $_POST["cdusua"]);
+            $delogin = preg_replace('/[^[:alnum:]_]/', '', $_POST["delogin"]);
             $desenh = md5(preg_replace('/[^[:alnum:]_]/', '', $_POST["desenh"]));
 
             $usuario = new Usuario();
 
-            $result = $usuario->validaAcesso($cdusua);
+            $result = $usuario->validaAcesso($delogin);
 
             if ($result) {
 
@@ -64,6 +65,62 @@ class Controller
         }
     }
 
+    //Salvar novo usuario
+    function salvarUsuario($nomes, $dados)
+    {
+
+        $sql="insert into "."usuarios"." (";
+        $campos="";
+        $total=count($nomes)-1;
+
+        for ($i=0 ; $i < count($nomes) ; $i++ ) {
+
+            $campos=$campos.$nomes[$i];
+
+            if ($i < $total) {
+                $campos=$campos.", ";
+            }
+
+        }
+
+        $sql=$sql.$campos.") values (";
+
+        $campos="";
+
+        for ($x =0 ; $x < count($dados) ; $x++ ) {
+
+            $campo="'".$dados[$x]."'";
+
+            if ($x < $total) {
+                $campos=$campos.$campo.", ";
+            } Else {
+                $campos=$campos.$campo.")";
+            }
+        }
+
+        $sql=$sql.$campos;
+
+        $user = new Usuario();
+
+        if($user->insertUsuario($sql)) {
+
+            /* $cdusua="99999999999";
+             $chave=$dados[0];
+             $delog = "Inclusão dos dados da tabela ["."{$tabela}"."] para a chave ["."{$chave}"."]";
+             if (isset($_COOKIE['cdusua'])) {
+                 $cdusua = $_COOKIE['cdusua'];
+             }
+
+             if ($tabela !== "log") {
+                 GravarLog($cdusua, $delog);
+             }*/
+
+            return true;
+        }
+
+        return false;
+    }
+
     //Busca funcionario por matricula
     function buscarUsuario($mat)
     {
@@ -80,8 +137,56 @@ class Controller
         return $result;
     }
 
-    //Atualiza dados dos usuarios
-    function updateDadosUsuario()
+    //Atualiza dados do usuario pelo admin
+    function atualizaDadosUser($nomes, $dados, $codigo)
+    {
+
+        $campos="";
+        $total=count($dados)-1;
+
+        $sql="update "."usuarios"." set ";
+
+        for ($i =0 ; $i < count($dados) ; $i++ ) {
+
+            $campos=$campos.$nomes[$i]." = '".$dados[$i]."'";
+
+            if ($i < $total) {
+                $campos=$campos.", ";
+            }
+
+        }
+
+        $sql=$sql.$campos." where cdusua = "."'{$codigo}'";
+
+        $user = new Usuario();
+
+        if($user->updateDados($sql)){
+
+            /*$cdusua="99999999999";
+            $delog = "Alteração dos dados da tabela ["."{$tabela}"."] para a chave ["."{$chave}"."]";
+            if (isset($_COOKIE['cdusua'])) {
+                $cdusua = $_COOKIE['cdusua'];
+            }
+
+            if ($tabela !== "log") {
+                GravarLog($cdusua, $delog);
+            }*/
+            return true;
+        }
+
+        return false;
+    }
+
+    //Excluir usuario
+    function excluirUsuario($cod)
+    {
+        $user = new Usuario();
+        $result = $user->deleteUsuario($cod);
+        return $result;
+    }
+
+    //Atualiza dados pelo o usuario
+    function atualizaMeusDados()
     {
         $user = new Usuario();
 
@@ -104,7 +209,7 @@ class Controller
             $defoto= $uploadfile;
         }
 
-        if($user->updateUsuario($cdusua,$deusua,$demail,$tel,$defoto))
+        if($user->updateMeusDados($cdusua,$deusua,$demail,$tel,$defoto))
         {
             setcookie("deusua",$deusua);
             setcookie("defoto",$defoto);
@@ -1318,7 +1423,7 @@ class Controller
     {
         if(isset($_REQUEST['atualiza']))
         {
-            if($this->updateDadosUsuario()){
+            if($this->atualizaMeusDados()){
 
                 //$delog = "Alteração de Próprios Dados (Nome/Foto/E-Mail)";
                 //GravarLog($cdusua, $delog);
@@ -1385,13 +1490,8 @@ class Controller
             $cdorde = $_REQUEST["cdorde"];
 
             $this->excluirOrdemDeServico($cdorde);
-            //ExcluirDados("ordem", "cdorde", $cdorde);
-
             $this->excluirOrdemiDeServico($cdorde);
-            //ExcluirDados("ordemi", "cdorde", $cdorde);
-
             $this->excluirConta($cdorde);
-            //ExcluirDados("", "", "","delete from contas where cdtipo ='Pagar' and cdorig = '{$cdorde}'");
 
             $dtcada = date('Y-m-d');
             $Flag = true;
@@ -1558,7 +1658,7 @@ class Controller
                     $aDados[] = $dtcada;
 
                     $this->insertConta($aNomes, $aDados);
-                    //IncluirDados("contas", $aDados, $aNomes);
+
                 }
 
                 $demens = "Alteração efetuada com sucesso!";
@@ -1679,10 +1779,8 @@ class Controller
                 $aDados[]= $dtcada;
 
                 $this->insertOrdem($aDados, $aNomes);
-                //IncluirDados("ordem", $aDados, $aNomes);
 
                 $result = $this->buscarMaiorOrdemPorCliente($cdclie, $dtorde);
-                //$cliente= ConsultarDados("", "", "","select max(cdorde) cdorde from ordem where cdclie = '{$cdclie}' and dtorde = '{$dtorde}'");
 
                 $cdorde = $result[0]["cdorde"];
 
@@ -1715,10 +1813,9 @@ class Controller
                         $aDados[]= $vltota;
 
                         $this->insertOrdemi($aDados, $aNomes);
-                        //IncluirDados("ordemi", $aDados, $aNomes);
                     }
                 }
-                //$aTrab= ConsultarDados("", "", "","select * from ordem where cdorde = '{$cdorde}'");
+
                 $result = $this->buscarOrdem($cdorde);
 
                 $dtorde = $result[0]["dtorde"];
@@ -1751,7 +1848,6 @@ class Controller
                     $aDados[]= $dtcada;
 
                     $this->insertConta($aNomes,$aDados);
-                    //IncluirDados("contas", $aDados, $aNomes);
                 }
 
                 $demens = "Cadastro efetuado com sucesso!";
@@ -1849,7 +1945,6 @@ class Controller
                     $aDados[] = "S";
                     $aDados[] = $data;
 
-                    //AlterarDados("clientes", $aDados, $aNomes, "cdclie", $cdclie);
                     if($this->updateCliente($aNomes, $aDados, $chave)){
                         //gravar log
                         //GravarIPLog($cdusua, "Alterar Meus Dados:");
@@ -1872,7 +1967,6 @@ class Controller
                 $cdclie = $_POST["cdclie"];
 
                 $result = $this->excluirCliente($cdclie);
-                //ExcluirDados("clientes", "cdclie", $cdclie);
 
                 if ($flag2 == false and $result == true) {
 
@@ -2008,13 +2102,14 @@ class Controller
             }
 
             if (isset($_REQUEST['editar'])) {
+
                 $cdforn = $_POST["cdforn"];
 
                 if (strlen($cdforn) < 12) {
                     $cdforn = $this->RetirarMascara($cdforn, "cpf");
                     if ($this->validaCPF($cdforn) == false) {
                         $demens = "Cpf inválido!";
-                        $detitu = "Template Oficina | Cadastro de Clientes";
+                        $detitu = "Template Oficina | Cadastro de Fornecedores";
                         header('Location: mensagem.php?demens=' . $demens . '&detitu=' . $detitu);
                         $flag = false;
                     }
@@ -2192,8 +2287,6 @@ class Controller
                     $aDados[] = "S";
                     $aDados[] = $data;
 
-                    //IncluirDados("fornecedores", $aDados, $aNomes);
-
                     if($this->salvarFornecedor($aNomes, $aDados))
                     {
                         //gravar log
@@ -2210,6 +2303,176 @@ class Controller
                 $devolt = "fornecedores.php";
                 header('Location: mensagem.php?demens=' . $demens . '&detitu=' . $detitu . '&devolt=' . $devolt);
 
+            }
+        }
+    }
+
+    //Funcoes pagina Usuarios
+    function pagUsuario()
+    {
+        $data = date('Y-m-d');
+        $acao = $_REQUEST['acao'];
+
+        $flag = true;
+        $flag2 = false;
+
+        if ($flag == true) {
+
+            if ($acao == 'ver' or $acao == 'edita' or $acao == 'apaga') {
+
+                $chave = $_REQUEST['chave'];
+                $this->usuario = $this->buscarUsuario($chave);
+
+            }
+
+            if(isset($_REQUEST['editar']))
+            {
+
+                $cdusua = $_POST["cdusua"];
+                $defoto1 = $_POST["defoto1"];
+                $desenha = $_POST['password'];
+
+                //uploads
+                $uploaddir = '../../templates/img/'.$cdusua."_";
+                $uploadfile1 = $uploaddir . basename($_FILES['defotom']['name']);
+
+                #Move o arquivo para o diretório de destino
+                move_uploaded_file( $_FILES["defotom"]["tmp_name"], $uploadfile1 );
+
+                $defotom=basename($_FILES['defotom']['name']);
+
+                if (empty($defotom) == true) {
+                    $defoto= $defoto1;
+                } Else {
+                    $defoto= $uploadfile1;
+                }
+
+                //campos da tabela
+                $aNomes=array();
+                $aNomes[]= "deusua";
+                $aNomes[]= "demail";
+                $aNomes[]= "defoto";
+                $aNomes[]= "cdtipo";
+                $aNomes[]= "flativ";
+                $aNomes[]= "nrtele";
+
+                //dados da tabela
+                $aDados=array();
+                $aDados[]= $_POST["deusua"];
+                $aDados[]= $_POST["demail"];
+                $aDados[]= $defoto;
+                $aDados[]= $_POST["cdtipo"];
+                $aDados[]= $_POST["flativ"];
+                $aDados[]= $_POST["nrtele"];
+
+                if(!empty($desenha)){
+                    $aNomes[]= "desenh";
+                    $aDados[]= md5($desenha);
+                }
+
+                if($this->atualizaDadosUser($aNomes, $aDados, $cdusua)){
+
+                    $demens = "Atualização efetuada com sucesso!";
+
+                }else{
+
+                    $demens = "Ocorreu um problema na atualização/exclusão. Se persistir contate o Suporte!";
+                }
+
+                $detitu = "Template Oficina | Cadastro de Usuários";
+                $devolt = "usuarios.php";
+                header('Location: mensagem.php?demens=' . $demens . '&detitu=' . $detitu . '&devolt=' . $devolt);
+            }
+
+            if(isset($_REQUEST['apagar']))
+            {
+                $cdusua = $_POST["cdusua"];
+
+                if($this->excluirUsuario($cdusua))
+                {
+                    $demens = "Exclusão efetuada com sucesso!";
+
+                }else{
+
+                    $demens = "Ocorreu um problema na atualização/exclusão. Se persistir contate o suporte!";
+                }
+
+                //gravar log
+                //GravarIPLog($cdusua, "Alterar Meus Dados:");
+
+                $detitu = "Template Oficina | Cadastro de Usuários";
+                $devolt = "usuarios.php";
+                header('Location: mensagem.php?demens='.$demens.'&detitu='.$detitu.'&devolt='.$devolt);
+
+            }
+
+            if(isset($_REQUEST['salvar']))
+            {
+                $delogin = $_POST["login"];
+                $demail = $_POST["demail"];
+                $dtcada = date('Y-m-d');
+                $flativ	= "S";
+                $Flag = true;
+
+                if ($Flag == true) {
+
+                    //uploads
+                    $uploaddir = '../../templates/img/'.$delogin."_";
+                    $uploadfile1 = $uploaddir . basename($_FILES['defotom']['name']);
+
+                    #Move o arquivo para o diretório de destino
+                    move_uploaded_file( $_FILES["defotom"]["tmp_name"], $uploadfile1 );
+
+                    $defoto1=basename($_FILES['defotom']['name']);
+
+                    $desenh=md5($_POST["password"]);
+
+                    if (empty($defoto1) == true){
+                        $defoto="img/semfoto.jpg";
+                    } Else {
+                        $defoto = $uploadfile1;
+                    }
+
+                    //campos da tabela
+                    $aNomes=array();
+                    $aNomes[]= "deusua";
+                    $aNomes[]= "delogin";
+                    $aNomes[]= "desenh";
+                    $aNomes[]= "demail";
+                    $aNomes[]= "defoto";
+                    $aNomes[]= "cdtipo";
+                    $aNomes[]= "flativ";
+                    $aNomes[]= "dtcada";
+                    $aNomes[]= "nrtele";
+
+                    //dados da tabela
+                    $aDados=array();
+                    $aDados[]= $_POST["deusua"];
+                    $aDados[]= $delogin;
+                    $aDados[]= $desenh;
+                    $aDados[]= $_POST["demail"];
+                    $aDados[]= $defoto;
+                    $aDados[]= $_POST["cdtipo"];
+                    $aDados[]= $flativ;
+                    $aDados[]= $dtcada;
+                    $aDados[]= $_POST["nrtele"];
+
+                    if($this->salvarUsuario($aNomes, $aDados))
+                    {
+                        $demens = "Cadastro efetuado com sucesso!";
+
+                    }else{
+
+                        $demens = "Ocorreu um problema no cadastro. Se persistir contate o suporte!";
+                    }
+
+                    //gravar log
+                    //GravarIPLog($cdusua, "Alterar Meus Dados:");
+
+                    $detitu = "Template Oficina | Cadastro de usuarios";
+                    $devolt = "usuarios.php";
+                    header('Location: mensagem.php?demens='.$demens.'&detitu='.$detitu.'&devolt='.$devolt);
+                }
             }
         }
     }
