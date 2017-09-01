@@ -21,7 +21,7 @@
     }
 
     $con = new Controller();
-    $con->pagFornecedor();
+    $con->pagFornecedores();
 
     $fornecedor = $con->fornecedor;
     $estados = $con->estados;

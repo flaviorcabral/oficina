@@ -21,7 +21,7 @@
     }
 
     $con = new Controller();
-    $con->pagCliente();
+    $con->pagClientes();
     $estados = $con->estados;
 
     $acao = $_GET["acao"];

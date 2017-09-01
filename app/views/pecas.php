@@ -1,5 +1,11 @@
 <?php
 
+    include_once '../../config.php';
+
+    ini_set ('display_errors', 1 );
+    error_reporting ( E_ALL | E_STRICT );
+    //error_reporting (0);
+
     // identificando dispositivo
     $iphone = strpos($_SERVER['HTTP_USER_AGENT'],"iPhone");
     $ipad = strpos($_SERVER['HTTP_USER_AGENT'],"iPad");
@@ -14,9 +20,8 @@
         $eMovel="S";
     }
 
-    // incluindo bibliotecas de apoio
-    include "banco.php";
-    include "util.php";
+    $con = new Controller();
+    $pecas = $con->listarPecas();
 
     //codigo do usuario
     if (isset($_COOKIE['cdusua'])) {
@@ -75,8 +80,6 @@
     $deusua1=$deusua;
     $deusua = substr($deusua, 0,15);
 
-    $aPeca= ConsultarDados("", "", "","select * from pecas");
-
 ?>
 <!DOCTYPE html>
 <html>
@@ -134,19 +137,12 @@
                     <ul class="nav navbar-top-links navbar-left">
                         <br>
                         <li>
-                            <?php if (strlen($cdusua) == 14 ) {;?>
-                                <span><?php echo  formatar($cdusua,"cnpj")." - ";?></span>
-                            <?php } Else {?>
-                                <span><?php echo  formatar($cdusua,"cpf")." - ";?></span>
-                            <?php }?>
-                        </li>
-                        <li>
                             <span><?php echo  $deusua1 ;?></span>
                         </li>
                     </ul>
                     <ul class="nav navbar-top-links navbar-right">
                         <li>
-                            <span class="m-r-sm text-muted welcome-message">Benvindo a <strong>Demonstração Auto Mecânica&copy;</strong></span>
+                            <span class="m-r-sm text-muted welcome-message">Benvindo a <strong>Template Oficina</strong></span>
                         </li>
                         <li>
                             <a href="../../index.php">
@@ -167,7 +163,7 @@
 
                         <div class="ibox-content">
                             <div class="pull-left">
-                                <a onclick="#" href="pecasi.php" class="btn btn-warning ">Incluir</a>
+                                <a onclick="#" href="pecasacoes.php?acao=novo" class="btn btn-warning ">Incluir</a>
                             </div>
                             <br>
                             <br>
@@ -184,17 +180,17 @@
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        <?php for ($f =0; $f <= (count($aPeca)-1); $f++) { ?>
+                                        <?php for ($f =0; $f <= (count($pecas)-1); $f++) { ?>
                                             <tr class="gradeX">
 
-                                                <?php $coluna1 = $aPeca[$f]["cdpeca"]; ?>
-                                                <?php $coluna2 = $aPeca[$f]["depeca"]; ?>
-                                                <?php $coluna3 = $aPeca[$f]["vlpeca"]; ?>
-                                                <?php $coluna4 = $aPeca[$f]["qtpeca"]; ?>
+                                                <?php $coluna1 = $pecas[$f]["cdpeca"]; ?>
+                                                <?php $coluna2 = $pecas[$f]["depeca"]; ?>
+                                                <?php $coluna3 = $pecas[$f]["vlpeca"]; ?>
+                                                <?php $coluna4 = $pecas[$f]["qtpeca"]; ?>
 
-                                                <?php $ver = "pecasa.php?acao=ver&chave=".$coluna1; ?>
-                                                <?php $edita = "pecasa.php?acao=edita&chave=".$coluna1; ?>
-                                                <?php $apaga = "pecasa.php?acao=apaga&chave=".$coluna1; ?>
+                                                <?php $ver = "pecasacoes.php?acao=ver&chave=".$coluna1; ?>
+                                                <?php $edita = "pecasacoes.php?acao=edita&chave=".$coluna1; ?>
+                                                <?php $apaga = "pecasacoes.php?acao=apaga&chave=".$coluna1; ?>
 
                                                 <td><?php print $coluna1; ?></td>
                                                 <td><?php print $coluna2; ?></td>

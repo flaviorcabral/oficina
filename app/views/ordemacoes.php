@@ -21,7 +21,7 @@
     }
 
     $con = new Controller();
-    $con->pagOrdemServico();
+    $con->pagOrdemServicos();
 
     $acao = $_GET["acao"];
 

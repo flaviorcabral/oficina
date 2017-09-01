@@ -23,7 +23,7 @@
     $acao = $_GET["acao"];
 
     $con = new Controller();
-    $con->pagUsuario();
+    $con->pagUsuarios();
 
     switch ($acao) {
     case 'ver':
@@ -102,7 +102,7 @@
     if($acao != "novo")
     {
         $chave = trim($_GET["chave"]);
-        $usuario = $con->usuario;
+        $peca = $con->peca;
     }
 
     if($acao == "novo")
