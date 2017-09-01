@@ -45,7 +45,6 @@ class Peca
         }
 
         return false;
-
     }
 
     //Update info peça

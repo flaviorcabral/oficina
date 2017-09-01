@@ -5,6 +5,7 @@ class Controller
     public $ordem = null;
     public $itens = null;
     public $peca = null;
+    public $servico = null;
     public $cliente = null;
     public $clientes = null;
     public $fornecedor = null;
@@ -542,11 +543,120 @@ class Controller
         return $result;
     }
 
+    //Salvar novo serviço
+    function salvarServico($nomes, $dados)
+    {
+        $sql="insert into "."servicos"." (";
+        $campos="";
+        $total=count($nomes)-1;
+
+        for ($i=0 ; $i < count($nomes) ; $i++ ) {
+
+            $campos=$campos.$nomes[$i];
+
+            if ($i < $total) {
+                $campos=$campos.", ";
+            }
+
+        }
+
+        $sql=$sql.$campos.") values (";
+
+        $campos="";
+
+        for ($x =0 ; $x < count($dados) ; $x++ ) {
+
+            $campo="'".$dados[$x]."'";
+
+            if ($x < $total) {
+                $campos=$campos.$campo.", ";
+            } Else {
+                $campos=$campos.$campo.")";
+            }
+        }
+
+        $sql=$sql.$campos;
+
+        $serv = new Servico();
+
+        if($serv->insertServico($sql))
+        {
+            /*$cdusua="99999999999";
+            $chave=$dados[0];
+            $delog = "Inclusão dos dados da tabela ["."{$tabela}"."] para a chave ["."{$chave}"."]";
+            if (isset($_COOKIE['cdusua'])) {
+                $cdusua = $_COOKIE['cdusua'];
+            }
+
+            if ($tabela !== "log") {
+                GravarLog($cdusua, $delog);
+            }*/
+            return true;
+        }
+
+        return false;
+    }
+
     //Listar todos os serviços
     function listarServicos()
     {
         $serv = new Servico();
         $result = $serv->listarServicos();
+        return $result;
+    }
+
+    //Atualizar info serviço
+    function atualizaServiço($nomes, $dados, $codigo)
+    {
+        $campos="";
+        $total=count($dados)-1;
+
+        $sql="update "."servicos"." set ";
+
+        for ($i =0 ; $i < count($dados) ; $i++ ) {
+
+            $campos=$campos.$nomes[$i]." = '".$dados[$i]."'";
+
+            if ($i < $total) {
+                $campos=$campos.", ";
+            }
+
+        }
+
+        $sql=$sql.$campos." where cdserv = "."'{$codigo}'";
+
+        $serv = new Servico();
+
+        if($serv->updateServico($sql))
+        {
+            /*$cdusua="99999999999";
+        $delog = "Alteração dos dados da tabela ["."{$tabela}"."] para a chave ["."{$chave}"."]";
+        if (isset($_COOKIE['cdusua'])) {
+            $cdusua = $_COOKIE['cdusua'];
+        }
+
+        if ($tabela !== "log") {
+            GravarLog($cdusua, $delog);
+        }*/
+            return true;
+        }
+
+        return false;
+    }
+
+    //Excluir serviço
+    function excluirServico($cod)
+    {
+        $serv = new Servico();
+        $result = $serv->deleteServico($cod);
+        return $result;
+    }
+
+    //Buscar serviço por codigo
+    function buscaServico($cod)
+    {
+        $serv = new Servico();
+        $result = $serv->buscaServico($cod);
         return $result;
     }
 
@@ -1692,6 +1802,7 @@ class Controller
                 } else {
                     $demens = "Ocorreu um problema na atualização/exclusão. Se persistir contate o Suporte!";
                 }
+
                 $detitu = "Template Oficina | Cadastro de Clientes";
                 $devolt = "cliente.php";
                 header('Location: mensagem.php?demens=' . $demens . '&detitu=' . $detitu . '&devolt=' . $devolt);
@@ -1784,7 +1895,7 @@ class Controller
                         $demens = "Cadastro efetuado com sucesso!";
 
                     } else {
-                        $demens = "Ocorreu um problema durante tentativa de Salvar. Se persistir contate o Suporte!";
+                        $demens = "Ocorreu um problema durante o cadastro. Se persistir contate o suporte!";
                     }
                 }
 
@@ -2300,6 +2411,7 @@ class Controller
                 } else {
                     $demens = "Ocorreu um problema na atualização/exclusão. Se persistir contate o Suporte!";
                 }
+
                 $detitu = "Template Oficina | Cadastro de fornecedores";
                 $devolt = "fornecedores.php";
                 header('Location: mensagem.php?demens=' . $demens . '&detitu=' . $detitu . '&devolt=' . $devolt);
@@ -2396,7 +2508,7 @@ class Controller
                         $demens = "Cadastro efetuado com sucesso!";
 
                     } else {
-                        $demens = "Ocorreu um problema na tentativa de Salvar. Se persistir contate o Suporte!";
+                        $demens = "Ocorreu um problema durante o cadastro. Se persistir contate o suporte!";
                     }
                 }
 
@@ -2559,7 +2671,7 @@ class Controller
 
                     } else {
 
-                        $demens = "Ocorreu um problema no cadastro. Se persistir contate o suporte!";
+                        $demens = "Ocorreu um problema durante o cadastro. Se persistir contate o suporte!";
                     }
 
                     //gravar log
@@ -2641,6 +2753,9 @@ class Controller
 
                 if($this->excluirPeca($chave)){
 
+                    //gravar log
+                    //GravarIPLog($cdusua, "Alterar Meus Dados:");
+
                     $demens = "Exclusão efetuada com sucesso!";
 
                 }else{
@@ -2648,9 +2763,6 @@ class Controller
                     $demens = "Ocorreu um problema na atualização/exclusão. Se persistir contate o suporte!";
 
                 }
-
-                //gravar log
-                //GravarIPLog($cdusua, "Alterar Meus Dados:");
 
                 $detitu = "Template Oficina | Cadastro de Peças";
                 $devolt = "pecas.php";
@@ -2703,7 +2815,7 @@ class Controller
 
                     }else{
 
-                        $demens = "Ocorreu um problema na atualização/exclusão. Se persistir contate o suporte!";
+                        $demens = "Ocorreu um problema durante o cadastro. Se persistir contate o suporte!";
                     }
 
                 }
@@ -2711,6 +2823,146 @@ class Controller
                 $detitu = "Template Oficina | Cadastro de Peças";
                 $devolt = "pecas.php";
                 header('Location: mensagem.php?demens='.$demens.'&detitu='.$detitu.'&devolt='.$devolt);
+            }
+        }
+    }
+
+    //Funcoes pagina serviços
+    function pagServicos()
+    {
+        $data = date('Y-m-d');
+        $acao = $_REQUEST['acao'];
+
+        $flag = true;
+        $flag2 = false;
+
+        if ($flag == true) {
+
+            if ($acao == 'ver' or $acao == 'edita' or $acao == 'apaga') {
+
+                $chave = $_REQUEST['chave'];
+                $this->servico = $this->buscaServico($chave);
+
+            }
+        }
+
+        if(isset($_REQUEST['editar']))
+        {
+            $data = date('Y-m-d');
+            $cdserv = $_POST["cdserv"];
+            $deserv = $_POST["deserv"];
+            $qtserv = $_POST["qtserv"];
+            $vlserv = $_POST["vlserv"];
+
+            $vlserv= str_replace(".","",$vlserv);
+            $vlserv= str_replace(",",".",$vlserv);
+
+			$demens = "Atualização efetuada com sucesso!";
+
+			//campos da tabela
+			$aNomes=array();
+
+			//$aNomes[]= "cdveic";
+			$aNomes[]= "deserv";
+			$aNomes[]= "qtserv";
+			$aNomes[]= "vlserv";
+
+			//dados da tabela
+			$aDados=array();
+			//$aDados[]= $_POST["cdveic"];
+			$aDados[]= $deserv;
+			$aDados[]= $qtserv;
+			$aDados[]= $vlserv;
+
+            if($this->atualizaServiço($aNomes, $aDados, $cdserv))
+            {
+                $demens = "Atualização efetuada com sucesso!";
+
+            }else{
+
+                $demens = "Ocorreu um problema na atualização/exclusão. Se persistir contate o suporte!";
+
+            }
+
+                $detitu = "Template Oficina | Cadastro de Serviços";
+                $devolt = "servicos.php";
+                header('Location: mensagem.php?demens='.$demens.'&detitu='.$detitu.'&devolt='.$devolt);
+
+        }
+
+        if(isset($_REQUEST['apagar']))
+        {
+            $data = date('Y-m-d');
+            $chave = $_POST["cdserv"];
+
+            if($this->excluirServico($chave))
+            {
+                //gravar log
+                //GravarIPLog($cdusua, "Alterar Meus Dados:");
+                $demens = "Exclusão efetuada com sucesso!";
+
+            }else{
+
+                $demens = "Ocorreu um problema na atualização/exclusão. Se persistir contate o suporte!";
+            }
+
+
+            $detitu = "Template Oficina | Cadastro de Serviços";
+            $devolt = "servicos.php";
+            header('Location: mensagem.php?demens='.$demens.'&detitu='.$detitu.'&devolt='.$devolt);
+        }
+
+        if(isset($_REQUEST['salvar']))
+        {
+            $data = date('Y-m-d');
+            $cdserv = $_POST["cdserv"];
+            $deserv = $_POST["deserv"];
+            $qtserv = $_POST["qtserv"];
+            $vlserv = $_POST["vlserv"];
+
+            $vlserv = str_replace(".", "", $vlserv);
+            $vlserv = str_replace(",", ".", $vlserv);
+
+            $Flag = true;
+
+            $servico = $this->buscaServico($cdserv);
+
+            if ($servico) {
+                $demens = "Código do serviço já cadastrado!";
+                $detitu = "Template Oficina | Cadastro de Serviços";
+                header('Location: mensagem.php?demens=' . $demens . '&detitu=' . $detitu);
+                $Flag = false;
+            }
+
+            if ($Flag == true) {
+
+                //campos da tabela
+                $aNomes = array();
+
+                $aNomes[] = "cdserv";
+                $aNomes[] = "deserv";
+                $aNomes[] = "qtserv";
+                $aNomes[] = "vlserv";
+
+                //dados da tabela
+                $aDados = array();
+                $aDados[] = $cdserv;
+                $aDados[] = $deserv;
+                $aDados[] = $qtserv;
+                $aDados[] = $vlserv;
+
+                if($this->salvarServico($aNomes, $aDados))
+                {
+                    $demens = "Cadastro efetuado com sucesso!";
+
+                }else{
+
+                    $demens = "Ocorreu um problema durante o cadastro. Se persistir contate o suporte!";
+                }
+
+                $detitu = "Demonstração Auto Mecânica&copy; | Cadastro de Serviços";
+                $devolt = "servicos.php";
+                header('Location: mensagem.php?demens=' . $demens . '&detitu=' . $detitu . '&devolt=' . $devolt);
             }
         }
     }

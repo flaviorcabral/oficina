@@ -1,5 +1,11 @@
 <?php
 
+    include_once '../../config.php';
+
+    ini_set ('display_errors', 1 );
+    error_reporting ( E_ALL | E_STRICT );
+    //error_reporting (0);
+
     // identificando dispositivo
     $iphone = strpos($_SERVER['HTTP_USER_AGENT'],"iPhone");
     $ipad = strpos($_SERVER['HTTP_USER_AGENT'],"iPad");
@@ -14,9 +20,8 @@
         $eMovel="S";
     }
 
-    // incluindo bibliotecas de apoio
-    include "banco.php";
-    include "util.php";
+    $con = neW Controller();
+    $servico = $con->listarServicos();
 
     //codigo do usuario
     if (isset($_COOKIE['cdusua'])) {
@@ -75,8 +80,6 @@
     $deusua1=$deusua;
     $deusua = substr($deusua, 0,15);
 
-    $aServ= ConsultarDados("", "", "","select * from servicos");
-
 ?>
 <!DOCTYPE html>
 <html>
@@ -86,7 +89,7 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-    <title>Demonstração Auto Mecânica&copy; | Principal </title>
+    <title>Template Oficina | Principal </title>
 
     <link href="../../templates/css/bootstrap.min.css" rel="stylesheet">
     <link href="../../templates/font-awesome/css/font-awesome.css" rel="stylesheet">
@@ -134,19 +137,12 @@
                     <ul class="nav navbar-top-links navbar-left">
                         <br>
                         <li>
-                            <?php if (strlen($cdusua) == 14 ) {;?>
-                                <span><?php echo  formatar($cdusua,"cnpj")." - ";?></span>
-                            <?php } Else {?>
-                                <span><?php echo  formatar($cdusua,"cpf")." - ";?></span>
-                            <?php }?>
-                        </li>
-                        <li>
                             <span><?php echo  $deusua1 ;?></span>
                         </li>
                     </ul>
                     <ul class="nav navbar-top-links navbar-right">
                         <li>
-                            <span class="m-r-sm text-muted welcome-message">Benvindo a <strong>Demonstração Auto Mecânica&copy;</strong></span>
+                            <span class="m-r-sm text-muted welcome-message">Benvindo a <strong>Template Oficina</strong></span>
                         </li>
                         <li>
                             <a href="../../index.php">
@@ -167,7 +163,7 @@
 
                         <div class="ibox-content">
                             <div class="pull-left">
-                                <a onclick="#" href="servicosi.php" class="btn btn-warning ">Incluir</a>
+                                <a onclick="#" href="servicosacoes.php?acao=novo" class="btn btn-warning ">Incluir</a>
                             </div>
                             <br>
                             <br>
@@ -179,27 +175,24 @@
                                             <th>Código</th>
                                             <th>Descrição</th>
                                             <th>Valor</th>
-                                            <th>Quantidade</th>
                                             <th class="text-right" data-sort-ignore="true">Ação</th>
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        <?php for ($f =0; $f <= (count($aServ)-1); $f++) { ?>
+                                        <?php for ($f =0; $f <= (count($servico)-1); $f++) { ?>
                                             <tr class="gradeX">
 
-                                                <?php $coluna1 = $aServ[$f]["cdserv"]; ?>
-                                                <?php $coluna2 = $aServ[$f]["deserv"]; ?>
-                                                <?php $coluna3 = $aServ[$f]["vlserv"]; ?>
-                                                <?php $coluna4 = $aServ[$f]["qtserv"]; ?>
+                                                <?php $coluna1 = $servico[$f]["cdserv"]; ?>
+                                                <?php $coluna2 = $servico[$f]["deserv"]; ?>
+                                                <?php $coluna3 = $servico[$f]["vlserv"]; ?>
 
-                                                <?php $ver = "servicosa.php?acao=ver&chave=".$coluna1; ?>
-                                                <?php $edita = "servicosa.php?acao=edita&chave=".$coluna1; ?>
-                                                <?php $apaga = "servicosa.php?acao=apaga&chave=".$coluna1; ?>
+                                                <?php $ver = "servicosacoes.php?acao=ver&chave=".$coluna1; ?>
+                                                <?php $edita = "servicosacoes.php?acao=edita&chave=".$coluna1; ?>
+                                                <?php $apaga = "servicosacoes.php?acao=apaga&chave=".$coluna1; ?>
 
                                                 <td><?php print $coluna1; ?></td>
-                                                <td><?php print $coluna2; ?></td>
+                                                <td  class="col-lg-7"><?php print $coluna2; ?></td>
                                                 <td><?php print $coluna3; ?></td>
-                                                <td><?php print $coluna4; ?></td>
 
                                                 <td class="text-right">
                                                     <div class="btn-group">
@@ -219,7 +212,6 @@
                                             <th>Código</th>
                                             <th>Descrição</th>
                                             <th>Valor</th>
-                                            <th>Quantidade</th>
                                             <th class="text-right" data-sort-ignore="true">Ação</th>
                                         </tr>
                                     </tfoot>
@@ -332,8 +324,8 @@
                 buttons: [
                     { extend: 'copy'},
                     {extend: 'csv'},
-                    {extend: 'excel', title: 'ExampleFile'},
-                    {extend: 'pdf', title: 'ExampleFile'},
+                    {extend: 'excel', title: 'Template Oficina'},
+                    {extend: 'pdf', title: 'Template Oficina'},
 
                     {extend: 'print',
                      customize: function (win){

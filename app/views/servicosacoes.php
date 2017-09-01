@@ -1,5 +1,11 @@
 <?php
 
+    include_once '../../config.php';
+
+    ini_set ('display_errors', 1 );
+    error_reporting ( E_ALL | E_STRICT );
+    //error_reporting (0);
+
     // identificando dispositivo
     $iphone = strpos($_SERVER['HTTP_USER_AGENT'],"iPhone");
     $ipad = strpos($_SERVER['HTTP_USER_AGENT'],"iPad");
@@ -14,12 +20,10 @@
         $eMovel="S";
     }
 
-    // incluindo bibliotecas de apoio
-    include "banco.php";
-    include "util.php";
+    $con =  new Controller();
+    $con->pagServicos();
 
     $acao = $_GET["acao"];
-    $chave = trim($_GET["chave"]);
 
     switch ($acao) {
     case 'ver':
@@ -30,6 +34,9 @@
         break;
     case 'apaga':
         $titulo = "Exclusão";
+        break;
+    case 'novo':
+        $titulo = "Inclusão";
         break;
     default:
         header('Location: fichacadastral.php');
@@ -92,7 +99,16 @@
     $deusua1=$deusua;
     $deusua = substr($deusua, 0,15);
 
-    $aServ = ConsultarDados("servicos", "cdserv", $chave);
+    if($acao != "novo")
+    {
+        $chave = trim($_GET["chave"]);
+        $servico = $con->servico;
+    }
+
+    if($acao == "novo")
+    {
+        $servico = $con->servico;
+    }
 
 ?>
 <!DOCTYPE html>
@@ -103,7 +119,7 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-    <title>Demonstração Auto Mecânica&copy; | Principal </title>
+    <title>Template Oficina | Principal </title>
 
     <link href="../../templates/css/bootstrap.min.css" rel="stylesheet">
     <link href="../../templates/font-awesome/css/font-awesome.css" rel="stylesheet">
@@ -150,19 +166,12 @@
                     <ul class="nav navbar-top-links navbar-left">
                         <br>
                         <li>
-                            <?php if (strlen($cdusua) == 14 ) {;?>
-                                <span><?php echo  formatar($cdusua,"cnpj")." - ";?></span>
-                            <?php } Else {?>
-                                <span><?php echo  formatar($cdusua,"cpf")." - ";?></span>
-                            <?php }?>
-                        </li>
-                        <li>
                             <span><?php echo  $deusua1 ;?></span>
                         </li>
                     </ul>
                     <ul class="nav navbar-top-links navbar-right">
                         <li>
-                            <span class="m-r-sm text-muted welcome-message">Benvindo a <strong>Demonstração Auto Mecânica&copy;</strong></span>
+                            <span class="m-r-sm text-muted welcome-message">Benvindo a <strong>Template Oficina</strong></span>
                         </li>
                         <li>
                             <a href="../../index.php">
@@ -182,88 +191,55 @@
                         </div>
 
                         <div class="ibox-content">
-                            <form class="form-horizontal" method="POST" enctype="multipart/form-data" action="servicosaa.php">
+                            <form class="form-horizontal" method="POST" enctype="multipart/form-data">
                                 <div>
                                     <center>
                                         <?php if($acao == "edita") {?>
-                                            <button class="btn btn-sm btn-primary" name = "edita" type="submit"><strong>Alterar</strong></button>
+                                            <button class="btn btn-sm btn-primary" name = "editar" type="submit"><strong>Alterar</strong></button>
                                         <?php }?>
                                         <?php if($acao == "apaga") {?>
-                                            <button class="btn btn-sm btn-danger" name = "apaga" type="submit"><strong>Apagar</strong></button>
+                                            <button class="btn btn-sm btn-danger" name = "apagar" type="submit"><strong>Apagar</strong></button>
+                                        <?php }?>
+                                        <?php if($acao == "novo") {?>
+                                            <button class="btn btn-sm btn-danger" name = "salvar" type="submit"><strong>Salvar</strong></button>
                                         <?php }?>
                                         <button class="btn btn-sm btn-warning " type="button" onClick="history.go(-1)"><strong>Retornar</strong></button>
                                     </center>
                                 </div>
                                 <br>
-                                <?php if($acao == "edita") {?>
                                     <div class="row">
                                             <div class="form-group">
                                                 <label class="col-md-2 control-label" for="textinput">Código</label>
                                                 <div class="col-md-4">
-                                                    <input id="cdserv" name="cdserv" value="<?php echo $aServ[0]["cdserv"]; ?>" type="text" placeholder="" class="form-control" maxlength = "50" readonly = "">
+                                                    <input id="cdserv" name="cdserv" value="<?php echo $servico["cdserv"]; ?>" type="text" placeholder="" class="form-control" autofocus maxlength = "50" <?php if($acao == 'ver' or $acao == 'apaga' or $acao == 'edita'): ?>readonly=""<?php endif; ?> required>
                                                 </div>
                                             </div>
 
                                             <div class="form-group">
                                                 <label class="col-md-2 control-label" for="textinput">Descrição</label>
                                                 <div class="col-md-8">
-                                                    <input id="deserv" name="deserv" value="<?php echo $aServ[0]["deserv"]; ?>" type="text" placeholder="" class="form-control" autofocus maxlength = "100">
+                                                    <input id="deserv" name="deserv" value="<?php echo $servico["deserv"]; ?>" type="text" placeholder="" class="form-control" maxlength = "100" <?php if($acao == 'ver' or $acao == 'apaga'): ?>readonly=""<?php endif; ?> required>
                                                 </div>
                                             </div>
 
                                             <div class="form-group">
                                                 <label class="col-md-2 control-label" for="textinput">Valor</label>
                                                 <div class="col-md-2">
-                                                    <input id="vlserv" name="vlserv" value="<?php echo $aServ[0]["vlserv"]; ?>" type="text" placeholder="" class="form-control" maxlength = "15">
-                                                </div>
-                                            </div>
-
-                                            <div class="form-group">
-                                                <label class="col-md-2 control-label" for="textinput">Quantidade</label>
-                                                <div class="col-md-2">
-                                                    <input id="qtserv" name="qtserv" value="<?php echo $aServ[0]["qtserv"]; ?>" type="text" placeholder="" class="form-control" maxlength = "15">
+                                                    <input id="vlserv" name="vlserv" value="<?php echo $servico["vlserv"]; ?>" type="text" placeholder="" class="form-control" maxlength = "15" <?php if($acao == 'ver' or $acao == 'apaga'): ?>readonly=""<?php endif; ?> required>
                                                 </div>
                                             </div>
                                     </div>
-                                <?php } Else {?>
-                                    <div class="row">
-                                            <div class="form-group">
-                                                <label class="col-md-2 control-label" for="textinput">Código</label>
-                                                <div class="col-md-4">
-                                                    <input id="cdserv" name="cdserv" value="<?php echo $aServ[0]["cdserv"]; ?>" type="text" placeholder="" class="form-control" maxlength = "50" readonly = "">
-                                                </div>
-                                            </div>
-
-                                            <div class="form-group">
-                                                <label class="col-md-2 control-label" for="textinput">Descrição</label>
-                                                <div class="col-md-8">
-                                                    <input id="deserv" name="deserv" value="<?php echo $aServ[0]["deserv"]; ?>" type="text" placeholder="" class="form-control" autofocus maxlength = "100" readonly = "">
-                                                </div>
-                                            </div>
-
-                                            <div class="form-group">
-                                                <label class="col-md-2 control-label" for="textinput">Valor</label>
-                                                <div class="col-md-2">
-                                                    <input id="vlserv" name="vlserv" value="<?php echo $aServ[0]["vlserv"]; ?>" type="text" placeholder="" class="form-control" maxlength = "15" readonly = "">
-                                                </div>
-                                            </div>
-
-                                            <div class="form-group">
-                                                <label class="col-md-2 control-label" for="textinput">Quantidade</label>
-                                                <div class="col-md-2">
-                                                    <input id="qtserv" name="qtserv" value="<?php echo $aServ[0]["qtserv"]; ?>" type="text" placeholder="" class="form-control" maxlength = "15" readonly = "">
-                                                </div>
-                                            </div>
-                                    </div>
-                                <?php }?>
                                 <br>
                                 <div>
                                     <center>
                                         <?php if($acao == "edita") {?>
-                                            <button class="btn btn-sm btn-primary" name = "edita" type="submit"><strong>Alterar</strong></button>
+                                            <button class="btn btn-sm btn-primary" name = "editar" type="submit"><strong>Alterar</strong></button>
                                         <?php }?>
                                         <?php if($acao == "apaga") {?>
-                                            <button class="btn btn-sm btn-danger" name = "apaga" type="submit"><strong>Apagar</strong></button>
+                                            <button class="btn btn-sm btn-danger" name = "apagar" type="submit"><strong>Apagar</strong></button>
+                                        <?php }?>
+                                        <?php if($acao == "novo") {?>
+                                            <button class="btn btn-sm btn-danger" name = "salvar" type="submit"><strong>Salvar</strong></button>
                                         <?php }?>
                                         <button class="btn btn-sm btn-warning " type="button" onClick="history.go(-1)"><strong>Retornar</strong></button>
                                     </center>
@@ -326,8 +302,8 @@
                 buttons: [
                     { extend: 'copy'},
                     {extend: 'csv'},
-                    {extend: 'excel', title: 'ExampleFile'},
-                    {extend: 'pdf', title: 'ExampleFile'},
+                    {extend: 'excel', title: 'Template Oficina'},
+                    {extend: 'pdf', title: 'Template Oficina'},
 
                     {extend: 'print',
                      customize: function (win){
