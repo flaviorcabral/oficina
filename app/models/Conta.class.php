@@ -34,10 +34,10 @@ class Conta
         return FALSE;
     }
 
-    //atualiza informações tbl contas
-    function excluirConta($cod)
+    //Deletar conta
+    function deleteConta($cod)
     {
-        if ($this->con->exec("DELETE FROM contas WHERE cdtipo = 'Pagar' AND cdorig = '{$cod}'")) {
+        if ($this->con->exec("DELETE FROM contas WHERE cdorig = '{$cod}'")) {
 
             return TRUE;
         }

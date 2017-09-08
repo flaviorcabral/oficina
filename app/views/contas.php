@@ -1,5 +1,11 @@
 <?php
 
+    include_once '../../config.php';
+
+    ini_set ('display_errors', 1 );
+    error_reporting ( E_ALL | E_STRICT );
+    //error_reporting (0);
+
     // identificando dispositivo
     $iphone = strpos($_SERVER['HTTP_USER_AGENT'],"iPhone");
     $ipad = strpos($_SERVER['HTTP_USER_AGENT'],"iPad");
@@ -14,9 +20,8 @@
         $eMovel="S";
     }
 
-    // incluindo bibliotecas de apoio
-    include "banco.php";
-    include "util.php";
+    $con = new Controller();
+    $contas = $con->listaContas();
 
     //codigo do usuario
     if (isset($_COOKIE['cdusua'])) {
@@ -75,7 +80,6 @@
     $deusua1=$deusua;
     $deusua = substr($deusua, 0,15);
 
-    $aCont= ConsultarDados("", "", "","select * from contas order by cdcont");
 ?>
 <!DOCTYPE html>
 <html>
@@ -85,7 +89,7 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-    <title>Demonstração&copy; | Principal </title>
+    <title>Template Oficina | Principal </title>
 
     <link href="../../templates/css/bootstrap.min.css" rel="stylesheet">
     <link href="../../templates/font-awesome/css/font-awesome.css" rel="stylesheet">
@@ -134,9 +138,9 @@
                         <br>
                         <li>
                             <?php if (strlen($cdusua) == 14 ) {;?>
-                                <span><?php echo  formatar($cdusua,"cnpj")." - ";?></span>
+                                <span><?php echo  $con->formatar($cdusua,"cnpj")." - ";?></span>
                             <?php } Else {?>
-                                <span><?php echo  formatar($cdusua,"cpf")." - ";?></span>
+                                <span><?php echo  $con->formatar($cdusua,"cpf")." - ";?></span>
                             <?php }?>
                         </li>
                         <li>
@@ -175,7 +179,7 @@
                                 <table class="table table-striped table-bordered table-hover dataTables-example" >
                                     <thead>
                                         <tr>
-                                            <th>Número de Controle</th>
+                                            <th class="col-lg-1">Nº de Controle</th>
                                             <th>Cliente/Fornecedor</th>
                                             <th>Tipo</th>
                                             <th>OS/Pedido</th>
@@ -187,42 +191,42 @@
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        <?php for ($f =0; $f <= (count($aCont)-1); $f++) { ?>
+                                        <?php for ($f =0; $f <= (count($contas)-1); $f++) { ?>
                                             <tr class="gradeX">
-                                                <?php $datac = strtotime($aCont[$f]["dtcont"]) ;?>
-                                                <?php $datap = strtotime($aCont[$f]["dtpago"]) ;?>
+                                                <?php $datac = strtotime($contas[$f]["dtcont"]) ;?>
+                                                <?php $datap = strtotime($contas[$f]["dtpago"]) ;?>
                                                 <?php $datah = strtotime(date("d-m-Y")) ;?>
 
-                                                <?php $coluna1 = trim($aCont[$f]["cdcont"]); ?>
-                                                <?php $coluna2 = trim($aCont[$f]["cdquem"]); ?>
-                                                <?php $coluna3 = trim($aCont[$f]["cdtipo"]); ?>
-                                                <?php $coluna4 = trim($aCont[$f]["cdorig"]); ?>
-                                                <?php $coluna5 = number_format($aCont[$f]["vlcont"],2,',','.'); ?>
+                                                <?php $coluna1 = trim($contas[$f]["cdcont"]); ?>
+                                                <?php $coluna2 = trim($contas[$f]["cdquem"]); ?>
+                                                <?php $coluna3 = trim($contas[$f]["cdtipo"]); ?>
+                                                <?php $coluna4 = trim($contas[$f]["cdorig"]); ?>
+                                                <?php $coluna5 = number_format($contas[$f]["vlcont"],2,',','.'); ?>
                                                 <?php $coluna6 = ""; ?>
                                                 <?php $coluna7 = ""; ?>
                                                 <?php $coluna8 = "Pendente"; ?>
 
-                                                <?php if ( empty($datac) !== true and strtotime($aCont[$f]["dtcont"]) !== '-62169984000' and $aCont[$f]["dtcont"] !== '1969-12-31' ){ ?>
+                                                <?php if ( empty($datac) !== true and strtotime($contas[$f]["dtcont"]) !== '-62169984000' and $contas[$f]["dtcont"] !== '1969-12-31' ){ ?>
                                                     <?php $coluna6 = date("d-m-Y", $datac); ?>
                                                 <?php }?>
 
-                                                <?php if ( empty($datap) !== true and strtotime($aCont[$f]["dtpago"]) !== '-62169984000' and $aCont[$f]["dtpago"] !== '1969-12-31' ){ ?>
+                                                <?php if ( empty($datap) !== true and strtotime($contas[$f]["dtpago"]) !== '-62169984000' and $contas[$f]["dtpago"] !== '1969-12-31' ){ ?>
                                                     <?php $coluna7 = date("d-m-Y", $datap); ?>
                                                 <?php }?>
 
-                                                <?php if ( $aCont[$f]["vlpago"] > 0 ){ ?>
+                                                <?php if ($contas[$f]["vlpago"] > 0 ){ ?>
                                                     <?php $coluna8 = "Pago"; ?>
                                                 <?php }?>
 
                                                 <?php if (  $datac < $datah ){ ?>
-                                                    <?php if ( $aCont[$f]["vlpago"] <= 0 ){ ?>
+                                                    <?php if ($contas[$f]["vlpago"] <= 0 ){ ?>
                                                         <?php $coluna8 = "Atrasada"; ?>
                                                     <?php }?>
                                                 <?php }?>
                                                   
-                                                <?php $ver = "contasa.php?acao=ver&chave=".$coluna1; ?>
-                                                <?php $edita = "contasa.php?acao=edita&chave=".$coluna1; ?>
-                                                <?php $apaga = "contasa.php?acao=apaga&chave=".$coluna1; ?>
+                                                <?php $ver = "contasacoes.php?acao=ver&chave=".$coluna1; ?>
+                                                <?php $edita = "contasacoes.php?acao=edita&chave=".$coluna1; ?>
+                                                <?php $apaga = "contasacoes.php?acao=apaga&chave=".$coluna1; ?>
                                                 <?php $imprime = "contasp.php?acao=imprime&chave=".$coluna1; ?>
 
                                                 <td><?php print $coluna1; ?></td>

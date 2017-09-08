@@ -8,14 +8,15 @@
 
 include 'config.php';
 
+session_start();
 
 $con = new Controller();
-$usu = new Usuario();
-$result = $con->buscarCliente("123");
+$usu = new Conta();
+
+$result = $con->buscarMaiorOrdemPorCliente("26812855000100 - AILTON F SILVA", "2017-09-08");
 
 //$result = $usu->listaUsuarios();
 echo "<pre>";
 var_dump($result);
 echo "<pre/>";
 
-//echo $result[0];

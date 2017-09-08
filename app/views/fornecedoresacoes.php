@@ -23,11 +23,7 @@
     $con = new Controller();
     $con->pagFornecedores();
 
-    $fornecedor = $con->fornecedor;
-    $estados = $con->estados;
-
     $acao = $_GET["acao"];
-    $chave = trim($_GET["chave"]);
 
     switch ($acao) {
     case 'ver':
@@ -40,7 +36,7 @@
         $titulo = "Exclusão";
         break;
     case 'novo':
-        $titulo = "Incluir";
+        $titulo = "Inclusão";
         break;
     default:
         header('Location: fichacadastral.php');
@@ -103,6 +99,18 @@
     $deusua1=$deusua;
     $deusua = substr($deusua, 0,15);
 
+    if($acao != "novo")
+    {
+        $chave = trim($_GET["chave"]);
+        $fornecedor = $con->fornecedor;
+    }
+
+    if($acao == "novo")
+    {
+        $fornecedor = $con->fornecedor;
+    }
+
+    $estados = $con->estados;
 ?>
 <!DOCTYPE html>
 <html>

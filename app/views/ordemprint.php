@@ -24,7 +24,7 @@
 
     $chave = trim($_GET["chave"]);
 
-    $aItem = $con->buscarOrdemTbli($chave);
+    $aItem = $con->buscarItensOrdem($chave);
 
     $aOrde = $con->buscarOrdemCindice($chave);
     $pos = strpos($aOrde[0]["cdclie"], "-");

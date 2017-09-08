@@ -37,7 +37,7 @@
         $titulo = "Exclusão";
         break;
     case 'novo':
-        $titulo = "Incluir";
+        $titulo = "Inclusão";
         break;
     default:
         header('Location: fichacadastral.php');

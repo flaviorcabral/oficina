@@ -45,7 +45,7 @@ class OrdemServico
 
         if (count($busca) > 0) {
 
-            return $busca->fetch(PDO::FETCH_ASSOC);
+            return $busca->fetchAll(PDO::FETCH_ASSOC);
         }
 
         return false;
@@ -64,8 +64,8 @@ class OrdemServico
         return false;
     }
 
-    //Busca ordem de serviço tbl ordem intermediaria
-    function buscaOrdemi($cod)
+    //Busca itens da ordem de serviço
+    function buscaItensOrdem($cod)
     {
         $busca = $this->con->query("SELECT * FROM ordemi WHERE cdorde = '{$cod}'");
 
@@ -77,7 +77,7 @@ class OrdemServico
         return false;
     }
 
-    //Atualiza ordem de serviço tbl ordem
+    //Salvar ordem de serviço
     function insertOrdemServico($sql)
     {
         if ($this->con->exec($sql)){
@@ -87,8 +87,8 @@ class OrdemServico
         return false;
     }
 
-    //Atualiza ordem de serviço tbl ordem intermediaria
-    function insertOrdemiServico($sql)
+    //Salva itens ordem de serviço
+    function insertItensOrdem($sql)
     {
         if ($this->con->exec($sql)){
             return true;
@@ -97,8 +97,8 @@ class OrdemServico
         return false;
     }
 
-    //Exluir ordem de serviço tbl ordem
-    function excluirOrdem($cod)
+    //Exluir ordem de serviço
+    function deleteOrdem($cod)
     {
         if ($this->con->exec("DELETE FROM ordem WHERE cdorde = '{$cod}'")) {
 
@@ -108,8 +108,8 @@ class OrdemServico
         return FALSE;
     }
 
-    //Exluir ordem de serviço tbl ordem intermediaria
-    function excluirOrdemi($cod)
+    //Exluir itens ordem de serviço
+    function deleteItensOrdem($cod)
     {
         if ($this->con->exec("DELETE FROM ordemi WHERE cdorde = '{$cod}'")) {
 

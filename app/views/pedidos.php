@@ -1,5 +1,11 @@
 <?php
 
+    include_once '../../config.php';
+
+    ini_set ('display_errors', 1 );
+    error_reporting ( E_ALL | E_STRICT );
+    //error_reporting (0);
+
     // identificando dispositivo
     $iphone = strpos($_SERVER['HTTP_USER_AGENT'],"iPhone");
     $ipad = strpos($_SERVER['HTTP_USER_AGENT'],"iPad");
@@ -14,9 +20,8 @@
         $eMovel="S";
     }
 
-    // incluindo bibliotecas de apoio
-    include "banco.php";
-    include "util.php";
+    $con = new Controller();
+    $pedidos = $con->listaPedidos();
 
     //codigo do usuario
     if (isset($_COOKIE['cdusua'])) {
@@ -75,8 +80,6 @@
     $deusua1=$deusua;
     $deusua = substr($deusua, 0,15);
 
-    // usuarios
-    $aPedi= ConsultarDados("", "", "","select * from pedidos order by cdpedi");
 ?>
 <!DOCTYPE html>
 <html>
@@ -86,7 +89,7 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-    <title>Demonstração&copy; | Principal </title>
+    <title>Template Oficina | Principal </title>
 
     <link href="../../templates/css/bootstrap.min.css" rel="stylesheet">
     <link href="../../templates/font-awesome/css/font-awesome.css" rel="stylesheet">
@@ -134,19 +137,12 @@
                     <ul class="nav navbar-top-links navbar-left">
                         <br>
                         <li>
-                            <?php if (strlen($cdusua) == 14 ) {;?>
-                                <span><?php echo  formatar($cdusua,"cnpj")." - ";?></span>
-                            <?php } Else {?>
-                                <span><?php echo  formatar($cdusua,"cpf")." - ";?></span>
-                            <?php }?>
-                        </li>
-                        <li>
                             <span><?php echo  $deusua1 ;?></span>
                         </li>
                     </ul>
                     <ul class="nav navbar-top-links navbar-right">
                         <li>
-                            <span class="m-r-sm text-muted welcome-message">Benvindo ao <strong>Demonstração Auto Mecânica&copy;</strong></span>
+                            <span class="m-r-sm text-muted welcome-message">Benvindo ao <strong>Template Oficina</strong></span>
                         </li>
                         <li>
                             <a href="../../index.php">
@@ -167,7 +163,7 @@
 
                         <div class="ibox-content">
                             <div class="pull-left">
-                                <a onclick="#" href="pedidosi.php" class="btn btn-warning ">Incluir</a>
+                                <a onclick="#" href="pedidosacoes.php?acao=novo" class="btn btn-warning ">Incluir</a>
                             </div>
                             <br>
                             <br>
@@ -185,24 +181,20 @@
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        <?php for ($f =0; $f <= (count($aPedi)-1); $f++) { ?>
+                                        <?php for ($f =0; $f <= (count($pedidos)-1); $f++) { ?>
                                             <tr class="gradeX">
-                                                <?php $datap = strtotime($aPedi[$f]["dtpedi"]) ;?>
-                                                <?php $datae = strtotime($aPedi[$f]["dtentr"]) ;?>
+                                                <?php $datap = strtotime($pedidos[$f]["dtpedi"]) ;?>
+                                                <?php $datae = strtotime($pedidos[$f]["dtentr"]) ;?>
 
-                                                <?php $coluna1 = trim($aPedi[$f]["cdpedi"]); ?>
-                                                <?php $coluna2 = trim($aPedi[$f]["cdforn"]); ?>
-                                                <?php $coluna3 = number_format($aPedi[$f]["vlpedi"],2,',','.'); ?>
+                                                <?php $coluna1 = trim($pedidos[$f]["cdpedi"]); ?>
+                                                <?php $coluna2 = trim($pedidos[$f]["cdforn"]); ?>
+                                                <?php $coluna3 = number_format($pedidos[$f]["vlpedi"],2,',','.'); ?>
                                                 <?php $coluna4 = date("d/m/Y",$datap); ?>
                                                 <?php $coluna5 = date("d/m/Y",$datae); ?>
-                                               
-                                                <?php if ( empty(strtotime($datae)) == true or strtotime($aPedi[$f]["dtentr"]) == '-62169984000' ){ ?>
-                                                    <?php $coluna5 = ""; ?>
-                                                <?php }?>
 
-                                                <?php $ver = "pedidosa.php?acao=ver&chave=".$coluna1; ?>
-                                                <?php $edita = "pedidosa.php?acao=edita&chave=".$coluna1; ?>
-                                                <?php $apaga = "pedidosa.php?acao=apaga&chave=".$coluna1; ?>
+                                                <?php $ver = "pedidosacoes.php?acao=ver&chave=".$coluna1; ?>
+                                                <?php $edita = "pedidosacoes.php?acao=edita&chave=".$coluna1; ?>
+                                                <?php $apaga = "pedidosacoes.php?acao=apaga&chave=".$coluna1; ?>
 
                                                 <td><?php print $coluna1; ?></td>
                                                 <td><?php print $coluna2; ?></td>
