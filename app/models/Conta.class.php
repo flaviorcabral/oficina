@@ -34,6 +34,19 @@ class Conta
         return FALSE;
     }
 
+    //Buscar conta
+    function buscarConta($cod)
+    {
+        $busca = $this->con->query("SELECT * FROM contas WHERE cdcont = '{$cod}'");
+
+        if (count($busca) > 0) {
+
+            return $busca->fetchAll(PDO::FETCH_ASSOC);
+        }
+
+        return false;
+    }
+
     //Deletar conta
     function deleteConta($cod)
     {

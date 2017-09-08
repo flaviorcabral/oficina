@@ -11,7 +11,7 @@ class Conexao
         $host = 'localhost';
         $dataBase = 'oficina';
         $usuario = 'root';
-        $senha = '';
+        $senha = 'un1cr3d1';
 
         if (!isset(self::$instance)) {
 

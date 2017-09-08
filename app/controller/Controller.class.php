@@ -8,6 +8,7 @@ class Controller
     public $peca = null;
     public $servico = null;
     public $cliente = null;
+    public $conta = null;
     public $clientes = null;
     public $fornecedor = null;
     public $fornecedores = null;
@@ -1112,6 +1113,14 @@ class Controller
         }
 
         return false;
+    }
+
+    //Buscar conta
+    function buscaConta($cod)
+    {
+        $conta = new Conta();
+        $result = $conta->buscarConta($cod);
+        return $result;
     }
 
     //Excluir conta
@@ -3531,6 +3540,26 @@ class Controller
                 $detitu = "Demonstração Auto Mecânica&copy; | Cadastro de Serviços";
                 $devolt = "servicos.php";
                 header('Location: mensagem.php?demens=' . $demens . '&detitu=' . $detitu . '&devolt=' . $devolt);
+            }
+        }
+    }
+
+    //Funcoes pagina contasacoes.php
+    function pagContas()
+    {
+        $data = date('Y-m-d');
+        $acao = $_REQUEST['acao'];
+
+        $flag = true;
+        $flag2 = false;
+
+        if ($flag == true) {
+
+            if ($acao == 'ver' or $acao == 'edita' or $acao == 'apaga') {
+
+                $chave = $_REQUEST['chave'];
+                $this->conta = $this->buscaConta($chave);
+
             }
         }
     }
