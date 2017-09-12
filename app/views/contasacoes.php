@@ -101,7 +101,6 @@
 
     if($acao != "novo")
     {
-        $chave = trim($_GET["chave"]);
         $conta = $con->conta;
     }
 
@@ -111,7 +110,7 @@
     }
 
     $clientes = $con->listarClientes();
-    $forncedores = $con->listaFornecedores();
+    $fornecedores = $con->listaFornecedores();
     $pedidos = $con->listaPedidos();
     $ordens = $con->listarOrdensServico();
 
@@ -241,7 +240,7 @@
                                             <div class="form-group">
                                                 <label class="col-md-2 control-label" for="textinput">Valor</label>
                                                 <div class="col-md-2">
-                                                    <input id="vlcont" name="vlcont" value="<?php echo number_format($conta[0]["cdcont"],2,",",".");?>" type="text" placeholder="" class="form-control" maxlength = "15">
+                                                    <input id="vlcont" name="vlcont" value="<?php echo number_format($conta[0]["vlcont"],2,",",".");?>" type="text" placeholder="" class="form-control" maxlength = "15">
                                                 </div>
                                             </div>
 
@@ -265,7 +264,7 @@
                                                 <div class="col-md-2">
                                                     <select name="cdquem" id="cdquem" style="width:250%">
                                                         <option>Outros</option>
-                                                        <option>CLIENTE</option>
+                                                        <option>CLIENTES</option>
                                                         <?php for($i=0;$i < count($clientes);$i++) { ?>
                                                           <?php if ($conta[0]["cdquem"] == $clientes[$i]["cdclie"]." - ".$clientes[$i]["declie"] ) {?>
                                                             <option selected=""><?php echo $clientes[$i]["cdclie"]." - ".$clientes[$i]["declie"];?></option>
@@ -273,7 +272,7 @@
                                                             <option><?php echo $clientes[$i]["cdclie"]." - ".$clientes[$i]["declie"];?></option>
                                                           <?php }?>
                                                         <?php }?>
-                                                        <option>FORNECEDOR</option>
+                                                        <option>FORNECEDORES</option>
                                                         <?php for($i=0;$i < count($fornecedores);$i++) { ?>
                                                           <?php if ($conta[0]["cdquem"] == $fornecedores[$i]["cdforn"]." - ".$fornecedores[$i]["deforn"] ) {?>
                                                             <option selected=""><?php echo $fornecedores[$i]["cdforn"]." - ".$fornecedores[$i]["deforn"];?></option>
@@ -286,24 +285,24 @@
                                             </div>
 
                                             <div class="form-group">
-                                                <label class="col-md-2 control-label" for="textinput">OS/Pedido</label>
+                                                <label class="col-md-2 control-label" for="textinput">Num. OS/Pedido</label>
                                                 <div class="col-md-2">
                                                     <select name="cdorig" id="cdorig" style="width:250%">
                                                         <option>Outros</option>
-                                                        <option >ORDEM DE SERVIÇOS</option>
+                                                        <option >ORDENS DE SERVIÇOS</option>
                                                         <?php for($i=0;$i < count($ordens);$i++) { ?>
-                                                          <?php if ($conta[0]["cdorig"] == $ordens[$i]["cdorde"]." - ".$ordens[$i]["cdclie"] ) {?>
-                                                            <option selected=""><?php echo $ordens[$i]["cdorde"]." - ".$ordens[$i]["cdclie"];?></option>
+                                                          <?php if ($conta[0]["cdorig"] == $ordens[$i]["cdorde"]) {?>
+                                                            <option selected=""><?php echo $ordens[$i]["cdorde"];?></option>
                                                           <?php } Else {?>
-                                                            <option><?php echo $ordens[$i]["cdorde"]." - ".$ordens[$i]["cdclie"];?></option>
+                                                            <option><?php echo $ordens[$i]["cdorde"];?></option>
                                                           <?php }?>
                                                         <?php }?>
-                                                        <option>PEDIDO</option>
+                                                        <option>PEDIDOS</option>
                                                         <?php for($i=0;$i < count($pedidos);$i++) { ?>
-                                                          <?php if ($pedidos[0]["cdpedi"] == $pedidos[$i]["cdpedi"]." - ".$pedidos[$i]["cdforn"] ) {?>
-                                                            <option selected=""><?php echo $pedidos[$i]["cdpedi"]." - ".$pedidos[$i]["cdforn"];?></option>
+                                                          <?php if ($conta[0]["cdorig"] == $pedidos[$i]["cdpedi"]) {?>
+                                                            <option selected=""><?php echo $pedidos[$i]["cdpedi"];?></option>
                                                           <?php } Else {?>
-                                                            <option><?php echo $pedidos[$i]["cdpedi"]." - ".$pedidos[$i]["cdforn"];?></option>
+                                                            <option><?php echo $pedidos[$i]["cdpedi"];?></option>
                                                           <?php }?>
                                                         <?php }?>
                                                     </select>
@@ -403,8 +402,8 @@
                 buttons: [
                     { extend: 'copy'},
                     {extend: 'csv'},
-                    {extend: 'excel', title: 'ExampleFile'},
-                    {extend: 'pdf', title: 'ExampleFile'},
+                    {extend: 'excel', title: 'Template Oficina'},
+                    {extend: 'pdf', title: 'Template Oficina'},
 
                     {extend: 'print',
                      customize: function (win){
