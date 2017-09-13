@@ -1115,6 +1115,45 @@ class Controller
         return false;
     }
 
+    //Atualizar conta
+    function atualizaConta($nomes, $dados, $cod)
+    {
+        $campos="";
+        $total=count($dados)-1;
+
+        $sql="update "."contas"." set ";
+
+        for ($i =0 ; $i < count($dados) ; $i++ ) {
+
+            $campos=$campos.$nomes[$i]." = '".$dados[$i]."'";
+
+            if ($i < $total) {
+                $campos=$campos.", ";
+            }
+
+        }
+
+        $sql=$sql.$campos." where cdcont = "."'{$cod}'";
+
+        $conta = new Conta();
+
+        if($conta->updateConta($sql)) {
+
+           /* $cdusua = "99999999999";
+            $delog = "Alteração dos dados da tabela [" . "{$tabela}" . "] para a chave [" . "{$chave}" . "]";
+            if (isset($_COOKIE['cdusua'])) {
+                $cdusua = $_COOKIE['cdusua'];
+            }
+
+            if ($tabela !== "log") {
+                GravarLog($cdusua, $delog);
+            }*/
+            return true;
+        }
+
+        return false;
+    }
+
     //Buscar conta
     function buscaConta($cod)
     {
@@ -1123,7 +1162,23 @@ class Controller
         return $result;
     }
 
-    //Excluir conta
+    //Excluir conta referente Ordem de serviço
+    function excluirContaOrdem($cod)
+    {
+        $conta = new Conta();
+        $result = $conta->deleteContaOrdem($cod);
+        return $result;
+    }
+
+    //Excluir conta referente Pedido
+    function excluirContaPedido($cod)
+    {
+        $conta = new Conta();
+        $result = $conta->deleteContaPedido($cod);
+        return $result;
+    }
+
+    //Excluir qualquer tipo de conta
     function excluirConta($cod)
     {
         $conta = new Conta();
@@ -2113,7 +2168,7 @@ class Controller
 
             $this->excluirOrdemDeServico($cdorde);
             $this->excluirItensOrdemDeServico($cdorde);
-            $this->excluirConta($cdorde);
+            $this->excluirContaOrdem($cdorde);
 
             $dtcada = date('Y-m-d');
             $Flag = true;
@@ -2299,7 +2354,7 @@ class Controller
 
             $cdorde = $_REQUEST["cdorde"];
 
-            if ($this->excluirOrdemDeServico($cdorde) and $this->excluirItensOrdemDeServico($cdorde) and $this->excluirConta($cdorde)) {
+            if ($this->excluirOrdemDeServico($cdorde) and $this->excluirItensOrdemDeServico($cdorde) and $this->excluirContaOrdem($cdorde)) {
                 $demens = "Exclusão efetuada com sucesso!";
 
             } else {
@@ -2516,7 +2571,7 @@ class Controller
 
             $this->excluirPedido($cdpedi);
             $this->excluirItensPedido($cdpedi);
-            $this->excluirConta($cdpedi);
+            $this->excluirContaPedido($cdpedi);
 
             $dtcada = date('Y-m-d');
             $Flag = true;
@@ -2687,7 +2742,7 @@ class Controller
         if (isset($_REQUEST['apagar'])) {
             $cdpedi = $_POST["cdpedi"];
 
-            if ($this->excluirPedido($cdpedi) and $this->excluirItensPedido($cdpedi) and $this->excluirConta($cdpedi)) {
+            if ($this->excluirPedido($cdpedi) and $this->excluirItensPedido($cdpedi) and $this->excluirContaPedido($cdpedi)) {
                 $demens = "Exclusão efetuada com sucesso!";
 
             } else {
@@ -3562,6 +3617,146 @@ class Controller
 
             }
         }
-    }
 
+        if(isset($_REQUEST['editar']))
+        {
+            $data = date('Y-m-d');
+            $cdcont = $_POST["cdcont"];
+            $vlcont = $_POST["vlcont"];
+            $vlpago = $_POST["vlpago"];
+
+            $vlcont= str_replace(".","",$vlcont);
+            $vlcont= str_replace(",",".",$vlcont);
+            $vlpago= str_replace(".","",$vlpago);
+            $vlpago= str_replace(",",".",$vlpago);
+
+            //campos da tabela
+            $aNomes=array();
+
+            $aNomes[]= "decont";
+            $aNomes[]= "dtcont";
+            $aNomes[]= "vlcont";
+            $aNomes[]= "cdtipo";
+            $aNomes[]= "vlpago";
+            $aNomes[]= "dtpago";
+            $aNomes[]= "cdquem";
+            $aNomes[]= "cdorig";
+            $aNomes[]= "deobse";
+            $aNomes[]= "flativ";
+            $aNomes[]= "dtcada";
+
+            //dados da tabela
+            $aDados=array();
+            $aDados[]= $_POST["decont"];
+            $aDados[]= $_POST["dtcont"];
+            $aDados[]= $vlcont;
+            $aDados[]= $_POST["cdtipo"];
+            $aDados[]= $vlpago;
+            $aDados[]= $_POST["dtpago"];
+            $aDados[]= $_POST["cdquem"];
+            $aDados[]= $_POST["cdorig"];
+            $aDados[]= $_POST["deobse"];
+            $aDados[]= "S";
+            $aDados[]= date("Y-m-d");
+
+            if($this->atualizaConta($aNomes, $aDados, $cdcont ))
+            {
+                $demens = "Atualização efetuada com sucesso!";
+
+            }else{
+
+                $demens = "Ocorreu um problema na atualização/exclusão. Se persistir contate o suporte!";
+
+            }
+
+            $detitu = "Template Oficinas; | Cadastro de Contas a Pagar/Receber";
+            $devolt = "contas.php";
+            header('Location: mensagem.php?demens='.$demens.'&detitu='.$detitu.'&devolt='.$devolt);
+        }
+
+        if(isset($_REQUEST['apagar']))
+        {
+            $data = date('Y-m-d');
+            $cdcont = $_POST["cdcont"];
+            $cdtipo = $_POST["cdtipo"];
+
+            if($this->excluirConta($cdcont))
+            {
+                /* $cdusua = "99999999999";
+            $delog = "Alteração dos dados da tabela [" . "{$tabela}" . "] para a chave [" . "{$chave}" . "]";
+            if (isset($_COOKIE['cdusua'])) {
+                $cdusua = $_COOKIE['cdusua'];
+            }
+
+            if ($tabela !== "log") {
+                 GravarLog($cdusua, $delog);
+            }*/
+
+                $demens = "Exclusão efetuada com sucesso!";
+
+            }else{
+
+                $demens = "1Ocorreu um problema na atualização/exclusão. Se persistir contate o suporte!";
+            }
+
+            $detitu = "Template Oficinas; | Cadastro de Contas a Pagar/Receber";
+            $devolt = "contas.php";
+            header('Location: mensagem.php?demens='.$demens.'&detitu='.$detitu.'&devolt='.$devolt);
+
+        }
+
+        if(isset($_REQUEST['salvar']))
+        {
+            $data = date('Y-m-d');
+            $vlcont = $_POST["vlcont"];
+            $vlpago = $_POST["vlpago"];
+
+            $vlcont= str_replace(".","",$vlcont);
+            $vlcont= str_replace(",",".",$vlcont);
+            $vlpago= str_replace(".","",$vlpago);
+            $vlpago= str_replace(",",".",$vlpago);
+
+            //campos da tabela
+            $aNomes=array();
+            $aNomes[]= "decont";
+            $aNomes[]= "dtcont";
+            $aNomes[]= "vlcont";
+            $aNomes[]= "cdtipo";
+            $aNomes[]= "vlpago";
+            $aNomes[]= "dtpago";
+            $aNomes[]= "cdquem";
+            $aNomes[]= "cdorig";
+            $aNomes[]= "deobse";
+            $aNomes[]= "flativ";
+            $aNomes[]= "dtcada";
+
+            //dados da tabela
+            $aDados=array();
+            $aDados[]= $_POST["decont"];
+            $aDados[]= $_POST["dtcont"];
+            $aDados[]= $vlcont;
+            $aDados[]= $_POST["cdtipo"];
+            $aDados[]= $vlpago;
+            $aDados[]= $_POST["dtpago"];
+            $aDados[]= $_POST["cdquem"];
+            $aDados[]= $_POST["cdorig"];
+            $aDados[]= $_POST["deobse"];
+            $aDados[]= "S";
+            $aDados[]= $data;
+
+            if($this->salvarConta($aNomes, $aDados))
+            {
+                $demens = "Cadastro efetuado com sucesso!";
+
+            }else{
+
+                $demens = "Cadastro efetuado com sucesso!";
+            }
+
+            $detitu = "Template Oficina | Cadastro de Contas a Pagar/Receber";
+            $devolt = "contas.php";
+            header('Location: mensagem.php?demens='.$demens.'&detitu='.$detitu.'&devolt='.$devolt);
+
+        }
+    }
 }

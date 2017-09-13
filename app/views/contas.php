@@ -170,7 +170,7 @@
 
                         <div class="ibox-content">
                             <div class="pull-left">
-                                <a onclick="#" href="contasi.php" class="btn btn-warning ">Incluir</a>
+                                <a onclick="#" href="contasacoes.php?acao=nova" class="btn btn-warning ">Incluir</a>
                             </div>
                             <br>
                             <br>
@@ -179,10 +179,9 @@
                                 <table class="table table-striped table-bordered table-hover dataTables-example" >
                                     <thead>
                                         <tr>
-                                            <th class="col-lg-1">Nº de Controle</th>
+                                            <th class="col-lg-1">Nº OS/Pedido</th>
                                             <th>Cliente/Fornecedor</th>
                                             <th>Tipo</th>
-                                            <th>OS/Pedido</th>
                                             <th>Valor</th>
                                             <th>Vencimento</th>
                                             <th>Pagamento</th>
@@ -229,10 +228,9 @@
                                                 <?php $apaga = "contasacoes.php?acao=apaga&chave=".$coluna1; ?>
                                                 <?php $imprime = "contasp.php?acao=imprime&chave=".$coluna1; ?>
 
-                                                <td><?php print $coluna1; ?></td>
+                                                <td><?php print $coluna4; ?></td>
                                                 <td><?php print $coluna2; ?></td>
                                                 <td><?php print $coluna3; ?></td>
-                                                <td><?php print $coluna4; ?></td>
                                                 <td><?php print $coluna5; ?></td>
                                                 <td><?php print $coluna6; ?></td>
                                                 <td><?php print $coluna7; ?></td>
@@ -250,10 +248,9 @@
                                     </tbody>
                                     <tfoot>
                                         <tr>
-                                            <th>Número de Controle</th>
+                                            <th>Nº OS/Pedido</th>
                                             <th>Cliente/Fornecedor</th>
                                             <th>Tipo</th>
-                                            <th>OS/Pedido</th>
                                             <th>Valor</th>
                                             <th>Vencimento</th>
                                             <th>Pagamento</th>

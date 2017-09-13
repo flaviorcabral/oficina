@@ -21,6 +21,15 @@ class Conta
         return false;
     }
 
+    //Update conta
+    function updateConta($sql)
+    {
+        if ($this->con->exec($sql)){
+            return true;
+        }
+        return false;
+    }
+
     //Listar todas as contas
     function listarContas()
     {
@@ -47,10 +56,32 @@ class Conta
         return false;
     }
 
+    //Deletar conta referente Ordem de serviço
+    function deleteContaOrdem($cod)
+    {
+        if ($this->con->exec("DELETE FROM contas WHERE cdtipo = 'Receber' AND cdorig = '{$cod}'")) {
+
+            return TRUE;
+        }
+
+        return FALSE;
+    }
+
+    //Deletar conta referente Pedido
+    function deleteContaPedido($cod)
+    {
+        if ($this->con->exec("DELETE FROM contas WHERE cdtipo = 'Pagar' AND cdorig = '{$cod}'")) {
+
+            return TRUE;
+        }
+
+        return FALSE;
+    }
+
     //Deletar conta
     function deleteConta($cod)
     {
-        if ($this->con->exec("DELETE FROM contas WHERE cdorig = '{$cod}'")) {
+        if ($this->con->exec("DELETE FROM contas WHERE cdcont = '{$cod}'")) {
 
             return TRUE;
         }

@@ -99,12 +99,12 @@
     $deusua1=$deusua;
     $deusua = substr($deusua, 0,15);
 
-    if($acao != "novo")
+    if($acao != "nova")
     {
         $conta = $con->conta;
     }
 
-    if($acao == "novo")
+    if($acao == "nova")
     {
         $conta = $con->conta;
     }
@@ -199,7 +199,7 @@
                         </div>
 
                         <div class="ibox-content">
-                            <form class="form-horizontal" method="POST" enctype="multipart/form-data" action="contasaa.php">
+                            <form class="form-horizontal" method="POST" enctype="multipart/form-data">
 
                                 <div>
                                     <center>
@@ -217,43 +217,44 @@
                                 </div>
 
                                     <div class="row">
-
                                             <div class="form-group">
-                                                <label class="col-md-2 control-label" for="textinput">Número de Controle</label>
-                                                <div class="col-md-2">
-                                                    <input id="cdcont" name="cdcont" value="<?php echo $conta[0]["cdcont"];?>" type="text" placeholder="" class="form-control" maxlength = "15" readonly="">
+                                                <label class="col-md-2 control-label" for="textinput">Nº OS/Pedido</label>
+                                                <div class="col-md-3">
+                                                    <input id="cdcont" name="cdorig" value="<?php echo $conta[0]["cdorig"];?>" type="text" placeholder="" class="form-control" maxlength = "15" readonly="">
                                                 </div>
                                             </div>
+
                                             <div class="form-group">
                                                 <label class="col-md-2 control-label" for="textinput">Descrição</label>
                                                 <div class="col-md-6">
-                                                    <input id="decont" name="decont" value="<?php echo $conta[0]["decont"];?>" type="text" placeholder="" class="form-control" maxlength = "50">
+                                                    <input id="decont" name="decont" value="<?php echo $conta[0]["decont"];?>" type="text" placeholder="" class="form-control" maxlength = "50" <?php if($acao != 'nova'): ?>readonly=""<?php endif; ?>>
                                                 </div>
                                             </div>
+
                                             <div class="form-group">
                                                 <label class="col-md-2 control-label" for="textinput">Data de Vencimento</label>
-                                                <div class="col-md-2">
-                                                    <input id="dtcont" name="dtcont" value="<?php echo $conta[0]["dtcont"];?>" type="date" placeholder="" class="form-control" maxlength = "10">
+                                                <div class="col-md-3">
+                                                    <input id="dtcont" name="dtcont" value="<?php echo $conta[0]["dtcont"];?>" type="date" placeholder="" class="form-control" maxlength = "10" <?php if($acao == 'ver' or $acao == 'apaga'): ?>readonly=""<?php endif; ?>>
                                                 </div>
                                             </div>
 
                                             <div class="form-group">
                                                 <label class="col-md-2 control-label" for="textinput">Valor</label>
-                                                <div class="col-md-2">
-                                                    <input id="vlcont" name="vlcont" value="<?php echo number_format($conta[0]["vlcont"],2,",",".");?>" type="text" placeholder="" class="form-control" maxlength = "15">
+                                                <div class="col-md-3">
+                                                    <input id="vlcont" name="vlcont" value="<?php echo number_format($conta[0]["vlcont"],2,",",".");?>" type="text" placeholder="" class="form-control" maxlength = "15" <?php if($acao != 'nova'): ?>readonly=""<?php endif; ?>>
                                                 </div>
                                             </div>
 
                                             <div class="form-group">
                                                 <label class="col-md-2 control-label" for="textinput">Tipo</label>
                                                 <div class="col-md-2">
-                                                    <select name="cdtipo" id="cdtipo">
+                                                    <select name="cdtipo" id="cdtipo" <?php if($acao == 'ver' or $acao == 'apaga'): ?>disabled<?php endif; ?>>
                                                         <?php if ($conta[0]["cdtipo"] == "Receber") {?>
-                                                            <option selected="">Receber</option>
-                                                            <option>Pagar</option>
+                                                            <option selected="" value="Receber">Receber</option>
+                                                            <option value="Pagar">Pagar</option>
                                                         <?php } Else {?>
-                                                            <option>Receber</option>
-                                                            <option selected="">Pagar</option>
+                                                            <option value="Receber">Receber</option>
+                                                            <option value="Pagar" selected="">Pagar</option>
                                                         <?php }?>
                                                     </select>
                                                 </div>
@@ -262,11 +263,11 @@
                                             <div class="form-group">
                                                 <label class="col-md-2 control-label" for="textinput">Cliente/Fornecedor</label>
                                                 <div class="col-md-2">
-                                                    <select name="cdquem" id="cdquem" style="width:250%">
+                                                    <select name="cdquem" id="cdquem" style="width:250%" <?php if($acao == 'ver' or $acao == 'apaga'): ?>disabled<?php endif; ?>>
                                                         <option>Outros</option>
                                                         <option>CLIENTES</option>
                                                         <?php for($i=0;$i < count($clientes);$i++) { ?>
-                                                          <?php if ($conta[0]["cdquem"] == $clientes[$i]["cdclie"]." - ".$clientes[$i]["declie"] ) {?>
+                                                          <?php if (trim($conta[0]["cdquem"]) == $clientes[$i]["cdclie"]." - ".$clientes[$i]["declie"] ) {?>
                                                             <option selected=""><?php echo $clientes[$i]["cdclie"]." - ".$clientes[$i]["declie"];?></option>
                                                           <?php } Else {?>
                                                             <option><?php echo $clientes[$i]["cdclie"]." - ".$clientes[$i]["declie"];?></option>
@@ -274,7 +275,7 @@
                                                         <?php }?>
                                                         <option>FORNECEDORES</option>
                                                         <?php for($i=0;$i < count($fornecedores);$i++) { ?>
-                                                          <?php if ($conta[0]["cdquem"] == $fornecedores[$i]["cdforn"]." - ".$fornecedores[$i]["deforn"] ) {?>
+                                                          <?php if (trim($conta[0]["cdquem"]) == $fornecedores[$i]["cdforn"]." - ".$fornecedores[$i]["deforn"] ) {?>
                                                             <option selected=""><?php echo $fornecedores[$i]["cdforn"]." - ".$fornecedores[$i]["deforn"];?></option>
                                                           <?php } Else {?>
                                                             <option><?php echo $fornecedores[$i]["cdforn"]." - ".$fornecedores[$i]["deforn"];?></option>
@@ -285,49 +286,27 @@
                                             </div>
 
                                             <div class="form-group">
-                                                <label class="col-md-2 control-label" for="textinput">Num. OS/Pedido</label>
-                                                <div class="col-md-2">
-                                                    <select name="cdorig" id="cdorig" style="width:250%">
-                                                        <option>Outros</option>
-                                                        <option >ORDENS DE SERVIÇOS</option>
-                                                        <?php for($i=0;$i < count($ordens);$i++) { ?>
-                                                          <?php if ($conta[0]["cdorig"] == $ordens[$i]["cdorde"]) {?>
-                                                            <option selected=""><?php echo $ordens[$i]["cdorde"];?></option>
-                                                          <?php } Else {?>
-                                                            <option><?php echo $ordens[$i]["cdorde"];?></option>
-                                                          <?php }?>
-                                                        <?php }?>
-                                                        <option>PEDIDOS</option>
-                                                        <?php for($i=0;$i < count($pedidos);$i++) { ?>
-                                                          <?php if ($conta[0]["cdorig"] == $pedidos[$i]["cdpedi"]) {?>
-                                                            <option selected=""><?php echo $pedidos[$i]["cdpedi"];?></option>
-                                                          <?php } Else {?>
-                                                            <option><?php echo $pedidos[$i]["cdpedi"];?></option>
-                                                          <?php }?>
-                                                        <?php }?>
-                                                    </select>
+                                                <label class="col-md-2 control-label" for="textinput">Data Pagamento</label>
+                                                <div class="col-md-3">
+                                                    <input id="dtpago" name="dtpago" value="<?php echo $conta[0]["dtpago"];?>" type="date" placeholder="" class="form-control" maxlength = "10" <?php if($acao == 'ver' or $acao == 'apaga'): ?>readonly=""<?php endif; ?>>
                                                 </div>
                                             </div>
 
                                             <div class="form-group">
-                                                <label class="col-md-2 control-label" for="textinput">Data de Pagamento</label>
-                                                <div class="col-md-4">
-                                                    <input id="dtpago" name="dtpago" value="<?php echo $conta[0]["dtpago"];?>" type="date" placeholder="" class="form-control" maxlength = "10">
-                                                </div>
-                                            </div>
-                                            <div class="form-group">
                                                 <label class="col-md-2 control-label" for="textinput">Valor Pago</label>
-                                                <div class="col-md-4">
-                                                    <input id="vlpago" name="vlpago" value="<?php echo number_format($conta[0]["vlpago"],2,",",".");?>" type="text" placeholder="" class="form-control" maxlength = "10">
+                                                <div class="col-md-3">
+                                                    <input id="vlpago" name="vlpago" value="<?php echo number_format($conta[0]["vlpago"],2,",",".");?>" type="text" placeholder="" class="form-control" maxlength = "10" <?php if($acao == 'ver' or $acao == 'apaga'): ?>readonly=""<?php endif; ?>>
                                                 </div>
                                             </div>
 
                                             <div class="form-group">
                                                 <label class="col-md-2 control-label" for="textinput">Observações</label>
                                                 <div class="col-md-8">
-                                                    <textarea class="form-control" id="deobse" wrap="physical" cols=50 rows=3 name="deobse" placeholder=""><?php echo $conta[0]["deobse"];?></textarea>
+                                                    <textarea class="form-control" id="deobse" wrap="physical" cols=50 rows=3 name="deobse" placeholder="" <?php if($acao == 'ver' or $acao == 'apaga'): ?>readonly=""<?php endif; ?>><?php echo $conta[0]["deobse"];?></textarea>
                                                 </div>
                                             </div>
+
+                                            <input type="hidden" name="cdcont" value="<?php echo $conta[0]["cdcont"];?>">
                                     </div>
                                 <br>
                                 <div>
