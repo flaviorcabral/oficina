@@ -1,5 +1,11 @@
 <?php
 
+    include_once '../../config.php';
+
+    ini_set ('display_errors', 1 );
+    error_reporting ( E_ALL | E_STRICT );
+    //error_reporting (0);
+
     // identificando dispositivo
     $iphone = strpos($_SERVER['HTTP_USER_AGENT'],"iPhone");
     $ipad = strpos($_SERVER['HTTP_USER_AGENT'],"iPad");
@@ -14,9 +20,7 @@
         $eMovel="S";
     }
 
-    // incluindo bibliotecas de apoio
-    include "banco.php";
-    include "util.php";
+    $con = new Controller();
 
     //codigo do usuario
     if (isset($_COOKIE['cdusua'])) {
@@ -74,8 +78,8 @@
     // reduzir o tamanho do nome do usuario
     $deusua1=$deusua;
     $deusua = substr($deusua, 0,15);
-    $sql="select * from contas c, ordem o where c.cdorig = o.cdorde and (c.vlpago is null or c.vlpago < 1) and c.cdtipo = 'Receber' order by c.dtcont";
-    $aOrde= ConsultarDados("", "", "",$sql);
+
+    $ordens= $con->buscaContasPorFormaPag();
 
 ?>
 <!DOCTYPE html>
@@ -86,7 +90,7 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-    <title>Demonstração Auto Mecânica&copy; | Principal </title>
+    <title>Template Oficina | Principal </title>
 
     <link href="../../templates/css/bootstrap.min.css" rel="stylesheet">
     <link href="../../templates/font-awesome/css/font-awesome.css" rel="stylesheet">
@@ -134,19 +138,12 @@
                     <ul class="nav navbar-top-links navbar-left">
                         <br>
                         <li>
-                            <?php if (strlen($cdusua) == 14 ) {;?>
-                                <span><?php echo  formatar($cdusua,"cnpj")." - ";?></span>
-                            <?php } Else {?>
-                                <span><?php echo  formatar($cdusua,"cpf")." - ";?></span>
-                            <?php }?>
-                        </li>
-                        <li>
                             <span><?php echo  $deusua1 ;?></span>
                         </li>
                     </ul>
                     <ul class="nav navbar-top-links navbar-right">
                         <li>
-                            <span class="m-r-sm text-muted welcome-message">Benvindo a <strong>Demonstração Auto Mecânica&copy;</strong></span>
+                            <span class="m-r-sm text-muted welcome-message">Benvindo a <strong>Template Oficina</strong></span>
                         </li>
                         <li>
                             <a href="../../index.php">
@@ -183,15 +180,15 @@
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    <?php for ($f =0; $f <= (count($aOrde)-1); $f++) { ?>
+                                    <?php for ($f =0; $f <= (count($ordens)-1); $f++) { ?>
                                         <tr class="gradeX">
-                                            <?php $datap = strtotime($aOrde[$f]["dtcont"]) ;?>
+                                            <?php $datap = strtotime($ordens[$f]["dtcont"]) ;?>
 
                                             <?php $coluna1 = date("d/m/Y",$datap); ?>
-                                            <?php $coluna2 = trim($aOrde[$f]["cdform"]); ?>
-                                            <?php $coluna3 = number_format($aOrde[$f]["vlcont"],2,",","."); ?>
-                                            <?php $coluna4 = trim($aOrde[$f]["cdclie"]); ?>
-                                            <?php $coluna5 = trim($aOrde[$f]["cdorde"]); ?>
+                                            <?php $coluna2 = trim($ordens[$f]["cdform"]); ?>
+                                            <?php $coluna3 = number_format($ordens[$f]["vlcont"],2,",","."); ?>
+                                            <?php $coluna4 = trim($ordens[$f]["cdclie"]); ?>
+                                            <?php $coluna5 = trim($ordens[$f]["cdorde"]); ?>
                                            
                                             <td><?php print $coluna1; ?></td>
                                             <td><?php print $coluna2; ?></td>

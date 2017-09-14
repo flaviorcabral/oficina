@@ -1,5 +1,11 @@
 <?php
 
+    include_once '../../config.php';
+
+    ini_set ('display_errors', 1 );
+    error_reporting ( E_ALL | E_STRICT );
+    //error_reporting (0);
+
     // identificando dispositivo
     $iphone = strpos($_SERVER['HTTP_USER_AGENT'],"iPhone");
     $ipad = strpos($_SERVER['HTTP_USER_AGENT'],"iPad");
@@ -14,9 +20,7 @@
         $eMovel="S";
     }
 
-    // incluindo bibliotecas de apoio
-    include "banco.php";
-    include "util.php";
+    $con = new Controller();
 
     //codigo do usuario
     if (isset($_COOKIE['cdusua'])) {
@@ -75,7 +79,8 @@
     $deusua1=$deusua;
     $deusua = substr($deusua, 0,15);
 
-    $aOrde= ConsultarDados("", "", "","select * from ordem where (cdsitu <> 'Orçamento' and cdsitu <> 'Entregue') order by dtorde");
+    $ordens = $con-> buscaOrdemSituacaoOrcamentoEpendente();
+
 ?>
 <!DOCTYPE html>
 <html>
@@ -85,7 +90,7 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-    <title>Demonstração&copy; | Principal </title>
+    <title>Template Oficina | Principal </title>
 
     <link href="../../templates/css/bootstrap.min.css" rel="stylesheet">
     <link href="../../templates/font-awesome/css/font-awesome.css" rel="stylesheet">
@@ -133,19 +138,12 @@
                     <ul class="nav navbar-top-links navbar-left">
                         <br>
                         <li>
-                            <?php if (strlen($cdusua) == 14 ) {;?>
-                                <span><?php echo  formatar($cdusua,"cnpj")." - ";?></span>
-                            <?php } Else {?>
-                                <span><?php echo  formatar($cdusua,"cpf")." - ";?></span>
-                            <?php }?>
-                        </li>
-                        <li>
                             <span><?php echo  $deusua1 ;?></span>
                         </li>
                     </ul>
                     <ul class="nav navbar-top-links navbar-right">
                         <li>
-                            <span class="m-r-sm text-muted welcome-message">Benvindo ao <strong>Demonstração Auto Mecânica&copy;</strong></span>
+                            <span class="m-r-sm text-muted welcome-message">Benvindo ao <strong>Template Oficina</strong></span>
                         </li>
                         <li>
                             <a href="../../index.php">
@@ -179,18 +177,18 @@
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        <?php for ($f =0; $f <= (count($aOrde)-1); $f++) { ?>
+                                        <?php for ($f =0; $f <= (count($ordens)-1); $f++) { ?>
                                             <tr class="gradeX">
-                                                <?php $datap = strtotime($aOrde[$f]["dtorde"]) ;?>
-                                                <!--?php $datae = strtotime($aOrde[$f]["dtentr"]) ;?-->
+                                                <?php $datap = strtotime($ordens[$f]["dtorde"]) ;?>
+                                                <!--?php $datae = strtotime($ordens[$f]["dtentr"]) ;?-->
 
                                                 <?php $coluna1 = date("d/m/Y",$datap); ?>
-                                                <?php $coluna2 = trim($aOrde[$f]["cdsitu"]); ?>
-                                                <?php $coluna3 = trim($aOrde[$f]["cdclie"]); ?>
-                                                <?php $coluna4 = trim($aOrde[$f]["veplac"]); ?>
-                                                <?php $coluna5 = trim($aOrde[$f]["cdorde"]); ?>
+                                                <?php $coluna2 = trim($ordens[$f]["cdsitu"]); ?>
+                                                <?php $coluna3 = trim($ordens[$f]["cdclie"]); ?>
+                                                <?php $coluna4 = trim($ordens[$f]["veplac"]); ?>
+                                                <?php $coluna5 = trim($ordens[$f]["cdorde"]); ?>
                                                
-                                                <?php $ver = "agendaa.php?acao=ver&chave=".$coluna5; ?>
+                                                <?php $ver = "agendaacoes.php?acao=ver&chave=".$coluna5; ?>
                                                 <?php $edita = "ordemacoes.php?acao=edita&chave=".$coluna5; ?>
                                                 <?php $apaga = "ordemacoes.php?acao=apaga&chave=".$coluna5; ?>
                                                 <?php $imprime = "ordemp.php?acao=imprime&chave=".$coluna5; ?>

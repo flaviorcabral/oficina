@@ -1,5 +1,11 @@
 <?php
 
+    include_once '../../config.php';
+
+    ini_set ('display_errors', 1 );
+    error_reporting ( E_ALL | E_STRICT );
+    //error_reporting (0);
+
     // identificando dispositivo
     $iphone = strpos($_SERVER['HTTP_USER_AGENT'],"iPhone");
     $ipad = strpos($_SERVER['HTTP_USER_AGENT'],"iPad");
@@ -145,8 +151,8 @@
                         <li>
                             <a href="home.php"><i class="fa fa-calculator"></i> <span class="nav-label">Fluxo de Caixa</span><span class="caret"></span></a>
                             <ul class="nav nav-second-level">
-                                <li><a href="fluxo.php">Pagar/Receber Resumido</a></li>
-                                <li><a href="fluxof.php">Receber por Forma de Pagamento</a></li>
+                                <li><a href="fluxoresumido.php">Pagar/Receber Resumido</a></li>
+                                <li><a href="fluxoformpag.php">Receber por Forma de Pagamento</a></li>
                             </ul>
                         </li>
                     <?php }?>

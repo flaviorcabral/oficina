@@ -423,6 +423,14 @@ class Controller
         return $result;
     }
 
+    //Busca ordem por situação diferente de orçamento e Entregue
+    function buscaOrdemSituacaoOrcamentoEpendente()
+    {
+        $ordem = new OrdemServico();
+        $result = $ordem->buscarOrdemSituacao();
+        return $result;
+    }
+
     //Exluir itens ordem de serviço
     function excluirItensOrdemDeServico($cod)
     {
@@ -1194,6 +1202,41 @@ class Controller
         return $result;
     }
 
+    //Buscar total de contas por situação
+    function totalContasSituacao($qual)
+    {
+        $qtde=0;
+
+        $ordem = new OrdemServico();
+
+        $resultado= $ordem->totalContasSituacao($qual);
+
+        if ($resultado) {
+            foreach($resultado as $conta){
+                $qtde=$conta["qtde"];
+            }
+
+            return $qtde;
+        }
+
+        return false;
+    }
+
+    //Somar contas
+    function somarTotalValorContas($mes,$tipo)
+    {
+        $ordem = new OrdemServico();
+        $result =  $ordem->somaContas($mes, $tipo);
+        return $result;
+    }
+
+    function buscaContasPorFormaPag()
+    {
+        $conta = new Conta();
+        $result = $conta->buscarContasFormPag();
+        return $result;
+    }
+
     function traduz_data_para_banco($data)
     {
         if ($data == "") {
@@ -1865,7 +1908,7 @@ class Controller
         }
     }
 
-    //Funçoes pagina login
+    //Pagina login
     function pagLogin()
     {
 
@@ -1873,7 +1916,7 @@ class Controller
 
     }
 
-    //Funcoes pagina meus dados e senha
+    //Pagina meus dados e senha
     function pagsMeusDados()
     {
         if (isset($_REQUEST['atualiza'])) {
@@ -1916,7 +1959,7 @@ class Controller
         }
     }
 
-    //Funcoes pagina clienteacoes.php
+    //Pagina clienteacoes.php
     function pagClientes()
     {
         $data = date('Y-m-d');
@@ -2141,7 +2184,7 @@ class Controller
         }
     }
 
-    //Funcoes pagina ordem de serviçoacoes.php
+    //Pagina ordem de serviçoacoes.php
     function pagOrdemServicos()
     {
         $acao = $_REQUEST['acao'];
@@ -2544,7 +2587,7 @@ class Controller
         }
     }
 
-    //Funcoes pagina de pedidosacoes.php
+    //Pagina de pedidosacoes.php
     function pagPedidos()
     {
         $acao = $_REQUEST['acao'];
@@ -2930,7 +2973,7 @@ class Controller
         }
     }
 
-    //Funcoes pagina fornecedoresacoes.php
+    //Pagina fornecedoresacoes.php
     function pagFornecedores()
     {
         $data = date('Y-m-d');
@@ -3152,7 +3195,7 @@ class Controller
         }
     }
 
-    //Funcoes pagina Usuarioscoes.php
+    //Pagina Usuarioscoes.php
     function pagUsuarios()
     {
         $data = date('Y-m-d');
@@ -3317,7 +3360,7 @@ class Controller
         }
     }
 
-    //Funcoes pagina pecasacoes.php
+    //Pagina pecasacoes.php
     function pagPecas()
     {
         $data = date('Y-m-d');
@@ -3459,7 +3502,7 @@ class Controller
         }
     }
 
-    //Funcoes pagina servicosacoes.php
+    //Pagina servicosacoes.php
     function pagServicos()
     {
         $data = date('Y-m-d');
@@ -3599,7 +3642,7 @@ class Controller
         }
     }
 
-    //Funcoes pagina contasacoes.php
+    //Pagina contasacoes.php
     function pagContas()
     {
         $data = date('Y-m-d');
@@ -3759,4 +3802,5 @@ class Controller
 
         }
     }
+
 }

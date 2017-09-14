@@ -88,4 +88,19 @@ class Conta
 
         return FALSE;
     }
+
+    //Busca contas por forma de pagamento
+    function buscarContasFormPag()
+    {
+        $sql="select * from contas c, ordem o where c.cdorig = o.cdorde and (c.vlpago is null or c.vlpago < 1) and c.cdtipo = 'Receber' order by c.dtcont";
+
+        $busca = $this->con->query($sql);
+
+        if (count($busca) > 0) {
+
+            return $busca->fetchAll(PDO::FETCH_ASSOC);
+        }
+
+        return false;
+    }
 }

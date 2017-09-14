@@ -118,4 +118,57 @@ class OrdemServico
 
         return FALSE;
     }
+
+    //Buscar total de contas por situação
+    function totalContasSituacao($qual)
+    {
+        $busca = $this->con->query( "select count(cdorde) qtde from ordem where left(cdsitu,1) = '{$qual}'");
+
+        if (count($busca) > 0) {
+
+            return $busca->fetchAll(PDO::FETCH_ASSOC);
+        }
+
+        return false;
+    }
+
+    //Soma contas
+    function somaContas($mes,$tipo)
+    {
+        $valor=0;
+
+        if ($tipo == 'P') {
+            $sql = "SELECT sum(vlcont) valor FROM contas where cdtipo = 'Pagar' and month(dtcont)= {$mes} and year(dtcont) = year(CURRENT_DATE) and (vlpago is null or vlpago <= 0)";
+        } Else {
+            $sql = "SELECT sum(vlcont) valor FROM contas where cdtipo = 'Receber' and month(dtcont)= {$mes} and year(dtcont) = year(CURRENT_DATE) and (vlpago is null or vlpago <= 0)";
+        }
+
+        $resultado = $this->con->query($sql);
+
+        if ($resultado) {
+            foreach($resultado as $conta){
+                $valor = $conta["valor"];
+            }
+
+            return $valor;
+        }
+
+        return false;
+    }
+
+    //Busca ordem por situação diferente de orçamento e Entregue
+    function buscarOrdemSituacao()
+    {
+        $sql = "select * from ordem where (cdsitu <> 'Orcamento' and cdsitu <> 'Entregue') order by dtorde";
+
+        $busca = $this->con->query($sql);
+
+        if (count($busca) > 0) {
+
+            return $busca->fetchAll(PDO::FETCH_ASSOC);
+        }
+
+        return false;
+
+    }
 }

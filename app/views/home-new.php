@@ -64,11 +64,11 @@
 
     <title>Nova Aliança Auto Mecânica&copy; | Principal </title>
 
-    <link href="templates/css/bootstrap.min.css" rel="stylesheet">
-    <link href="templates/font-awesome/css/font-awesome.css" rel="stylesheet">
+    <link href="../../templates/css/bootstrap.min.css" rel="stylesheet">
+    <link href="../../templates/font-awesome/css/font-awesome.css" rel="stylesheet">
 
-    <link href="templates/css/animate.css" rel="stylesheet">
-    <link href="templates/css/style.css" rel="stylesheet">
+    <link href="../../templates/css/animate.css" rel="stylesheet">
+    <link href="../../templates/css/style.css" rel="stylesheet">
 
 </head>
 
@@ -88,7 +88,7 @@
                                 <li><a href="meusdados.php">Atualizar Meus Dados</a></li>
                                 <li><a href="minhasenha.php">Alterar Minha Senha</a></li>
                                 <li class="divider"></li>
-                                <li><a href="index.html">Sair</a></li>
+                                <li><a href="../../index.php">Sair</a></li>
                             </ul>
                         </div>
                     </li>
@@ -135,7 +135,7 @@
 
                     <?php if ($cdtipo == 'A'){?>
                         <li>
-                            <a href="fluxo.php"><i class="fa fa-calculator"></i> <span class="nav-label">Fluxo de Caixa</span></a>
+                            <a href="fluxoresumido.php"><i class="fa fa-calculator"></i> <span class="nav-label">Fluxo de Caixa</span></a>
                         </li>
                     <?php }?>
 
@@ -174,7 +174,7 @@
                             <span class="m-r-sm text-muted welcome-message">Benvindo a <strong>Nova Aliança Auto Mecânica&copy;</strong></span>
                         </li>
                         <li>
-                            <a href="index.html">
+                            <a href="../../index.php">
                                 <i class="fa fa-sign-out"></i> Sair
                             </a>
                         </li>
@@ -194,7 +194,7 @@
                             <div class="ibox-content">
                                 <div class="col-md-1"></div>
                                 <div class="m-b-sm">
-                                    <img alt="image" class="img-square" src="templates/img/logoalianca.png"
+                                    <img alt="image" class="img-square" src="../../templates/img/logoalianca.png"
                                                                          style="width: 782px">
                                 </div>
                                 <!--h1 class="logo-name">Nova Aliança</h1-->
@@ -211,43 +211,43 @@
         </div>
     </div>
     <!-- Mainly scripts -->
-    <script src="templates/js/jquery-2.1.1.js"></script>
-    <script src="templates/js/bootstrap.min.js"></script>
-    <script src="templates/js/plugins/metisMenu/jquery.metisMenu.js"></script>
-    <script src="templates/js/plugins/slimscroll/jquery.slimscroll.min.js"></script>
+    <script src="../../templates/js/jquery-2.1.1.js"></script>
+    <script src="../../templates/js/bootstrap.min.js"></script>
+    <script src="../../templates/js/plugins/metisMenu/jquery.metisMenu.js"></script>
+    <script src="../../templates/js/plugins/slimscroll/jquery.slimscroll.min.js"></script>
 
     <!-- Flot -->
-    <script src="templates/js/plugins/flot/jquery.flot.js"></script>
-    <script src="templates/js/plugins/flot/jquery.flot.tooltip.min.js"></script>
-    <script src="templates/js/plugins/flot/jquery.flot.spline.js"></script>
-    <script src="templates/js/plugins/flot/jquery.flot.resize.js"></script>
-    <script src="templates/js/plugins/flot/jquery.flot.pie.js"></script>
-    <script src="templates/js/plugins/flot/jquery.flot.symbol.js"></script>
-    <script src="templates/js/plugins/flot/jquery.flot.time.js"></script>
+    <script src="../../templates/js/plugins/flot/jquery.flot.js"></script>
+    <script src="../../templates/js/plugins/flot/jquery.flot.tooltip.min.js"></script>
+    <script src="../../templates/js/plugins/flot/jquery.flot.spline.js"></script>
+    <script src="../../templates/js/plugins/flot/jquery.flot.resize.js"></script>
+    <script src="../../templates/js/plugins/flot/jquery.flot.pie.js"></script>
+    <script src="../../templates/js/plugins/flot/jquery.flot.symbol.js"></script>
+    <script src="../../templates/js/plugins/flot/jquery.flot.time.js"></script>
 
     <!-- Peity -->
-    <script src="templates/js/plugins/peity/jquery.peity.min.js"></script>
-    <script src="templates/js/demo/peity-demo.js"></script>
+    <script src="../../templates/js/plugins/peity/jquery.peity.min.js"></script>
+    <script src="../../templates/js/demo/peity-demo.js"></script>
 
     <!-- Custom and plugin javascript -->
-    <script src="templates/js/inspinia.js"></script>
-    <script src="templates/js/plugins/pace/pace.min.js"></script>
+    <script src="../../templates/js/inspinia.js"></script>
+    <script src="../../templates/js/plugins/pace/pace.min.js"></script>
 
     <!-- jQuery UI -->
-    <script src="templates/js/plugins/jquery-ui/jquery-ui.min.js"></script>
+    <script src="../../templates/js/plugins/jquery-ui/jquery-ui.min.js"></script>
 
     <!-- Jvectormap -->
-    <script src="templates/js/plugins/jvectormap/jquery-jvectormap-2.0.2.min.js"></script>
-    <script src="templates/js/plugins/jvectormap/jquery-jvectormap-world-mill-en.js"></script>
+    <script src="../../templates/js/plugins/jvectormap/jquery-jvectormap-2.0.2.min.js"></script>
+    <script src="../../templates/js/plugins/jvectormap/jquery-jvectormap-world-mill-en.js"></script>
 
     <!-- EayPIE -->
-    <script src="templates/js/plugins/easypiechart/jquery.easypiechart.js"></script>
+    <script src="../../templates/js/plugins/easypiechart/jquery.easypiechart.js"></script>
 
     <!-- Sparkline -->
-    <script src="templates/js/plugins/sparkline/jquery.sparkline.min.js"></script>
+    <script src="../../templates/js/plugins/sparkline/jquery.sparkline.min.js"></script>
 
     <!-- Sparkline demo data  -->
-    <script src="templates/js/demo/sparkline-demo.js"></script>
+    <script src="../../templates/js/demo/sparkline-demo.js"></script>
 
     <script>
         $(document).ready(function() {
