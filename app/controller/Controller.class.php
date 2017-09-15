@@ -268,6 +268,45 @@ class Controller
         return $result;
     }
 
+    //Atualizar informações empresa
+    function atualizaInfoEmp($dados, $nomes, $codigo)
+    {
+        $campos="";
+        $total=count($dados)-1;
+
+        $sql="update "."parametros"." set ";
+
+        for ($i =0 ; $i < count($dados) ; $i++ ) {
+
+            $campos=$campos.$nomes[$i]." = '".$dados[$i]."'";
+
+            if ($i < $total) {
+                $campos=$campos.", ";
+            }
+
+        }
+
+        $sql=$sql.$campos." where cdprop = "."'{$codigo}'";
+
+        $param = new Parametros();
+
+        if($param->updateInformacoes($sql))
+        {
+
+            $delog = "Alteração dos dados da tabela [parametros] para a chave ["."{$codigo}"."]";
+
+            if (isset($_COOKIE['cdusua'])) {
+                $cdusua = $_COOKIE['cdusua'];
+            }
+
+            $this->geraLogSistema($cdusua, $delog);
+
+            return true;
+        }
+
+        return false;
+    }
+
     //Salvar ordem de serviço
     function salvarOrdemDeServico($dados, $nomes)
     {
@@ -424,7 +463,7 @@ class Controller
     }
 
     //Busca ordem por situação diferente de orçamento e Entregue
-    function buscaOrdemSituacaoOrcamentoEpendente()
+    function buscaOrdemSituacao()
     {
         $ordem = new OrdemServico();
         $result = $ordem->buscarOrdemSituacao();
@@ -1421,6 +1460,7 @@ class Controller
         return ($flag);
     }
 
+    //Pegar Ip da maquina
     function getIp()
     {
 
@@ -1823,26 +1863,11 @@ class Controller
         return ($key);
     }
 
-    function GravarIPLog($cdusua, $delog)
+    //Gera informação log do sistema
+    function geraLogSistema($cdusua, $delog)
     {
-        include "conexao.php";
-
-        $data = date('Y-m-d H:i:s');
-        $ip = getIp();
-
-        $sql = "insert iplog (dtlog, delog, ip, cdusua) values (" . "'{$data}'" . "," . "'{$delog}'" . "," . "'{$ip}'" . "," . "'{$cdusua}'" . ")";
-
-        mysqli_query($conexao, $sql);
-        mysqli_close($conexao);
-
-        return;
-    }
-
-    function GravarLog($cdusua, $delog)
-    {
-
         $dtlog = date('Y-m-d H:i:s');
-        $iplog = getIp();
+        $iplog = $this->getIp();
 
         $aNomes = array();
         $aNomes[] = "cdusua";
@@ -1858,9 +1883,46 @@ class Controller
         $aDados[] = $iplog;
         $aDados[] = "S";
 
-        IncluirDados("log", $aDados, $aNomes);
+        $sql="insert into "."logs"." (";
+        $campos="";
 
-        return;
+        $total=count($aNomes)-1;
+
+        for ($i=0 ; $i < count($aNomes) ; $i++ ) {
+
+            $campos=$campos.$aNomes[$i];
+
+            if ($i < $total) {
+                $campos=$campos.", ";
+            }
+        }
+
+        $sql=$sql.$campos.") values (";
+
+        $campos="";
+
+        for ($x =0 ; $x < count($aDados) ; $x++ ) {
+
+            $campo="'".$aDados[$x]."'";
+
+            if ($x < $total) {
+                $campos=$campos.$campo.", ";
+            } Else {
+                $campos=$campos.$campo.")";
+            }
+        }
+
+        $sql=$sql.$campos;
+
+        $log = new logsistema();
+
+        if($log->salvarLog($sql)){
+
+            return true;
+
+        }
+
+        return false;
     }
 
     function BuscaChaveArray($aDados, $chave)
@@ -3793,7 +3855,7 @@ class Controller
 
             }else{
 
-                $demens = "Cadastro efetuado com sucesso!";
+                $demens = "Ocorreu um problema na atualização/exclusão. Se persistir contate o suporte!";
             }
 
             $detitu = "Template Oficina | Cadastro de Contas a Pagar/Receber";
@@ -3801,6 +3863,65 @@ class Controller
             header('Location: mensagem.php?demens='.$demens.'&detitu='.$detitu.'&devolt='.$devolt);
 
         }
+    }
+
+    //Pagina paramentro.php
+    function pagParamentros()
+    {
+
+        if(isset($_REQUEST['editar']))
+        {
+            $cod = $_POST["cdprop"];
+
+            //campos da tabela
+            $aNomes=array();
+            $aNomes[]= "cdprop";
+            $aNomes[]= "deprop";
+            $aNomes[]= "nrinsc";
+            $aNomes[]= "nrccm";
+            $aNomes[]= "deende";
+            $aNomes[]= "nrende";
+            $aNomes[]= "decomp";
+            $aNomes[]= "debair";
+            $aNomes[]= "decida";
+            $aNomes[]= "nrcepi";
+            $aNomes[]= "cdesta";
+            $aNomes[]= "nrtele";
+            $aNomes[]= "nrcelu";
+            $aNomes[]= "demail";
+
+            //dados da tabela
+            $aDados=array();
+            $aDados[]= $_POST["cdprop"];
+            $aDados[]= $_POST["deprop"];
+            $aDados[]= $_POST["nrinsc"];
+            $aDados[]= $_POST["nrccm"];
+            $aDados[]= $_POST["deende"];
+            $aDados[]= $_POST["nrende"];
+            $aDados[]= $_POST["decomp"];
+            $aDados[]= $_POST["debair"];
+            $aDados[]= $_POST["decida"];
+            $aDados[]= $_POST["nrcepi"];
+            $aDados[]= $_POST["cdesta"];
+            $aDados[]= $_POST["nrtele"];
+            $aDados[]= $_POST["nrcelu"];
+            $aDados[]= $_POST["demail"];
+
+            if($this->atualizaInfoEmp($aDados, $aNomes, $cod))
+            {
+                $demens = "Parâmetros atualizados com sucesso!";
+
+            }else{
+
+                $demens = "Ocorreu um problema na atualização. Se persistir contate o suporte!";
+            }
+
+            $detitu = "Template Oficina | Parâmetros do Sistema";
+            $devolt = "home.php";
+            header('Location: mensagem.php?demens='.$demens.'&detitu='.$detitu.'&devolt='.$devolt);
+        }
+
+
     }
 
 }

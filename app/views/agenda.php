@@ -79,7 +79,7 @@
     $deusua1=$deusua;
     $deusua = substr($deusua, 0,15);
 
-    $ordens = $con-> buscaOrdemSituacaoOrcamentoEpendente();
+    $ordens = $con-> buscaOrdemSituacao();
 
 ?>
 <!DOCTYPE html>
