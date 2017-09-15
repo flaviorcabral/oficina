@@ -178,10 +178,10 @@
                                 <div>
                                     <center>
                                         <?php if($acao == "edita") {?>
-                                            <button class="btn btn-sm btn-primary" name = "edita" type="submit"><strong>Alterar</strong></button>
+                                            <button class="btn btn-sm btn-primary" name = "editar" type="submit"><strong>Alterar</strong></button>
                                         <?php }?>
                                         <?php if($acao == "apaga") {?>
-                                            <button class="btn btn-sm btn-danger" name = "apaga" type="submit"><strong>Apagar</strong></button>
+                                            <button class="btn btn-sm btn-danger" name = "apagar" type="submit"><strong>Apagar</strong></button>
                                         <?php }?>
                                         <button class="btn btn-sm btn-warning " type="button" onClick="history.go(-1)"><strong>Retornar</strong></button>
                                     </center>
@@ -196,7 +196,6 @@
                                                     <input id="cdorde" name="cdorde" value="<?php echo $ordem[0]["cdorde"];?>" type="text" placeholder="" class="form-control" maxlength = "10" readonly="">
                                                 </div>
                                             </div>
-                                            <!--center><h3><span class="text-warning"><strong>DADOS DO PEDIDO</strong></span></h3></center-->
                                             <div class="form-group">
                                                 <label class="col-md-4 control-label" for="textinput">Cliente</label>
                                                 <div class="col-md-4">
@@ -212,7 +211,7 @@
                                             <div class="form-group">
                                                 <label class="col-md-4 control-label" for="textinput">Situação</label>
                                                 <div class="col-md-4">
-                                                    <select name="cdsitu" id="cdsitu">
+                                                    <select name="cdsitu" id="cdsitu" <?php if($acao == 'ver' or $acao == 'apaga'): ?>disabled<?php endif; ?>>
                                                         <?php if ($ordem[0]["cdsitu"] == "") {?>
                                                             <option selected="">Orçamento</option>
                                                             <option>Pendente</option>
@@ -220,7 +219,7 @@
                                                             <option>Concluído</option>
                                                             <option>Entregue</option>
                                                         <?php }?>
-                                                        <?php if ($ordem[0]["cdsitu"] == "Orçamento") {?>
+                                                        <?php if ($ordem[0]["cdsitu"] == "Orcamento") {?>
                                                             <option selected="">Orçamento</option>
                                                             <option>Pendente</option>
                                                             <option>Andamento</option>
@@ -241,7 +240,7 @@
                                                             <option>Concluído</option>
                                                             <option>Entregue</option>
                                                         <?php }?>
-                                                        <?php if ($ordem[0]["cdsitu"] == "Concluído") {?>
+                                                        <?php if ($ordem[0]["cdsitu"] == "Concluido") {?>
                                                             <option>Orçamento</option>
                                                             <option>Pendente</option>
                                                             <option>Andamento</option>
@@ -262,71 +261,76 @@
                                             <div class="form-group">
                                                 <label class="col-md-4 control-label" for="textinput">Data</label>
                                                 <div class="col-md-4">
-                                                    <input id="dtorde" name="dtorde" value="<?php echo date("Y-m-d");?>" type="date" placeholder="" class="form-control" maxlength = "10">
+                                                    <input id="dtorde" name="dtorde" value="<?php echo date("Y-m-d");?>" type="date" placeholder="" class="form-control" maxlength = "10" <?php if($acao == 'ver' or $acao == 'apaga'): ?>readonly<?php endif; ?>>
                                                 </div>
                                             </div>
 
                                             <div class="form-group">
                                                 <label class="col-md-4 control-label" for="textinput">Valor</label>
                                                 <div class="col-md-4">
-                                                    <input id="vlorde" name="vlorde" value="<?php echo number_format($ordem[0]["vlorde"],2,",",".");?>" type="text" placeholder="" class="form-control" maxlength = "15">
+                                                    <input id="vlorde" name="vlorde" value="<?php echo number_format($ordem[0]["vlorde"],2,",",".");?>" type="text" placeholder="" class="form-control" maxlength = "15" <?php if($acao == 'ver' or $acao == 'apaga'): ?>readonly<?php endif; ?>>
                                                 </div>
                                             </div>
 
                                             <div class="form-group">
                                                 <label class="col-md-4 control-label" for="textinput">Placa do Veículo</label>
                                                 <div class="col-md-4">
-                                                    <input id="veplac" name="veplac" value="<?php echo $ordem[0]["veplac"];?>" type="text" placeholder="" class="form-control" maxlength = "7">
+                                                    <input id="veplac" name="veplac" value="<?php echo $ordem[0]["veplac"];?>" type="text" placeholder="" class="form-control" maxlength = "7" <?php if($acao == 'ver' or $acao == 'apaga'): ?>readonly<?php endif; ?>>
                                                 </div>
                                             </div>
+
                                             <div class="form-group">
                                                 <label class="col-md-4 control-label" for="textinput">Marca do Veículo</label>
                                                 <div class="col-md-4">
-                                                    <input id="vemarc" name="vemarc" value="<?php echo $ordem[0]["vemarc"];?>" type="text" placeholder="" class="form-control" maxlength = "50">
+                                                    <input id="vemarc" name="vemarc" value="<?php echo $ordem[0]["vemarc"];?>" type="text" placeholder="" class="form-control" maxlength = "50" <?php if($acao == 'ver' or $acao == 'apaga'): ?>readonly<?php endif; ?>>
                                                 </div>
                                             </div>
+
                                             <div class="form-group">
                                                 <label class="col-md-4 control-label" for="textinput">Modelo do Veículo</label>
                                                 <div class="col-md-4">
-                                                    <input id="vemode" name="vemode" value="<?php echo $ordem[0]["vemode"];?>" type="text" placeholder="" class="form-control" maxlength = "50">
+                                                    <input id="vemode" name="vemode" value="<?php echo $ordem[0]["vemode"];?>" type="text" placeholder="" class="form-control" maxlength = "50" <?php if($acao == 'ver' or $acao == 'apaga'): ?>readonly<?php endif; ?>>
                                                 </div>
                                             </div>
+
                                             <div class="form-group">
                                                 <label class="col-md-4 control-label" for="textinput">Cor do Veículo</label>
                                                 <div class="col-md-4">
-                                                    <input id="vecorv" name="vecorv" value="<?php echo $ordem[0]["vecorv"];?>" type="text" placeholder="" class="form-control" maxlength = "50">
+                                                    <input id="vecorv" name="vecorv" value="<?php echo $ordem[0]["vecorv"];?>" type="text" placeholder="" class="form-control" maxlength = "50" <?php if($acao == 'ver' or $acao == 'apaga'): ?>readonly<?php endif; ?>>
                                                 </div>
                                             </div>
+
                                             <div class="form-group">
                                                 <label class="col-md-4 control-label" for="textinput">Ano Fabricação</label>
                                                 <div class="col-md-2">
-                                                    <input id="veanof" name="veanof" value="<?php echo $ordem[0]["veanof"];?>" type="text" placeholder="" class="form-control" maxlength = "04">
+                                                    <input id="veanof" name="veanof" value="<?php echo $ordem[0]["veanof"];?>" type="text" placeholder="" class="form-control" maxlength = "04" <?php if($acao == 'ver' or $acao == 'apaga'): ?>readonly<?php endif; ?>>
                                                 </div>
                                             </div>
+
                                             <div class="form-group">
                                                 <label class="col-md-4 control-label" for="textinput">Ano Modelo</label>
                                                 <div class="col-md-2">
-                                                    <input id="veanom" name="veanom" value="<?php echo $ordem[0]["veanom"];?>" type="text" placeholder="" class="form-control" maxlength = "04">
+                                                    <input id="veanom" name="veanom" value="<?php echo $ordem[0]["veanom"];?>" type="text" placeholder="" class="form-control" maxlength = "04" <?php if($acao == 'ver' or $acao == 'apaga'): ?>readonly<?php endif; ?>>
                                                 </div>
                                             </div>
 
                                             <div class="form-group">
                                                 <label class="col-md-4 control-label" for="textinput">Data de Pagamento</label>
                                                 <div class="col-md-4">
-                                                    <input id="dtpago" name="dtpago" value="<?php echo $ordem[0]["dtpago"];?>" type="date" placeholder="" class="form-control" maxlength = "10">
+                                                    <input id="dtpago" name="dtpago" value="<?php echo $ordem[0]["dtpago"];?>" type="date" placeholder="" class="form-control" maxlength = "10" <?php if($acao == 'ver' or $acao == 'apaga'): ?>readonly<?php endif; ?>>
                                                 </div>
                                             </div>
                                             <div class="form-group">
                                                 <label class="col-md-4 control-label" for="textinput">Valor Pago</label>
                                                 <div class="col-md-4">
-                                                    <input id="vlpago" name="vlpago" value="<?php echo number_format($ordem[0]["vlpago"],2,",",".");?>" type="text" placeholder="" class="form-control" maxlength = "10">
+                                                    <input id="vlpago" name="vlpago" value="<?php echo number_format($ordem[0]["vlpago"],2,",",".");?>" type="text" placeholder="" class="form-control" maxlength = "10" <?php if($acao == 'ver' or $acao == 'apaga'): ?>readonly<?php endif; ?>>
                                                 </div>
                                             </div>
 
                                             <div class="form-group">
                                                 <label class="col-md-4 control-label" for="textinput">Forma de Pagamento</label>
                                                 <div class="col-md-4">
-                                                    <select name="cdform" id="cdform" style="width:50%">
+                                                    <select name="cdform" id="cdform" style="width:50%" <?php if($acao == 'ver' or $acao == 'apaga'): ?>disabled<?php endif; ?>>
                                                         <?php if ($ordem[0]["cdform"] == ""){?>
                                                             <option selected="">Dinheiro</option>
                                                             <option>Débito</option>
@@ -364,14 +368,14 @@
                                             <div class="form-group">
                                                 <label class="col-md-4 control-label" for="textinput">Quantidade Parcelas</label>
                                                 <div class="col-md-2">
-                                                    <input id="qtform" name="qtform" value="<?php echo $ordem[0]["qtform"];?>" type="number" placeholder="" class="form-control" maxlength = "15">
+                                                    <input id="qtform" name="qtform" value="<?php echo $ordem[0]["qtform"];?>" type="number" placeholder="" class="form-control" maxlength = "15" <?php if($acao == 'ver' or $acao == 'apaga'): ?>readonly<?php endif; ?>>
                                                 </div>
                                             </div>
 
                                             <div class="form-group">
                                                 <label class="col-md-4 control-label" for="textinput">Observações</label>
                                                 <div class="col-md-8">
-                                                    <textarea class="form-control" id="deobse" wrap="physical" cols=50 rows=3 name="deobse" placeholder=""><?php echo $ordem[0]["deobse"];?></textarea>
+                                                    <textarea class="form-control" id="deobse" wrap="physical" cols=50 rows=3 name="deobse" placeholder="" <?php if($acao == 'ver' or $acao == 'apaga'): ?>readonly<?php endif; ?>><?php echo $ordem[0]["deobse"];?></textarea>
                                                 </div>
                                             </div>
 
@@ -397,7 +401,7 @@
                                                                 <?php if (isset($item[$f-1]["cdpeca"])) {?>
                                                                     <td>
                                                                         <center>
-                                                                            <select id = "<?php echo $cditem;?>" name="<?php echo $cditem;?>" class="form-control" onclick="colocapreco();">
+                                                                            <select id = "<?php echo $cditem;?>" name="<?php echo $cditem;?>" class="form-control" onclick="colocapreco();" <?php if($acao == 'ver' or $acao == 'apaga'): ?>disabled<?php endif; ?>>
                                                                                 <option value= "X|0|Serviços">SERVIÇOS</option>
                                                                                 <option selected ="" value="<?php echo 'S|'.$item[$f-1]["vlpeca"].'|'.$item[$f-1]["cdpeca"];?>"><?php echo $item[$f-1]["cdpeca"];?></option>
                                                                                 <?php for($i=0;$i < count($servicos);$i++) { ?>
@@ -410,13 +414,13 @@
                                                                             </select>
                                                                         </center>
                                                                     </td>
-                                                                    <td><center><input id = "<?php echo $qtitem;?>" name="<?php echo $qtitem;?>" value = "<?php echo $item[$f-1]["qtpeca"] ;?>" onkeyup="mascara(this, 'soNumeros'); calcula();" type="text" class="form-control" placeholder="" maxlength = "15"></center></td>
-                                                                    <td><center><input id = "<?php echo $vlitem;?>" name="<?php echo $vlitem;?>" value = "<?php echo $item[$f-1]["vlpeca"] ;?>" onkeyup="mascara(this, 'soNumeros'); calcula();" type="text" class="form-control" placeholder="" maxlength = "15"></center></td>
+                                                                    <td><center><input id = "<?php echo $qtitem;?>" name="<?php echo $qtitem;?>" value = "<?php echo $item[$f-1]["qtpeca"] ;?>" onkeyup="mascara(this, 'soNumeros'); calcula();" type="text" class="form-control" placeholder="" maxlength = "15" <?php if($acao == 'ver' or $acao == 'apaga'): ?>readonly<?php endif; ?>></center></td>
+                                                                    <td><center><input id = "<?php echo $vlitem;?>" name="<?php echo $vlitem;?>" value = "<?php echo $item[$f-1]["vlpeca"] ;?>" onkeyup="mascara(this, 'soNumeros'); calcula();" type="text" class="form-control" placeholder="" maxlength = "15" <?php if($acao == 'ver' or $acao == 'apaga'): ?>readonly<?php endif; ?>></center></td>
                                                                     <td><center><input id = "<?php echo $vltota;?>" name="<?php echo $vltota;?>" value = "<?php echo $item[$f-1]["vltota"] ;?>" type="text" class="form-control" placeholder="" maxlength = "15" readonly = ""></center></td>
                                                                 <?php } Else {?>
                                                                     <td>
                                                                         <center>
-                                                                            <select id = "<?php echo $cditem;?>" name="<?php echo $cditem;?>" class="form-control" onclick="colocapreco();">
+                                                                            <select id = "<?php echo $cditem;?>" name="<?php echo $cditem;?>" class="form-control" onclick="colocapreco();" <?php if($acao == 'ver' or $acao == 'apaga'): ?>disabled<?php endif; ?>>
                                                                                 <option value= "X|0|Serviços" selected>SERVIÇOS</option>
                                                                                 <?php for($i=0;$i < count($servicos);$i++) { ?>
                                                                                   <option value = "<?php echo 'S|'.$servicos[$i]["vlserv"].'|'.$servicos[$i]["cdserv"]." - ".$servicos[$i]["deserv"];?>"><?php echo $servicos[$i]["cdserv"]." - ".$servicos[$i]["deserv"];?></option>
@@ -428,8 +432,8 @@
                                                                             </select>
                                                                         </center>
                                                                     </td>
-                                                                    <td><center><input id = "<?php echo $qtitem;?>" name="<?php echo $qtitem;?>" value = "1" onkeyup="mascara(this, 'soNumeros'); calcula();" type="text" class="form-control" placeholder="" maxlength = "15"></center></td>
-                                                                    <td><center><input id = "<?php echo $vlitem;?>" name="<?php echo $vlitem;?>" value = "0.00" onkeyup="mascara(this, 'soNumeros'); calcula();" type="text" class="form-control" placeholder="" maxlength = "15"></center></td>
+                                                                    <td><center><input id = "<?php echo $qtitem;?>" name="<?php echo $qtitem;?>" value = "1" onkeyup="mascara(this, 'soNumeros'); calcula();" type="text" class="form-control" placeholder="" maxlength = "15" <?php if($acao == 'ver' or $acao == 'apaga'): ?>readonly<?php endif; ?>></center></td>
+                                                                    <td><center><input id = "<?php echo $vlitem;?>" name="<?php echo $vlitem;?>" value = "0.00" onkeyup="mascara(this, 'soNumeros'); calcula();" type="text" class="form-control" placeholder="" maxlength = "15" <?php if($acao == 'ver' or $acao == 'apaga'): ?>readonly<?php endif; ?>></center></td>
                                                                     <td><center><input id = "<?php echo $vltota;?>" name="<?php echo $vltota;?>" value = "0.00" type="text" class="form-control" placeholder="" maxlength = "15" readonly = ""></center></td>
                                                                 <?php }?>
                                                             </tr>
@@ -443,10 +447,10 @@
                                 <div>
                                     <center>
                                         <?php if($acao == "edita") {?>
-                                            <button class="btn btn-sm btn-primary" name = "edita" type="submit"><strong>Alterar</strong></button>
+                                            <button class="btn btn-sm btn-primary" name = "editar" type="submit"><strong>Alterar</strong></button>
                                         <?php }?>
                                         <?php if($acao == "apaga") {?>
-                                            <button class="btn btn-sm btn-danger" name = "apaga" type="submit"><strong>Apagar</strong></button>
+                                            <button class="btn btn-sm btn-danger" name = "apagar" type="submit"><strong>Apagar</strong></button>
                                         <?php }?>
                                         <button class="btn btn-sm btn-warning " type="button" onClick="history.go(-1)"><strong>Retornar</strong></button>
                                     </center>

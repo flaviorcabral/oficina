@@ -1925,6 +1925,14 @@ class Controller
         return false;
     }
 
+    //Listar historico de logs
+    function listaHistorico()
+    {
+        $log = new logsistema();
+        $result = $log->listaHistorico();
+        return $result;
+    }
+
     function BuscaChaveArray($aDados, $chave)
     {
         $aMatriz = array();

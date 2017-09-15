@@ -13,7 +13,8 @@ class Parametros
     }
 
     //Buscar todas informações da empresa
-    function informaçõesEmp(){
+    function informaçõesEmp()
+    {
 
         $lista = $this->con->query("SELECT * FROM parametros");
 
@@ -23,5 +24,15 @@ class Parametros
         }
 
         return FALSE;
+    }
+
+    //Update infor empresa
+    function updateInformacoes($sql)
+    {
+        if($this->con->exec($sql)){
+            return true;
+        }
+
+        return false;
     }
 }

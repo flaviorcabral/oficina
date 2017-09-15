@@ -1,5 +1,11 @@
 <?php
 
+    include_once '../../config.php';
+
+    ini_set ('display_errors', 1 );
+    error_reporting ( E_ALL | E_STRICT );
+    //error_reporting (0);
+
     // identificando dispositivo
     $iphone = strpos($_SERVER['HTTP_USER_AGENT'],"iPhone");
     $ipad = strpos($_SERVER['HTTP_USER_AGENT'],"iPad");
@@ -14,28 +20,7 @@
         $eMovel="S";
     }
 
-    // incluindo bibliotecas de apoio
-    include "banco.php";
-    include "util.php";
-
-    //$acao = $_GET["acao"];
-    $acao = "edita";
-    //$chave = trim($_GET["chave"]);
-    $chave="";
-
-    switch ($acao) {
-    case 'ver':
-        $titulo = "Consulta";
-        break;
-    case 'edita':
-        $titulo = "Alteração";
-        break;
-    case 'apaga':
-        $titulo = "Exclusão";
-        break;
-    default:
-        header('Location: index.php');
-    }
+    $con = new Controller();
 
     //codigo do usuario
     if (isset($_COOKIE['cdusua'])) {
@@ -94,8 +79,7 @@
     $deusua1=$deusua;
     $deusua = substr($deusua, 0,15);
 
-    $titulo="Atualização";
-    $aLog= ConsultarDados("", "", "","select l.cdlog, l.cdusua, l.dtlog, l.delog, l.iplog, u.deusua from log l, usuarios u where left(l.cdusua,11) = left(u.cdusua,11) and left(l.flativ,1) = 'S' order by l.cdusua, l.dtlog, l.cdlog");
+    $logs = $con->listaHistorico();
 
 ?>
 <!DOCTYPE html>
@@ -106,7 +90,7 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-    <title>Demonstração Auto Mecânica&copy; | Principal </title>
+    <title>Template Oficina | Principal </title>
 
     <link href="../../templates/css/bootstrap.min.css" rel="stylesheet">
     <link href="../../templates/font-awesome/css/font-awesome.css" rel="stylesheet">
@@ -154,13 +138,6 @@
                     <ul class="nav navbar-top-links navbar-left">
                         <br>
                         <li>
-                            <?php if (strlen($cdusua) == 14 ) {;?>
-                                <span><?php echo  formatar($cdusua,"cnpj")." - ";?></span>
-                            <?php } Else {?>
-                                <span><?php echo  formatar($cdusua,"cpf")." - ";?></span>
-                            <?php }?>
-                        </li>
-                        <li>
                             <span><?php echo  $deusua1 ;?></span>
                         </li>
                     </ul>
@@ -197,15 +174,15 @@
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        <?php for ($f =0; $f <= (count($aLog)-1); $f++) { ?>
+                                        <?php for ($f =0; $f <= (count($logs)-1); $f++) { ?>
                                             <tr class="gradeX">
-                                                <?php $data = strtotime($aLog[$f]["dtlog"]) ;?>
+                                                <?php $data = strtotime($logs[$f]["dtlog"]) ;?>
 
-                                                <?php $coluna1 = $aLog[$f]["cdlog"]; ?>
-                                                <?php $coluna2 = $aLog[$f]["delog"]; ?>
+                                                <?php $coluna1 = $logs[$f]["cdlog"]; ?>
+                                                <?php $coluna2 = $logs[$f]["delog"]; ?>
                                                 <?php $coluna3 = date("d/m/Y",$data); ?>
-                                                <?php $coluna4 = $aLog[$f]["iplog"]; ?>
-                                                <?php $coluna5 = $aLog[$f]["cdusua"]." - ".$aLog[$f]["deusua"]; ?>
+                                                <?php $coluna4 = $logs[$f]["iplog"]; ?>
+                                                <?php $coluna5 = $logs[$f]["cdusua"]." - ".$logs[$f]["deusua"]; ?>
 
                                                 <td><center><?php print $coluna1; ?></center></td>
                                                 <td><center><?php print $coluna2; ?></center></td>
