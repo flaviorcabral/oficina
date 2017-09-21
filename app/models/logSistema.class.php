@@ -26,12 +26,11 @@ class logsistema
 
     function listaHistorico()
     {
-        $sql = "select l.cdusua, l.dtlog, l.delog, l.iplog, u.deusua from logs l, usuarios u where l.cdusua = u.cdusua and left(l.flativ,1) = 'S' order by l.cdusua, l.dtlog";
+        $logs = $this->con->query("select * from logs ORDER BY dtlog");
 
-        if($this->con->exec($sql)){
+        if (count($logs) > 0) {
 
-            return true;
-
+            return $logs->fetchALL(PDO::FETCH_ASSOC);
         }
 
         return false;

@@ -36,7 +36,7 @@
         $titulo = "Exclusão";
         break;
     case 'novo':
-        $titulo = "Inlcuir";
+        $titulo = "Inlcusão";
         break;
     default:
         header('Location: fichacadastral.php');
@@ -102,7 +102,7 @@
     if($acao != "novo")
     {
         $chave = trim($_GET["chave"]);
-        $peca = $con->peca;
+        $usuario = $con->usuario;
     }
 
     if($acao == "novo")

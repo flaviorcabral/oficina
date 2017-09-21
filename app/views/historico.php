@@ -166,39 +166,33 @@
                                 <table class="table table-striped table-bordered table-hover dataTables-example" >
                                     <thead>
                                         <tr>
-                                            <th><center>Sequencial</center></th>
                                             <th><center>Descrição</center></th>
-                                            <th><center>Atualizado em</center></th>
+                                            <th><center>Data/Hora</center></th>
                                             <th><center>Ip</center></th>
-                                            <th><center>Atualizado por</center></th>
+                                            <th><center>Usuário</center></th>
                                         </tr>
                                     </thead>
                                     <tbody>
                                         <?php for ($f =0; $f <= (count($logs)-1); $f++) { ?>
                                             <tr class="gradeX">
-                                                <?php $data = strtotime($logs[$f]["dtlog"]) ;?>
+                                                <?php $coluna1 = $logs[$f]["delog"]; ?>
+                                                <?php $coluna2 = $logs[$f]["dtlog"]; ?>
+                                                <?php $coluna3 = $logs[$f]["iplog"]; ?>
+                                                <?php $coluna4 = $con->buscarUsuario($logs[$f]["cdusua"]) ?>
 
-                                                <?php $coluna1 = $logs[$f]["cdlog"]; ?>
-                                                <?php $coluna2 = $logs[$f]["delog"]; ?>
-                                                <?php $coluna3 = date("d/m/Y",$data); ?>
-                                                <?php $coluna4 = $logs[$f]["iplog"]; ?>
-                                                <?php $coluna5 = $logs[$f]["cdusua"]." - ".$logs[$f]["deusua"]; ?>
-
-                                                <td><center><?php print $coluna1; ?></center></td>
+                                                <td><?php print $coluna1; ?></td>
                                                 <td><center><?php print $coluna2; ?></center></td>
                                                 <td><center><?php print $coluna3; ?></center></td>
-                                                <td><center><?php print $coluna4; ?></center></td>
-                                                <td><center><?php print $coluna5; ?></center></td>
+                                                <td><center><?php print $coluna4['delogin']; ?></center></td>
                                             </tr>
                                         <?php }; ?>    
                                     </tbody>
                                     <tfoot>
                                         <tr>
-                                            <th><center>Sequencial</center></th>
                                             <th><center>Descrição</center></th>
-                                            <th><center>Atualizado em</center></th>
+                                            <th><center>Data/Hora</center></th>
                                             <th><center>Ip</center></th>
-                                            <th><center>Atualizado por</center></th>
+                                            <th><center>Usuário</center></th>
                                         </tr>
                                     </tfoot>
                                 </table>

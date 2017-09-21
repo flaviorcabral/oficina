@@ -48,8 +48,8 @@ class Controller
                     setcookie("defoto", $defoto);
                     setcookie("demail", $demail);
 
-                    //$delog = "Acesso ao Sistema"; //Implementar geração de logs
-                    //GravarLog($cdusua, $delog);
+                    $delog = "Acesso ao Sistema";
+                    $this->geraLogSistema($cdusua, $delog);
 
                     header('Location: app/views/home.php');
 
@@ -109,16 +109,14 @@ class Controller
 
         if ($user->insertUsuario($sql)) {
 
-            /* $cdusua="99999999999";
-             $chave=$dados[0];
-             $delog = "Inclusão dos dados da tabela ["."{$tabela}"."] para a chave ["."{$chave}"."]";
-             if (isset($_COOKIE['cdusua'])) {
+             $delog = "Inclusão de usuario de acesso ao sistema na tabela [usuarios]";
+
+            if (isset($_COOKIE['cdusua'])) {
                  $cdusua = $_COOKIE['cdusua'];
              }
 
-             if ($tabela !== "log") {
-                 GravarLog($cdusua, $delog);
-             }*/
+            $this->geraLogSistema($cdusua, $delog);
+
 
             return true;
         }
@@ -143,7 +141,7 @@ class Controller
     }
 
     //Atualiza dados do usuario pelo admin
-    function atualizaDadosUser($nomes, $dados, $codigo)
+    function atualizaDadosUsuario($nomes, $dados, $codigo)
     {
 
         $campos = "";
@@ -167,15 +165,14 @@ class Controller
 
         if ($user->updateDados($sql)) {
 
-            /*$cdusua="99999999999";
-            $delog = "Alteração dos dados da tabela ["."{$tabela}"."] para a chave ["."{$chave}"."]";
+            $delog = "Alteração de dados na tabela [usuarios] codigo ". $codigo;
+
             if (isset($_COOKIE['cdusua'])) {
                 $cdusua = $_COOKIE['cdusua'];
             }
 
-            if ($tabela !== "log") {
-                GravarLog($cdusua, $delog);
-            }*/
+            $this->geraLogSistema($cdusua, $delog);
+
             return true;
         }
 
@@ -187,7 +184,19 @@ class Controller
     {
         $user = new Usuario();
         $result = $user->deleteUsuario($cod);
-        return $result;
+
+        if($result) {
+            $delog = "Exclusão de usuario na tabela [usuarios] codigo " . $cod;
+
+            if (isset($_COOKIE['cdusua'])) {
+                $cdusua = $_COOKIE['cdusua'];
+            }
+
+            $this->geraLogSistema($cdusua, $delog);
+            return $result;
+        }
+
+        return false;
     }
 
     //Atualiza dados pelo o usuario
@@ -214,10 +223,19 @@ class Controller
             $defoto = $uploadfile;
         }
 
-        if ($user->updateMeusDados($cdusua, $deusua, $demail, $tel, $defoto)) {
+        if ($user->updateMeusDados($cdusua, $deusua, $demail, $tel, $defoto))
+        {
             setcookie("deusua", $deusua);
             setcookie("defoto", $defoto);
             setcookie("demail", $demail);
+
+            $delog = "Atualização dados usuario na tabela [usuarios] codigo " . $cdusua;
+
+            if (isset($_COOKIE['cdusua'])) {
+                $cdusua = $_COOKIE['cdusua'];
+            }
+
+            $this->geraLogSistema($cdusua, $delog);
 
             return true;
         }
@@ -234,7 +252,8 @@ class Controller
         $desenh = md5($_POST["desenh"]);
         $desenh1 = md5($_POST["desenh1"]);
 
-        if (empty($desenh) == true) {
+        if (empty($desenh) == true)
+        {
             $demens = "É obrigatório informar a nova senha!";
             $detitu = "Template Oficina | Alterar Senha";
             $devolt = "minhasenha.php";
@@ -251,6 +270,15 @@ class Controller
                 $user = new Usuario();
 
                 if ($user->updateSenha($cdusua, $desenh)) {
+
+                    $delog = "Atualização senha usuario na tabela [usuarios] codigo " . $cdusua;
+
+                    if (isset($_COOKIE['cdusua'])) {
+                        $cdusua = $_COOKIE['cdusua'];
+                    }
+
+                    $this->geraLogSistema($cdusua, $delog);
+
                     return true;
                 }
 
@@ -293,7 +321,7 @@ class Controller
         if($param->updateInformacoes($sql))
         {
 
-            $delog = "Alteração dos dados da tabela [parametros] para a chave ["."{$codigo}"."]";
+            $delog = "Alteração de dados na tabela parametros na chave " . $codigo;
 
             if (isset($_COOKIE['cdusua'])) {
                 $cdusua = $_COOKIE['cdusua'];
@@ -308,7 +336,7 @@ class Controller
     }
 
     //Salvar ordem de serviço
-    function salvarOrdemDeServico($dados, $nomes)
+    function salvarOrdemDeServico($dados, $nomes, $proc, $cod)
     {
         $ordem = new OrdemServico();
 
@@ -344,17 +372,13 @@ class Controller
         $sql = $sql . $campos;
         $ordem->insertOrdemServico($sql);
 
-        //implementar geração de log
-        /*$cdusua="99999999999";
-        $chave=$dados[0];
-        $delog = "Inclusão dos dados da tabela ["."{$tabela}"."] para a chave ["."{$chave}"."]";
+        $delog = $proc." de dados na tabela [ordem] codigo ".$cod;
+
         if (isset($_COOKIE['cdusua'])) {
             $cdusua = $_COOKIE['cdusua'];
         }
 
-        if ($tabela !== "log") {
-            GravarLog($cdusua, $delog);
-        }*/
+        $this->geraLogSistema($cdusua, $delog);
 
         return;
     }
@@ -459,7 +483,21 @@ class Controller
     {
         $ordem = new OrdemServico();
         $result = $ordem->deleteOrdem($cod);
-        return $result;
+
+        if($result)
+        {
+            $delog = "Exclusão ordem de serviço na tabela [ordem] codigo ".$cod;
+
+            if (isset($_COOKIE['cdusua'])) {
+                $cdusua = $_COOKIE['cdusua'];
+            }
+
+            $this->geraLogSistema($cdusua, $delog);
+
+            return $result;
+        }
+
+        return false;
     }
 
     //Busca ordem por situação diferente de orçamento e Entregue
@@ -511,25 +549,26 @@ class Controller
             }
         }
 
-
         $sql = $sql . $campos;
 
         $cliente = new Cliente();
 
         $result = $cliente->insertCliente($sql);
 
-        /*$cdusua="99999999999";
-        $chave=$dados[0];
-        $delog = "Inclusão dos dados da tabela ["."{$tabela}"."] para a chave ["."{$chave}"."]";
-        if (isset($_COOKIE['cdusua'])) {
-            $cdusua = $_COOKIE['cdusua'];
+        if($result)
+        {
+            $delog = "Inclusão de clientes na tabela [clientes]";
+
+            if (isset($_COOKIE['cdusua'])) {
+                $cdusua = $_COOKIE['cdusua'];
+            }
+
+            $this->geraLogSistema($cdusua, $delog);
+
+            return $result;
         }
 
-        if ($tabela !== "log") {
-            GravarLog($cdusua, $delog);
-        }*/
-
-        return $result;
+        return false;
     }
 
     //Excluir cliente
@@ -537,7 +576,21 @@ class Controller
     {
         $cliente = new Cliente();
         $result = $cliente->deleteCliente($cod);
-        return $result;
+
+        if($result)
+        {
+            $delog = "Exclusão de cliente na tabela [clientes] Cpf/Cnpj " . $cod;
+
+            if (isset($_COOKIE['cdusua'])) {
+                $cdusua = $_COOKIE['cdusua'];
+            }
+
+            $this->geraLogSistema($cdusua,$delog);
+
+            return $result;
+        }
+
+        return false;
     }
 
     //BUscar cliente por codigo
@@ -571,15 +624,13 @@ class Controller
 
         if ($cliente->updateCliente($sql)) {
 
-            /*$cdusua = "99999999999";
-            $delog = "Alteração dos dados da tabela clientes  para a chave [" . "{$codigo}" . "]";
+            $delog = "Alteração de dados na tabela [clientes] Cpf/Cnpj " . $codigo;
+
             if (isset($_COOKIE['cdusua'])) {
                 $cdusua = $_COOKIE['cdusua'];
             }
 
-            if ($tabela !== "log") {
-                GravarLog($cdusua, $delog);
-            }*/
+            $this->geraLogSistema($cdusua,$delog);
 
             return true;
         }
@@ -631,16 +682,15 @@ class Controller
 
         if($serv->insertServico($sql))
         {
-            /*$cdusua="99999999999";
-            $chave=$dados[0];
-            $delog = "Inclusão dos dados da tabela ["."{$tabela}"."] para a chave ["."{$chave}"."]";
+
+            $delog = "Inclusão de dados na tabela [servicos]";
+
             if (isset($_COOKIE['cdusua'])) {
                 $cdusua = $_COOKIE['cdusua'];
             }
 
-            if ($tabela !== "log") {
-                GravarLog($cdusua, $delog);
-            }*/
+            $this->geraLogSistema($cdusua, $delog);
+
             return true;
         }
 
@@ -679,15 +729,14 @@ class Controller
 
         if($serv->updateServico($sql))
         {
-            /*$cdusua="99999999999";
-        $delog = "Alteração dos dados da tabela ["."{$tabela}"."] para a chave ["."{$chave}"."]";
-        if (isset($_COOKIE['cdusua'])) {
-            $cdusua = $_COOKIE['cdusua'];
-        }
+            $delog = "Alteração de dados na tabela [servicos] chave ".$codigo;
 
-        if ($tabela !== "log") {
-            GravarLog($cdusua, $delog);
-        }*/
+            if (isset($_COOKIE['cdusua'])) {
+                $cdusua = $_COOKIE['cdusua'];
+            }
+
+            $this->geraLogSistema($cdusua, $delog);
+
             return true;
         }
 
@@ -699,7 +748,21 @@ class Controller
     {
         $serv = new Servico();
         $result = $serv->deleteServico($cod);
-        return $result;
+
+        if($result)
+        {
+            $delog = "Exclusão de servico na tabela [servicos] codigo " . $cod;
+
+            if (isset($_COOKIE['cdusua'])) {
+                $cdusua = $_COOKIE['cdusua'];
+            }
+
+            $this->geraLogSistema($cdusua,$delog);
+
+            return $result;
+        }
+
+        return false;
     }
 
     //Buscar serviço por codigo
@@ -748,17 +811,13 @@ class Controller
 
         if ($forn->insertFornecedor($sql)) {
 
-            /*$cdusua="99999999999";
-            $chave=$dados[0];
-            $delog = "Inclusão dos dados da tabela ["."{$tabela}"."] para a chave ["."{$chave}"."]";
+            $delog = "Inclusão de dados na tabela [fornecedores]";
 
             if (isset($_COOKIE['cdusua'])) {
                 $cdusua = $_COOKIE['cdusua'];
             }
 
-            if ($tabela !== "log") {
-                GravarLog($cdusua, $delog);
-            }*/
+            $this->geraLogSistema($cdusua, $delog);
 
             return true;
         }
@@ -797,18 +856,19 @@ class Controller
         $forn = new Fornecedor();
 
         if ($forn->updateFornecedor($sql)) {
-            /*$cdusua="99999999999";
-            $delog = "Alteração dos dados da tabela ["."{$tabela}"."] para a chave ["."{$chave}"."]";
+
+            $delog = "Alteração de dados na tabela [fornecedores] Cpf/Cnpj ".$codigo;
+
             if (isset($_COOKIE['cdusua'])) {
                 $cdusua = $_COOKIE['cdusua'];
             }
 
-            if ($tabela !== "log") {
-                GravarLog($cdusua, $delog);
-            }*/
+            $this->geraLogSistema($cdusua, $delog);
 
             return true;
         }
+
+        return false;
     }
 
     //Buscar fornecedor pelo codigo
@@ -824,11 +884,25 @@ class Controller
     {
         $forn = new Fornecedor();
         $result = $forn->deleteFornecedor($cod);
-        return $result;
+
+        if($result)
+        {
+            $delog = "Exclusão de dados na tabela [fornecedores] Cpf/Cnpj ".$cod;
+
+            if (isset($_COOKIE['cdusua'])) {
+                $cdusua = $_COOKIE['cdusua'];
+            }
+
+            $this->geraLogSistema($cdusua, $delog);
+
+            return true;
+        }
+
+        return false;
     }
 
     //Salvar pedido
-    function salvarPedido($nomes, $dados)
+    function salvarPedido($nomes, $dados, $proc, $cod)
     {
 
         $sql="insert into "."pedidos"." (";
@@ -865,17 +939,13 @@ class Controller
 
         if($ped->insertPedido($sql)){
 
-            /*$cdusua="99999999999";
-            $chave=$dados[0];
-            $delog = "Inclusão dos dados da tabela ["."{$tabela}"."] para a chave ["."{$chave}"."]";
+            $delog = $proc . " de dados na tabela [pedidos] codigo ".$cod;
 
             if (isset($_COOKIE['cdusua'])) {
                 $cdusua = $_COOKIE['cdusua'];
             }
 
-            if ($tabela !== "log") {
-                GravarLog($cdusua, $delog);
-            }*/
+            $this->geraLogSistema($cdusua, $delog);
 
             return true;
 
@@ -978,7 +1048,21 @@ class Controller
     {
         $ped = new Pedido();
         $result = $ped->deletePedido($codigo);
-        return $result;
+
+        if($result)
+        {
+            $delog = "Exclusão de dados na tabela [pedidos] codigo ".$codigo;
+
+            if (isset($_COOKIE['cdusua'])) {
+                $cdusua = $_COOKIE['cdusua'];
+            }
+
+            $this->geraLogSistema($cdusua, $delog);
+
+            return true;
+        }
+
+        return false;
     }
 
     //Excluir itens do pedido
@@ -1027,16 +1111,13 @@ class Controller
 
         if($pecas->insertPeca($sql))
         {
-            /*$cdusua="99999999999";
-            $chave=$dados[0];
-            $delog = "Inclusão dos dados da tabela ["."{$tabela}"."] para a chave ["."{$chave}"."]";
+            $delog = "Inclusão de dados na tabela [pecas]";
+
             if (isset($_COOKIE['cdusua'])) {
                 $cdusua = $_COOKIE['cdusua'];
             }
 
-            if ($tabela !== "log") {
-                GravarLog($cdusua, $delog);
-            }*/
+            $this->geraLogSistema($cdusua, $delog);
 
             return true;
         }
@@ -1082,9 +1163,18 @@ class Controller
 
         $peca = new Peca();
 
-        if($peca->updatePeca($sql)){
+        if($peca->updatePeca($sql))
+        {
+            $delog = "Alteração de dados na tabela [pecas] codigo ".$cod;
+
+            if (isset($_COOKIE['cdusua'])) {
+                $cdusua = $_COOKIE['cdusua'];
+            }
+
+            $this->geraLogSistema($cdusua, $delog);
 
             return true;
+
         }
 
         return false;
@@ -1095,7 +1185,22 @@ class Controller
     {
         $peca = new Peca();
         $result = $peca->deletePeca($codigo);
-        return $result;
+
+        if($result)
+        {
+            $delog = "Exclusão de dados na tabela [pecas] codigo ".$codigo;
+
+            if (isset($_COOKIE['cdusua'])) {
+                $cdusua = $_COOKIE['cdusua'];
+            }
+
+            $this->geraLogSistema($cdusua, $delog);
+
+            return $result;
+
+        }
+
+        return false;
     }
 
     //Lista estados brasileiros
@@ -1144,17 +1249,13 @@ class Controller
 
         if ($conta->insertConta($sql)) {
 
-            //Implementar geração de log
-            /*$cdusua="99999999999";
-            $chave=$dados[0];
-            $delog = "Inclusão dos dados da tabela ["."{$tabela}"."] para a chave ["."{$chave}"."]";
+            $delog = "Inclusão de dados na tabela [contas]";
+
             if (isset($_COOKIE['cdusua'])) {
                 $cdusua = $_COOKIE['cdusua'];
             }
 
-            if ($tabela !== "log") {
-                GravarLog($cdusua, $delog);
-            }*/
+            $this->geraLogSistema($cdusua, $delog);
 
             return true;
         }
@@ -1186,15 +1287,15 @@ class Controller
 
         if($conta->updateConta($sql)) {
 
-           /* $cdusua = "99999999999";
-            $delog = "Alteração dos dados da tabela [" . "{$tabela}" . "] para a chave [" . "{$chave}" . "]";
+
+            $delog = "Alteração de dados na tabela [contas] chave " . $cod;
+
             if (isset($_COOKIE['cdusua'])) {
                 $cdusua = $_COOKIE['cdusua'];
             }
 
-            if ($tabela !== "log") {
-                GravarLog($cdusua, $delog);
-            }*/
+            $this->geraLogSistema($cdusua, $delog);
+
             return true;
         }
 
@@ -1230,7 +1331,21 @@ class Controller
     {
         $conta = new Conta();
         $result = $conta->deleteConta($cod);
-        return $result;
+
+        if($result)
+        {
+            $delog = "Exclusão de dados na tabela [contas] chave " . $cod;
+
+            if (isset($_COOKIE['cdusua'])) {
+                $cdusua = $_COOKIE['cdusua'];
+            }
+
+            $this->geraLogSistema($cdusua, $delog);
+
+            return $result;
+        }
+
+        return false;
     }
 
     //Listar contas
@@ -1989,14 +2104,9 @@ class Controller
     //Pagina meus dados e senha
     function pagsMeusDados()
     {
-        if (isset($_REQUEST['atualiza'])) {
+        if (isset($_REQUEST['atualiza']))
+        {
             if ($this->atualizaMeusDados()) {
-
-                //$delog = "Alteração de Próprios Dados (Nome/Foto/E-Mail)";
-                //GravarLog($cdusua, $delog);
-
-                //gravar log
-                //GravarIPLog($cdusua, "Alterar Meus Dados:");
 
                 $demens = "Cadastro atualizado com sucesso!";
 
@@ -2009,13 +2119,10 @@ class Controller
             header('Location: mensagem.php?demens=' . $demens . '&detitu=' . $detitu . '&devolt=' . $devolt);
         }
 
-        if (isset($_REQUEST['atualizaSenha'])) {
+        if (isset($_REQUEST['atualizaSenha']))
+        {
 
             if ($this->updateSenhaUsuario()) {
-
-                //GravarIPLog($cdusua, "Alterar Senha");
-                //$delog = "Alteração da Própria Senha";
-                //GravarLog($cdusua, $delog);
 
                 $demens = "Senha atualizada com sucesso!";
 
@@ -2116,8 +2223,6 @@ class Controller
                     $aDados[] = $data;
 
                     if ($this->atualizarCliente($aNomes, $aDados, $chave)) {
-                        //gravar log
-                        //GravarIPLog($cdusua, "Alterar Meus Dados:");
 
                         if ($flag2 == false) {
                             $demens = "Atualização efetuada com sucesso!";
@@ -2139,9 +2244,6 @@ class Controller
                 $result = $this->excluirCliente($cdclie);
 
                 if ($flag2 == false and $result == true) {
-
-                    //gravar log
-                    //GravarIPLog($cdusua, "Alterar Meus Dados:");
 
                     $demens = "Exclusão efetuada com sucesso!";
 
@@ -2233,10 +2335,7 @@ class Controller
                     $aDados[] = "S";
                     $aDados[] = $data;
 
-
                     if ($this->salvarCliente($aDados, $aNomes)) {
-                        //gravar log
-                        //GravarIPLog($cdusua, "Alterar Meus Dados:");
 
                         $demens = "Cadastro efetuado com sucesso!";
 
@@ -2379,7 +2478,10 @@ class Controller
                 $aDados[] = 'Sim';
                 $aDados[] = $dtcada;
 
-                $this->salvarOrdemDeServico($aDados, $aNomes);
+                $proc = "Alteração";
+                $chave = $_POST["cdorde"];
+
+                $this->salvarOrdemDeServico($aDados, $aNomes, $proc, $chave);
 
                 $nritem = 1;
                 for ($f = 1; $f <= 20; $f++) {
@@ -2463,7 +2565,8 @@ class Controller
 
         }
 
-        if (isset($_REQUEST['apagar'])) {
+        if (isset($_REQUEST['apagar']))
+        {
 
             $cdorde = $_REQUEST["cdorde"];
 
@@ -2479,7 +2582,8 @@ class Controller
             header('Location: mensagem.php?demens=' . $demens . '&detitu=' . $detitu . '&devolt=' . $devolt);
         }
 
-        if (isset($_REQUEST['salvar'])) {
+        if (isset($_REQUEST['salvar']))
+        {
             $dtcada = date('Y-m-d');
             $Flag = true;
 
@@ -2571,7 +2675,10 @@ class Controller
                 $aDados[] = 'Sim';
                 $aDados[] = $dtcada;
 
-                $this->salvarOrdemDeServico($aDados, $aNomes);
+                $proc = "Inclusão";
+                $chav = "";
+
+                $this->salvarOrdemDeServico($aDados, $aNomes, $proc, $chave);
 
                 $result = $this->buscarMaiorOrdemPorCliente($cdclie, $dtorde);
 
@@ -2770,7 +2877,10 @@ class Controller
                 $aDados[] = $_POST["cdform"];
                 $aDados[] = $_POST["qtform"];
 
-                $this->salvarPedido($aNomes, $aDados);
+                $proc = "Alteração";
+                $chave = $_POST["cdpedi"];
+
+                $this->salvarPedido($aNomes, $aDados, $proc, $chave);
 
                 $nritem = 1;
                 for ($f = 1; $f <= 10; $f++) {
@@ -2953,7 +3063,10 @@ class Controller
                 $aDados[] = $_POST["cdform"];
                 $aDados[] = $_POST["qtform"];
 
-                $this->salvarPedido($aNomes, $aDados);
+                $proc = "Inclusão";
+                $chave = "";
+
+                $this->salvarPedido($aNomes, $aDados, $proc, $chave);
 
                 $pedido = $this->buscarMaiorPedidoFornecedor($cdforn,$dtpedi);
                 $cdpedi = $pedido[0]["cdpedi"];
@@ -3147,8 +3260,6 @@ class Controller
 
                 if ($this->excluirFornecedor($cdforn)) {
 
-                    //gravar log
-                    //GravarIPLog($cdusua, "Alterar Meus Dados:");
                     if ($flag2 == false) {
                         $demens = "Exclusão efetuada com sucesso!";
 
@@ -3247,8 +3358,6 @@ class Controller
                     $aDados[] = $data;
 
                     if ($this->salvarFornecedor($aNomes, $aDados)) {
-                        //gravar log
-                        //GravarIPLog($cdusua, "Alterar Meus Dados:");
 
                         $demens = "Cadastro efetuado com sucesso!";
 
@@ -3268,38 +3377,114 @@ class Controller
     //Pagina Usuarioscoes.php
     function pagUsuarios()
     {
-        $data = date('Y-m-d');
         $acao = $_REQUEST['acao'];
 
-        $flag = true;
-        $flag2 = false;
+        if ($acao == 'ver' or $acao == 'edita' or $acao == 'apaga') {
 
-        if ($flag == true) {
+            $chave = $_REQUEST['chave'];
+            $this->usuario = $this->buscarUsuario($chave);
 
-            if ($acao == 'ver' or $acao == 'edita' or $acao == 'apaga') {
+        }
 
-                $chave = $_REQUEST['chave'];
-                $this->usuario = $this->buscarUsuario($chave);
+        if (isset($_REQUEST['editar'])) {
 
+            $cdusua = $_POST["cdusua"];
+            $defoto1 = $_POST["defoto1"];
+            $desenha = $_POST['password'];
+
+            //uploads
+            $uploaddir = '../../templates/img/' . $cdusua . "_";
+            $uploadfile1 = $uploaddir . basename($_FILES['defotom']['name']);
+
+            #Move o arquivo para o diretório de destino
+            move_uploaded_file($_FILES["defotom"]["tmp_name"], $uploadfile1);
+
+            $defotom = basename($_FILES['defotom']['name']);
+
+            if (empty($defotom) == true) {
+                $defoto = $defoto1;
+            } Else {
+                $defoto = $uploadfile1;
             }
 
-            if (isset($_REQUEST['editar'])) {
+            //campos da tabela
+            $aNomes = array();
+            $aNomes[] = "deusua";
+            $aNomes[] = "demail";
+            $aNomes[] = "defoto";
+            $aNomes[] = "cdtipo";
+            $aNomes[] = "flativ";
+            $aNomes[] = "nrtele";
 
-                $cdusua = $_POST["cdusua"];
-                $defoto1 = $_POST["defoto1"];
-                $desenha = $_POST['password'];
+            //dados da tabela
+            $aDados = array();
+            $aDados[] = $_POST["deusua"];
+            $aDados[] = $_POST["demail"];
+            $aDados[] = $defoto;
+            $aDados[] = $_POST["cdtipo"];
+            $aDados[] = $_POST["flativ"];
+            $aDados[] = $_POST["nrtele"];
+
+            if (!empty($desenha)) {
+                $aNomes[] = "desenh";
+                $aDados[] = md5($desenha);
+            }
+
+            if ($this->atualizaDadosUsuario($aNomes, $aDados, $cdusua)) {
+
+                $demens = "Atualização efetuada com sucesso!";
+
+            } else {
+
+                $demens = "Ocorreu um problema na atualização/exclusão. Se persistir contate o Suporte!";
+            }
+
+            $detitu = "Template Oficina | Cadastro de Usuários";
+            $devolt = "usuarios.php";
+            header('Location: mensagem.php?demens=' . $demens . '&detitu=' . $detitu . '&devolt=' . $devolt);
+        }
+
+        if (isset($_REQUEST['apagar']))
+        {
+            $cdusua = $_POST["cdusua"];
+
+            if ($this->excluirUsuario($cdusua)) {
+                $demens = "Exclusão efetuada com sucesso!";
+
+            } else {
+
+                $demens = "Ocorreu um problema na atualização/exclusão. Se persistir contate o suporte!";
+            }
+
+            $detitu = "Template Oficina | Cadastro de Usuários";
+            $devolt = "usuarios.php";
+            header('Location: mensagem.php?demens=' . $demens . '&detitu=' . $detitu . '&devolt=' . $devolt);
+
+        }
+
+        if (isset($_REQUEST['salvar']))
+        {
+            $delogin = $_POST["login"];
+            $demail = $_POST["demail"];
+            $dtcada = date('Y-m-d');
+            $flativ = "S";
+            $Flag = true;
+
+            if ($Flag == true) {
 
                 //uploads
-                $uploaddir = '../../templates/img/' . $cdusua . "_";
+                $uploaddir = '../../templates/img/' . $delogin . "_";
                 $uploadfile1 = $uploaddir . basename($_FILES['defotom']['name']);
 
                 #Move o arquivo para o diretório de destino
                 move_uploaded_file($_FILES["defotom"]["tmp_name"], $uploadfile1);
 
-                $defotom = basename($_FILES['defotom']['name']);
+                $defoto1 = basename($_FILES['defotom']['name']);
 
-                if (empty($defotom) == true) {
-                    $defoto = $defoto1;
+                $desenh = md5($_POST["password"]);
+
+                if (empty($defoto1) == true) {
+                    $defoto = "img/semfoto.jpg";
                 } Else {
                     $defoto = $uploadfile1;
                 }
@@ -3307,125 +3492,39 @@ class Controller
                 //campos da tabela
                 $aNomes = array();
                 $aNomes[] = "deusua";
+                $aNomes[] = "delogin";
+                $aNomes[] = "desenh";
                 $aNomes[] = "demail";
                 $aNomes[] = "defoto";
                 $aNomes[] = "cdtipo";
                 $aNomes[] = "flativ";
+                $aNomes[] = "dtcada";
                 $aNomes[] = "nrtele";
 
                 //dados da tabela
                 $aDados = array();
                 $aDados[] = $_POST["deusua"];
-                $aDados[] = $_POST["demail"];
+                $aDados[] = $delogin;
+                $aDados[] = $desenh;
+                $aDados[] = $demail;
                 $aDados[] = $defoto;
                 $aDados[] = $_POST["cdtipo"];
-                $aDados[] = $_POST["flativ"];
+                $aDados[] = $flativ;
+                $aDados[] = $dtcada;
                 $aDados[] = $_POST["nrtele"];
 
-                if (!empty($desenha)) {
-                    $aNomes[] = "desenh";
-                    $aDados[] = md5($desenha);
-                }
+                if ($this->salvarUsuario($aNomes, $aDados)) {
 
-                if ($this->atualizaDadosUser($aNomes, $aDados, $cdusua)) {
-
-                    $demens = "Atualização efetuada com sucesso!";
+                    $demens = "Cadastro efetuado com sucesso!";
 
                 } else {
 
-                    $demens = "Ocorreu um problema na atualização/exclusão. Se persistir contate o Suporte!";
+                    $demens = "Ocorreu um problema durante o cadastro. Se persistir contate o suporte!";
                 }
 
-                $detitu = "Template Oficina | Cadastro de Usuários";
+                $detitu = "Template Oficina | Cadastro de usuarios";
                 $devolt = "usuarios.php";
                 header('Location: mensagem.php?demens=' . $demens . '&detitu=' . $detitu . '&devolt=' . $devolt);
-            }
-
-            if (isset($_REQUEST['apagar'])) {
-                $cdusua = $_POST["cdusua"];
-
-                if ($this->excluirUsuario($cdusua)) {
-                    $demens = "Exclusão efetuada com sucesso!";
-
-                } else {
-
-                    $demens = "Ocorreu um problema na atualização/exclusão. Se persistir contate o suporte!";
-                }
-
-                //gravar log
-                //GravarIPLog($cdusua, "Alterar Meus Dados:");
-
-                $detitu = "Template Oficina | Cadastro de Usuários";
-                $devolt = "usuarios.php";
-                header('Location: mensagem.php?demens=' . $demens . '&detitu=' . $detitu . '&devolt=' . $devolt);
-
-            }
-
-            if (isset($_REQUEST['salvar'])) {
-                $delogin = $_POST["login"];
-                $demail = $_POST["demail"];
-                $dtcada = date('Y-m-d');
-                $flativ = "S";
-                $Flag = true;
-
-                if ($Flag == true) {
-
-                    //uploads
-                    $uploaddir = '../../templates/img/' . $delogin . "_";
-                    $uploadfile1 = $uploaddir . basename($_FILES['defotom']['name']);
-
-                    #Move o arquivo para o diretório de destino
-                    move_uploaded_file($_FILES["defotom"]["tmp_name"], $uploadfile1);
-
-                    $defoto1 = basename($_FILES['defotom']['name']);
-
-                    $desenh = md5($_POST["password"]);
-
-                    if (empty($defoto1) == true) {
-                        $defoto = "img/semfoto.jpg";
-                    } Else {
-                        $defoto = $uploadfile1;
-                    }
-
-                    //campos da tabela
-                    $aNomes = array();
-                    $aNomes[] = "deusua";
-                    $aNomes[] = "delogin";
-                    $aNomes[] = "desenh";
-                    $aNomes[] = "demail";
-                    $aNomes[] = "defoto";
-                    $aNomes[] = "cdtipo";
-                    $aNomes[] = "flativ";
-                    $aNomes[] = "dtcada";
-                    $aNomes[] = "nrtele";
-
-                    //dados da tabela
-                    $aDados = array();
-                    $aDados[] = $_POST["deusua"];
-                    $aDados[] = $delogin;
-                    $aDados[] = $desenh;
-                    $aDados[] = $_POST["demail"];
-                    $aDados[] = $defoto;
-                    $aDados[] = $_POST["cdtipo"];
-                    $aDados[] = $flativ;
-                    $aDados[] = $dtcada;
-                    $aDados[] = $_POST["nrtele"];
-
-                    if ($this->salvarUsuario($aNomes, $aDados)) {
-                        $demens = "Cadastro efetuado com sucesso!";
-
-                    } else {
-
-                        $demens = "Ocorreu um problema durante o cadastro. Se persistir contate o suporte!";
-                    }
-
-                    //gravar log
-                    //GravarIPLog($cdusua, "Alterar Meus Dados:");
-
-                    $detitu = "Template Oficina | Cadastro de usuarios";
-                    $devolt = "usuarios.php";
-                    header('Location: mensagem.php?demens=' . $demens . '&detitu=' . $detitu . '&devolt=' . $devolt);
-                }
             }
         }
     }
@@ -3484,9 +3583,6 @@ class Controller
 
                 }
 
-                //gravar log
-                //GravarIPLog($cdusua, "Alterar Meus Dados:");
-
                 $detitu = "Template Oficina | Cadastro de Peças";
                 $devolt = "pecas.php";
                 header('Location: mensagem.php?demens='.$demens.'&detitu='.$detitu.'&devolt='.$devolt);
@@ -3497,9 +3593,6 @@ class Controller
                 $chave = $_REQUEST['chave'];
 
                 if($this->excluirPeca($chave)){
-
-                    //gravar log
-                    //GravarIPLog($cdusua, "Alterar Meus Dados:");
 
                     $demens = "Exclusão efetuada com sucesso!";
 
@@ -3593,7 +3686,6 @@ class Controller
 
         if(isset($_REQUEST['editar']))
         {
-            $data = date('Y-m-d');
             $cdserv = $_POST["cdserv"];
             $deserv = $_POST["deserv"];
             $qtserv = $_POST["qtserv"];
@@ -3601,8 +3693,6 @@ class Controller
 
             $vlserv= str_replace(".","",$vlserv);
             $vlserv= str_replace(",",".",$vlserv);
-
-			$demens = "Atualização efetuada com sucesso!";
 
 			//campos da tabela
 			$aNomes=array();
@@ -3642,8 +3732,6 @@ class Controller
 
             if($this->excluirServico($chave))
             {
-                //gravar log
-                //GravarIPLog($cdusua, "Alterar Meus Dados:");
                 $demens = "Exclusão efetuada com sucesso!";
 
             }else{
@@ -3789,22 +3877,10 @@ class Controller
 
         if(isset($_REQUEST['apagar']))
         {
-            $data = date('Y-m-d');
             $cdcont = $_POST["cdcont"];
-            $cdtipo = $_POST["cdtipo"];
 
             if($this->excluirConta($cdcont))
             {
-                /* $cdusua = "99999999999";
-            $delog = "Alteração dos dados da tabela [" . "{$tabela}" . "] para a chave [" . "{$chave}" . "]";
-            if (isset($_COOKIE['cdusua'])) {
-                $cdusua = $_COOKIE['cdusua'];
-            }
-
-            if ($tabela !== "log") {
-                 GravarLog($cdusua, $delog);
-            }*/
-
                 $demens = "Exclusão efetuada com sucesso!";
 
             }else{
