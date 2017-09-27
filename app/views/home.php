@@ -20,29 +20,17 @@
         $eMovel="S";
     }
 
-    // incluindo bibliotecas de apoio
-    include "banco.php";
-    include "util.php";
+    $con = new Controller();
+    $con->pagHome();
 
     //codigo do usuario
     if (isset($_COOKIE['cdusua'])) {
         $cdusua = $_COOKIE['cdusua'];
-    } Else {
-        header('Location: index.html');
-    }
-
-    // nome do usuario
-    if (isset($_COOKIE['deusua'])) {
-        $deusua = $_COOKIE['deusua'];
-    } Else {
-        header('Location: index.html');
     }
 
     //tipo de usuario
     if (isset($_COOKIE['cdtipo'])) {
         $cdtipo = $_COOKIE['cdtipo'];
-    } Else {
-        header('Location: index.html');
     }
 
     //localização da foto
@@ -78,6 +66,7 @@
     }
 
     // reduzir o tamanho do nome do usuario
+    $deusua = $_SESSION['login'];
     $deusua = substr($deusua, 0,15);
 
     $demails="flaviorcabral@gmail.com";
@@ -118,13 +107,9 @@
                                 <li><a href="meusdados.php">Atualizar Meus Dados</a></li>
                                 <li><a href="minhasenha.php">Alterar Minha Senha</a></li>
                                 <li class="divider"></li>
-                                <li><a href="../../index.php">Sair</a></li>
+                                <li><a href="../../index.php?logoff">Sair</a></li>
                             </ul>
                         </div>
-                    </li>
-
-                     <li class="special_link">
-                        <a href="cliente.php"><i class="fa fa-user"></i> <span class="nav-label">Cadastrar Clientes</span></a>
                     </li>
 
                     <li>
@@ -132,17 +117,7 @@
                     </li>
 
                     <?php if ($cdtipo == 'A'){?>
-                        <li>
-                            <a href="fornecedores.php"><i class="fa fa-user"></i><span class="nav-label">Cadastrar Fornecedores</span></a>
-                        </li>
-
-                        <li>
-                            <a href="pedidos.php"><i class="fa fa-user"></i><span class="nav-label">Cadastrar Pedidos</span></a>
-                        </li>
-                    <?php }?>
-
-                    <?php if ($cdtipo == 'A'){?>
-                        <li class="special_link">
+                        <li> <!--class="special_link"-->
                             <a href="contas.php"><i class="fa fa-money"></i> <span class="nav-label">Contas a Pagar/Receber</span></a>
                         </li>
                     <?php }?>
@@ -158,22 +133,23 @@
                     <?php }?>
 
                     <li>
+                        <a href="cliente.php"><i class="fa fa-user"></i> <span class="nav-label">Cadastrar Clientes</span></a>
+                    </li>
+
+                    <li>
                         <a href="agenda.php"><i class="fa fa-calendar"></i> <span class="nav-label">Agenda</span></a>
                     </li>
 
-                    <?php if ($cdtipo == 'A'){?>
-                        <li class="special_link">
-                            <a href="parametros.php"><i class="fa fa-key"></i> <span class="nav-label">Parâmetros</span></a>
-                        </li>
-                    <?php }?>
-
-                    <?php if ($cdtipo == 'A'){?>
-                        <li>
-                            <a href="historico.php"><i class="fa fa-eye"></i> <span class="nav-label">Histórico</span></a>
-                        </li>
-                    <?php }?>
-
                    <?php if ($cdtipo == 'A'){?>
+
+                        <li>
+                               <a href="fornecedores.php"><i class="fa fa-user"></i><span class="nav-label">Cadastrar Fornecedores</span></a>
+                        </li>
+
+                        <li>
+                               <a href="pedidos.php"><i class="fa fa-user"></i><span class="nav-label">Cadastrar Pedidos</span></a>
+                        </li>
+
                         <li>
                             <a href="usuarios.php"><i class="fa fa-users"></i> <span class="nav-label">Cadastrar Usuários</span></a>
                         </li>
@@ -185,6 +161,15 @@
                         <li>
                             <a href="servicos.php"><i class="fa fa-car"></i> <span class="nav-label">Cadastrar Serviços</span></a>
                         </li>
+
+                       <li ><!--class="special_link"-->
+                           <a href="parametros.php"><i class="fa fa-key"></i> <span class="nav-label">Parâmetros</span></a>
+                       </li>
+
+                       <li>
+                           <a href="historico.php"><i class="fa fa-eye"></i> <span class="nav-label">Histórico</span></a>
+                       </li>
+
                     <?php }?>
 
                 </ul>
@@ -207,10 +192,10 @@
                     </ul>
                     <ul class="nav navbar-top-links navbar-right">
                         <li>
-                            <span class="m-r-sm text-muted welcome-message">Benvindo ao <strong>Oficina Light&copy;</strong></span>
+                            <span class="m-r-sm text-muted welcome-message">Template Oficina</strong></span>
                         </li>
                         <li>
-                            <a href="../../index.php">
+                            <a href="../../index.php?logoff">
                                 <i class="fa fa-sign-out"></i> Sair
                             </a>
                         </li>

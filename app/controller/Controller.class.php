@@ -1,5 +1,7 @@
 <?php
 
+    session_start();
+
 class Controller
 {
     public $ordem = null;
@@ -20,53 +22,97 @@ class Controller
     //Valida acesso ao sistema
     function login()
     {
+        $delogin = preg_replace('/[^[:alnum:]_]/', '', $_POST["delogin"]);
+        $desenh = md5(preg_replace('/[^[:alnum:]_]/', '', $_POST["desenh"]));
 
-        if (isset($_REQUEST['login'])) {
+        $usuario = new Usuario();
 
-            $delogin = preg_replace('/[^[:alnum:]_]/', '', $_POST["delogin"]);
-            $desenh = md5(preg_replace('/[^[:alnum:]_]/', '', $_POST["desenh"]));
+        $result = $usuario->validaAcesso($delogin);
 
-            $usuario = new Usuario();
+        if ($result) {
 
-            $result = $usuario->validaAcesso($delogin);
+            $senha = $result['desenh'];
 
-            if ($result) {
+            if ($senha == $desenh) {
+                // dados ok
+                $cdusua = $result["cdusua"];
+                $deusua = $result["deusua"];
+                $cdtipo = substr($result["cdtipo"], 0, 1);
+                $defoto = $result["defoto"];
+                $demail = $result["demail"];
 
-                $senha = $result['desenh'];
+                $_SESSION['login'] = $deusua;
 
-                if ($senha == $desenh) {
-                    // dados ok
-                    $cdusua = $result["cdusua"];
-                    $deusua = $result["deusua"];
-                    $cdtipo = substr($result["cdtipo"], 0, 1);
-                    $defoto = $result["defoto"];
-                    $demail = $result["demail"];
+                date_default_timezone_set("Brazil/East");
+                $tempoLimite = 60;
 
-                    setcookie("cdusua", $cdusua);
-                    setcookie("deusua", $deusua);
-                    setcookie("cdtipo", $cdtipo);
-                    setcookie("defoto", $defoto);
-                    setcookie("demail", $demail);
+                $_SESSION['logado'] = time();
+                $_SESSION['tempo_permitido'] = $tempoLimite;
 
-                    $delog = "Acesso ao Sistema";
-                    $this->geraLogSistema($cdusua, $delog);
+                setcookie("cdusua", $cdusua);
+                setcookie("cdtipo", $cdtipo);
+                setcookie("defoto", $defoto);
+                setcookie("demail", $demail);
 
-                    header('Location: app/views/home.php');
+                $delog = "Acesso ao Sistema";
+                $this->geraLogSistema($cdusua, $delog);
 
-                } else {
-                    // senha NÃO confere
-                    $demens = "A senha não confere. Tente novamente!";
-                    $detitu = "Template oficina | Acesso";
-                    header('Location: app/views/mensagem.php?demens=' . $demens . '&detitu=' . $detitu);
-                }
+                header('Location: app/views/home.php');
 
             } else {
-                // Usuario NÃO encontrado
-                $demens = "Usuário não cadastrado ou inativo!";
+                // senha NÃO confere
+                $demens = "A senha não confere. Tente novamente!";
                 $detitu = "Template oficina | Acesso";
                 header('Location: app/views/mensagem.php?demens=' . $demens . '&detitu=' . $detitu);
             }
 
+        } else {
+            // Usuario NÃO encontrado
+            $demens = "Usuário não cadastrado ou inativo!";
+            $detitu = "Template oficina | Acesso";
+            header('Location: app/views/mensagem.php?demens=' . $demens . '&detitu=' . $detitu);
+        }
+    }
+
+    //Efetua logoff do sistema
+    function logoff()
+    {
+
+        if (isset($_SESSION['login'])) {
+            unset($_COOKIE);
+            unset($_SESSION['login']);
+            session_destroy();
+            header('Location: index.php');
+            exit;
+        }
+    }
+
+    //Verifica sessão ativa do usuário
+    function verificaSessao()
+    {
+        if (array_key_exists('login', $_SESSION)) {
+           return true;
+        }
+
+        return false;
+    }
+
+    //Verifca inatividade da sessao
+    function verificaInatividade()
+    {
+        $logado = $_SESSION['logado'];
+        $limite = $_SESSION['tempo_permitido'];
+
+        if($logado){
+            $segundos = time() - $logado;
+        }
+
+        if($segundos > $limite){
+            session_destroy();
+            header('Location: Location: ../../index.php');
+            exit;
+        }else{
+            $_SESSION['logado'] = time();
         }
     }
 
@@ -1384,6 +1430,7 @@ class Controller
         return $result;
     }
 
+    //Buscar conta por forma de pagamento
     function buscaContasPorFormaPag()
     {
         $conta = new Conta();
@@ -1391,6 +1438,7 @@ class Controller
         return $result;
     }
 
+    //Traduz data para persistencia no banco
     function traduz_data_para_banco($data)
     {
         if ($data == "") {
@@ -1404,6 +1452,7 @@ class Controller
         return $data_mysql;
     }
 
+    //Traduz data para exibição
     function traduz_data_para_exibir($data)
     {
         if ($data == "" OR $data == "00-00-0000") {
@@ -1417,6 +1466,7 @@ class Controller
         return $data_exibir;
     }
 
+    //Prepara corpo do email de nova senha
     function preparar_corpo_email_novasenha()
     {
         ob_start();
@@ -1962,6 +2012,41 @@ class Controller
         return;
     }
 
+    function enviarSenha()
+    {
+        $demail= $_POST ["demail"];					// email para o qual será enviada a nova senha
+        $desenh= GerarSenha(); 	// gera automaticamente uma nova senha
+
+        // envia para o e-mail
+        $paraquem= $demail;
+        $dequem = "suporte@rcx5plasticos.com.br";
+        $assunto = "Aliança Auto Mecânica : Sua nova senha";
+        //$corpo = "cpf: ".$_POST["cdusua"]." - email: ".$_POST["demail"]." - ".$datahoje;
+        $corpo="Olá, segue sua nova senha conforme solicitado: ".$desenh;
+
+        $this->EnviarEmail($paraquem, $dequem, $assunto, $corpo);
+
+        // grava a nova senha
+        $desenh= md5($desenh);
+        $this->GravarNovaSenha($demail,$desenh);
+
+        $aDados = ConsultarDados("m_usuarios", "demail", $demail,"select * from m_usuarios where flativ ='S' and demail = "."'{$demail}'");
+        $cdusua="99999999999";
+
+        if (count($aDados) > 0 ) {
+            $cdusua=$aDados[0]["cdusua"];
+        }
+
+        $delog = "Geração automática de senha e envio de nova senha para o e-mail informado: Esqueceu a Senha";
+        GravarLog($cdusua, $delog);
+
+        // apresenta mensagem enviada
+        $demens = "Uma nova senha foi enviada para o e-mail informado!";
+        $detitu = "Aliança Auto Mecânica | Nova Senha";
+        $devolt = "index.html";
+        header('Location: mensagem.php?demens='.$demens.'&detitu='.$detitu.'&devolt='.$devolt);
+    }
+
     function RetirarMascara($key, $tipo)
     {
         if (empty($key) == true) {
@@ -2093,17 +2178,42 @@ class Controller
         }
     }
 
-    //Pagina login
+    //Pagina index.php
     function pagLogin()
     {
+        if(isset($_REQUEST['login']))
+        {
+            $this->login();
+        }
 
-        $this->login();
+        if(isset($_REQUEST['logoff']))
+        {
+            $this->logoff();
+        }
+    }
+
+    //Pagina home.php
+    function pagHome()
+    {
+        if (!$this->verificaSessao()) {
+            header('Location: ../../index.php');
+            exit;
+        }
+
+        $this->verificaInatividade();
 
     }
 
     //Pagina meus dados e senha
     function pagsMeusDados()
     {
+        if (!$this->verificaSessao()) {
+            header('Location: ../../index.php');
+            exit;
+        }
+
+        $this->verificaInatividade();
+
         if (isset($_REQUEST['atualiza']))
         {
             if ($this->atualizaMeusDados()) {
@@ -2139,6 +2249,13 @@ class Controller
     //Pagina clienteacoes.php
     function pagClientes()
     {
+        if (!$this->verificaSessao()) {
+            header('Location: ../../index.php');
+            exit;
+        }
+
+        $this->verificaInatividade();
+
         $data = date('Y-m-d');
         $acao = $_REQUEST['acao'];
 
@@ -2356,6 +2473,13 @@ class Controller
     //Pagina ordem de serviçoacoes.php
     function pagOrdemServicos()
     {
+        if (!$this->verificaSessao()) {
+            header('Location: ../../index.php');
+            exit;
+        }
+
+        $this->verificaInatividade();
+
         $acao = $_REQUEST['acao'];
 
         if ($acao == 'nova') {
@@ -2767,6 +2891,13 @@ class Controller
     //Pagina de pedidosacoes.php
     function pagPedidos()
     {
+        if (!$this->verificaSessao()) {
+            header('Location: ../../index.php');
+            exit;
+        }
+
+        $this->verificaInatividade();
+
         $acao = $_REQUEST['acao'];
 
         if ($acao == 'novo') {
@@ -3159,6 +3290,13 @@ class Controller
     //Pagina fornecedoresacoes.php
     function pagFornecedores()
     {
+        if (!$this->verificaSessao()) {
+            header('Location: ../../index.php');
+            exit;
+        }
+
+        $this->verificaInatividade();
+
         $data = date('Y-m-d');
         $acao = $_REQUEST['acao'];
 
@@ -3377,6 +3515,13 @@ class Controller
     //Pagina Usuarioscoes.php
     function pagUsuarios()
     {
+        if (!$this->verificaSessao()) {
+            header('Location: ../../index.php');
+            exit;
+        }
+
+        $this->verificaInatividade();
+
         $acao = $_REQUEST['acao'];
 
         if ($acao == 'ver' or $acao == 'edita' or $acao == 'apaga') {
@@ -3532,6 +3677,13 @@ class Controller
     //Pagina pecasacoes.php
     function pagPecas()
     {
+        if (!$this->verificaSessao()) {
+            header('Location: ../../index.php');
+            exit;
+        }
+
+        $this->verificaInatividade();
+
         $data = date('Y-m-d');
         $acao = $_REQUEST['acao'];
 
@@ -3668,6 +3820,13 @@ class Controller
     //Pagina servicosacoes.php
     function pagServicos()
     {
+        if (!$this->verificaSessao()) {
+            header('Location: ../../index.php');
+            exit;
+        }
+
+        $this->verificaInatividade();
+
         $data = date('Y-m-d');
         $acao = $_REQUEST['acao'];
 
@@ -3803,6 +3962,13 @@ class Controller
     //Pagina contasacoes.php
     function pagContas()
     {
+        if (!$this->verificaSessao()) {
+            header('Location: ../../index.php');
+            exit;
+        }
+
+        $this->verificaInatividade();
+
         $data = date('Y-m-d');
         $acao = $_REQUEST['acao'];
 
@@ -3952,6 +4118,12 @@ class Controller
     //Pagina paramentro.php
     function pagParamentros()
     {
+        if (!$this->verificaSessao()) {
+            header('Location: ../../index.php');
+            exit;
+        }
+
+        $this->verificaInatividade();
 
         if(isset($_REQUEST['editar']))
         {

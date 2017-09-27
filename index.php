@@ -4,7 +4,7 @@ include_once 'config.php';
 
 ini_set ('display_errors', 1 );
 error_reporting ( E_ALL | E_STRICT );
-error_reporting (0);
+//error_reporting (0);
 
 $con = new Controller();
 $con->pagLogin();
