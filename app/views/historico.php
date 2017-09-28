@@ -22,62 +22,14 @@
 
     $con = new Controller();
 
-    //codigo do usuario
-    if (isset($_COOKIE['cdusua'])) {
-        $cdusua = $_COOKIE['cdusua'];
-    } Else {
-        header('Location: index.html');
+    if (!$con->verificaSessao()) {
+        header('Location: ../../index.php');
+        exit;
     }
 
-    // nome do usuario
-    if (isset($_COOKIE['deusua'])) {
-        $deusua = $_COOKIE['deusua'];
-    } Else {
-        header('Location: index.html');
-    }
+    $con->verificaInatividade();
 
-    //tipo de usuario
-    if (isset($_COOKIE['cdtipo'])) {
-        $cdtipo = $_COOKIE['cdtipo'];
-    } Else {
-        header('Location: index.html');
-    }
-
-    //localização da foto
-    if (isset($_COOKIE['defoto'])) {
-        $defoto = $_COOKIE['defoto'];
-    }
-
-    //tipo de usuario
-    if (isset($_COOKIE['cdtipo'])) {
-        $cdtipo = $_COOKIE['cdtipo'];
-    }
-
-    //email de usuario
-    if (isset($_COOKIE['demail'])) {
-        $demail = $_COOKIE['demail'];
-    }
-
-    $detipo="Tipo Não Identificado";
-    if ($cdtipo == "A") {
-        $detipo="Administrador";
-    }
-    if ($cdtipo == "F") {
-        $detipo="Funcionário";
-    }
-    if ($cdtipo == "O") {
-        $detipo="Oficina";
-    }
-    if ($cdtipo == "M") {
-        $detipo="Mecânico";
-    }
-    if ($cdtipo == "C") {
-        $detipo="Cliente";
-    }
-
-    // reduzir o tamanho do nome do usuario
-    $deusua1=$deusua;
-    $deusua = substr($deusua, 0,15);
+    include "layouts/cookiesSessao.php";
 
     $logs = $con->listaHistorico();
 
@@ -102,57 +54,13 @@
 
 <body>
     <div id="wrapper">
-        <nav class="navbar-default navbar-static-side" role="navigation">
-            <div class="sidebar-collapse">
-                <ul class="nav metismenu" id="side-menu">
-                    <li class="nav-header">
-                        <div class="dropdown profile-element"> <span>
-                                <img alt="foto" width="80" height="80" class="img-circle" src="<?php echo $defoto; ?>" />
-                                 </span>
-                            <a data-toggle="dropdown" class="dropdown-toggle" href="#">
-                                <span class="clear"> <span class="block m-t-xs"> <strong class="font-bold"><?php echo $deusua; ?></strong>
-                                 </span> <span class="text-muted text-xs block"><?php echo $detipo; ?><b class="caret"></b></span> </span> </a>
-                            <ul class="dropdown-menu animated fadeInRight m-t-xs">
-                                <li><a href="meusdados.php">Atualizar Meus Dados</a></li>
-                                <li><a href="minhasenha.php">Alterar Minha Senha</a></li>
-                                <li class="divider"></li>
-                                <li><a href="../../index.php">Sair</a></li>
-                            </ul>
-                        </div>
-                    </li>
 
-                    <li>
-                        <a href="home.php"><i class="fa fa-home"></i> <span class="nav-label">Menu Principal</span></a>
-                    </li>                    
-
-                </ul>
-            </div>
-        </nav>
+        <?php include "layouts/meusdados.php"; ?>
 
         <div id="page-wrapper" class="gray-bg">
-            <div class="row border-bottom">
-                <nav class="navbar navbar-static-top white-bg" role="navigation" style="margin-bottom: 0">
-                    <div class="navbar-header">
-                        <a class="navbar-minimalize minimalize-styl-2 btn btn-warning " href="#"><i class="fa fa-bars"></i> </a>
-                    </div>
-                    <ul class="nav navbar-top-links navbar-left">
-                        <br>
-                        <li>
-                            <span><?php echo  $deusua1 ;?></span>
-                        </li>
-                    </ul>
-                    <ul class="nav navbar-top-links navbar-right">
-                        <li>
-                            <span class="m-r-sm text-muted welcome-message">Benvindo a <strong>Demonstração Auto Mecânica&copy;</strong></span>
-                        </li>
-                        <li>
-                            <a href="../../index.php">
-                                <i class="fa fa-sign-out"></i> Sair
-                            </a>
-                        </li>
-                    </ul>
-                </nav>
-            </div>
+
+            <?php include "layouts/cabecalho.php"; ?>
+
             <div class="wrapper wrapper-content">
                 <!--div class="col-lg-12"-->
                     <div class="ibox float-e-margins">
@@ -198,55 +106,9 @@
                                 </table>
                             </div>
                             <br>
-                            <div class="table-responsive">
-                                <table class="table table-striped table-bordered table-hover">
-                                    <caption><strong>* AJUDA</strong></caption>
-                                    <thead>
-                                        <tr>
-                                            <th width=5>Comando</th>
-                                            <th width=100>Descrição</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        <tr>
-                                            <td >Show</td>
-                                            <td >Controla a quantidade de linhas a serem apresentadas na tabela.</td>
-                                        </tr>
-                                        <tr>
-                                            <td >entriesSearch</td>
-                                            <td >É a pesquisa. Apresenta os dados filtrados conforme o conteúdo digitado.</td>
-                                        </tr>
-                                        <tr>
-                                            <td >Copy</td>
-                                            <td >Copia o conteúdo da tabela para a memória (clipboard).</td>
-                                        </tr>
-                                        <tr>
-                                            <td >CSV</td>
-                                            <td >Exporta os dados da tabela para um arquivo no formato CSV (arquivo texto com as informações separadas por vírgula).</td>
-                                        </tr>
-                                        <tr>
-                                            <td >Excel</td>
-                                            <td >Exporta os dados da tabela para um arquivo no formato EXCEL.</td>
-                                        </tr>
-                                        <tr>
-                                            <td >PDF</td>
-                                            <td >Exporta os dados da tabela para um arquivo no formato PDF.</td>
-                                        </tr>
-                                        <tr>
-                                            <td >Print</td>
-                                            <td >Imprime os dados da tabela.</td>
-                                        </tr>
-                                        <tr>
-                                            <td >Previous</td>
-                                            <td >Retorna uma página da tabela.</td>
-                                        </tr>
-                                        <tr>
-                                            <td >Next</td>
-                                            <td >Avança uma página da tabela.</td>
-                                        </tr>
-                                    </tbody>
-                                </table>
-                            </div>
+
+                            <?php include "layouts/ajuda.php"; ?>
+
                         </div>
                     </div>
                 <!--/div-->

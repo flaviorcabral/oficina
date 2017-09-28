@@ -44,7 +44,7 @@ class Controller
                 $_SESSION['login'] = $deusua;
 
                 date_default_timezone_set("Brazil/East");
-                $tempoLimite = 60;
+                $tempoLimite = 1800; //30 minutos de inatividade
 
                 $_SESSION['logado'] = time();
                 $_SESSION['tempo_permitido'] = $tempoLimite;

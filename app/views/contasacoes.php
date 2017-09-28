@@ -39,65 +39,10 @@
         $titulo = "Inclusão";
         break;
     default:
-        header('Location: fichacadastral.php');
+        header('Location: home.php');
     }
 
-    //codigo do usuario
-    if (isset($_COOKIE['cdusua'])) {
-        $cdusua = $_COOKIE['cdusua'];
-    } Else {
-        header('Location: index.html');
-    }
-
-    // nome do usuario
-    if (isset($_COOKIE['deusua'])) {
-        $deusua = $_COOKIE['deusua'];
-    } Else {
-        header('Location: index.html');
-    }
-
-    //tipo de usuario
-    if (isset($_COOKIE['cdtipo'])) {
-        $cdtipo = $_COOKIE['cdtipo'];
-    } Else {
-        header('Location: index.html');
-    }
-
-    //localização da foto
-    if (isset($_COOKIE['defoto'])) {
-        $defoto = $_COOKIE['defoto'];
-    }
-
-    //tipo de usuario
-    if (isset($_COOKIE['cdtipo'])) {
-        $cdtipo = $_COOKIE['cdtipo'];
-    }
-
-    //email de usuario
-    if (isset($_COOKIE['demail'])) {
-        $demail = $_COOKIE['demail'];
-    }
-
-    $detipo="Tipo Não Identificado";
-    if ($cdtipo == "A") {
-        $detipo="Administrador";
-    }
-    if ($cdtipo == "F") {
-        $detipo="Funcionário";
-    }
-    if ($cdtipo == "O") {
-        $detipo="Oficina";
-    }
-    if ($cdtipo == "M") {
-        $detipo="Mecânico";
-    }
-    if ($cdtipo == "C") {
-        $detipo="Cliente";
-    }
-
-    // reduzir o tamanho do nome do usuario
-    $deusua1=$deusua;
-    $deusua = substr($deusua, 0,15);
+    include "layouts/cookiesSessao.php";
 
     if($acao != "nova")
     {
@@ -135,60 +80,13 @@
 
 <body>
     <div id="wrapper">
-        <nav class="navbar-default navbar-static-side" role="navigation">
-            <div class="sidebar-collapse">
-                <ul class="nav metismenu" id="side-menu">
-                    <li class="nav-header">
-                        <div class="dropdown profile-element"> <span>
-                                <img alt="foto" width="80" height="80" class="img-circle" src="<?php echo $defoto; ?>" />
-                                 </span>
-                            <a data-toggle="dropdown" class="dropdown-toggle" href="#">
-                                <span class="clear"> <span class="block m-t-xs"> <strong class="font-bold"><?php echo $deusua; ?></strong>
-                                 </span> <span class="text-muted text-xs block"><?php echo $detipo; ?><b class="caret"></b></span> </span> </a>
-                            <ul class="dropdown-menu animated fadeInRight m-t-xs">
-                                <li><a href="meusdados.php">Atualizar Meus Dados</a></li>
-                                <li><a href="minhasenha.php">Alterar Minha Senha</a></li>
-                                <li class="divider"></li>
-                                <li><a href="../../index.php">Sair</a></li>
-                            </ul>
-                        </div>
-                        <div class="logo-element">
-                            <strong>Aliança&copy;</strong>
-                        </div>
-                    </li>
 
-                    <li>
-                        <a href="home.php"><i class="fa fa-home"></i> <span class="nav-label">Menu Principal</span></a>
-                    </li>                    
-
-                </ul>
-            </div>
-        </nav>
+        <?php include "layouts/meusdados.php"; ?>
 
         <div id="page-wrapper" class="gray-bg">
-            <div class="row border-bottom">
-                <nav class="navbar navbar-static-top white-bg" role="navigation" style="margin-bottom: 0">
-                    <div class="navbar-header">
-                        <a class="navbar-minimalize minimalize-styl-2 btn btn-warning " href="#"><i class="fa fa-bars"></i> </a>
-                    </div>
-                    <ul class="nav navbar-top-links navbar-left">
-                        <br>
-                        <li>
-                            <span><?php echo  $deusua1 ;?></span>
-                        </li>
-                    </ul>
-                    <ul class="nav navbar-top-links navbar-right">
-                        <li>
-                            <span class="m-r-sm text-muted welcome-message">Benvindo a <strong>Template Oficina</strong></span>
-                        </li>
-                        <li>
-                            <a href="../../index.php">
-                                <i class="fa fa-sign-out"></i> Sair
-                            </a>
-                        </li>
-                    </ul>
-                </nav>
-            </div>
+
+            <?php include "layouts/cabecalho.php"; ?>
+
             <div class="wrapper wrapper-content">
 
                     <div class="ibox float-e-margins">
