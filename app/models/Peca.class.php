@@ -68,4 +68,28 @@ class Peca
         return FALSE;
     }
 
+    //Busca total peça estoque
+    function estoquePeca($codigo)
+    {
+        $busca = $this->con->query("SELECT qtpeca FROM pecas WHERE cdpeca = '{$codigo}'");
+
+        if (count($busca) > 0) {
+
+            return $busca->fetch(PDO::FETCH_COLUMN);
+        }
+
+        return false;
+    }
+
+    //Incrementa peça estoque
+    function atualizaEstoque($codigo, $qtd)
+    {
+        if ($this->con->exec("UPDATE pecas SET qtpeca = '{$qtd}' WHERE cdpeca = '{$codigo}'")) {
+
+            return TRUE;
+        }
+
+        return FALSE;
+    }
+
 }

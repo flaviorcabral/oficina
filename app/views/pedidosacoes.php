@@ -130,13 +130,11 @@
                                                 <label class="col-md-4 control-label" for="textinput">Fornecedor</label>
                                                 <div class="col-md-4">
                                                     <select name="cdforn" id="cdforn" style="width:250%" <?php if($acao == 'ver' or $acao == 'apaga'): ?>disabled<?php endif; ?>>
-                                                        <?php for($i=0;$i < count($fornecedores);$i++) { ?>
-                                                            <?php if ( $pedido[0]["cdforn"] == str_pad($fornecedores[$i]["cdforn"],14," ",STR_PAD_LEFT)." - ".$fornecedores[$i]["deforn"] ) {?>
-                                                                <option value="<?php echo str_pad($fornecedores[$i]["cdforn"],14," ",STR_PAD_LEFT)." - ".$fornecedores[$i]["deforn"];?>" selected =""><?php echo str_pad($fornecedores[$i]["cdforn"],14," ",STR_PAD_LEFT)." - ".$fornecedores[$i]["deforn"];?></option>
-                                                            <?php } Else {?>
-                                                                <option value="<?php echo str_pad($fornecedores[$i]["cdforn"],14," ",STR_PAD_LEFT)." - ".$fornecedores[$i]["deforn"];?>"><?php echo str_pad($fornecedores[$i]["cdforn"],14," ",STR_PAD_LEFT)." - ".$fornecedores[$i]["deforn"];?></option>
-                                                            <?php }?>
-                                                        <?php }?>
+                                                        <option selected=""><?php echo $pedido[0]["cdforn"];?></option>
+                                                        <?php foreach($fornecedores as $fornecedor): ?>
+                                                            <option value="<?php echo str_pad($fornecedor["cdforn"],14," ",STR_PAD_LEFT)." - ".$fornecedor["deforn"];?>"><?php echo str_pad($fornecedor["cdforn"],14," ",STR_PAD_LEFT)." - ".$fornecedor["deforn"];?></option>
+                                                        <?php endforeach; ?>
+
                                                     </select>
                                                 </div>
                                             </div>
@@ -165,21 +163,7 @@
                                             <div class="form-group">
                                                 <label class="col-md-4 control-label" for="textinput">Data da Entrega</label>
                                                 <div class="col-md-4">
-                                                    <input id="dtentr" name="dtentr" value="<?php echo $pedido[0]["dtentr"];?>" type="date" placeholder="" class="form-control" maxlength = "10" <?php if($acao == 'ver' or $acao == 'apaga'): ?>readonly<?php endif; ?>>
-                                                </div>
-                                            </div>
-
-                                            <div class="form-group">
-                                                <label class="col-md-4 control-label" for="textinput">Data de Pagamento</label>
-                                                <div class="col-md-4">
-                                                    <input id="dtpago" name="dtpago" value="<?php echo $pedido[0]["dtpago"];?>" type="date" placeholder="" class="form-control" maxlength = "10" <?php if($acao == 'ver' or $acao == 'apaga'): ?>readonly<?php endif; ?>>
-                                                </div>
-                                            </div>
-
-                                            <div class="form-group">
-                                                <label class="col-md-4 control-label" for="textinput">Valor Pago</label>
-                                                <div class="col-md-4">
-                                                    <input id="vlpago" name="vlpago" value="<?php echo number_format($pedido[0]["vlpago"],2,",",".");?>" type="text" placeholder="" class="form-control" maxlength = "15" <?php if($acao == 'ver' or $acao == 'apaga'): ?>readonly<?php endif; ?>>
+                                                    <input id="dtentr" name="dtentr" value="<?php echo $pedido[0]["dtentr"];?>" type="date" placeholder="" class="form-control" maxlength = "10" <?php if($acao == 'ver' or $acao == 'apaga'): ?>readonly<?php endif; ?> required>
                                                 </div>
                                             </div>
 
@@ -224,7 +208,28 @@
                                             <div class="form-group">
                                                 <label class="col-md-4 control-label" for="textinput">Quantidade Parcelas</label>
                                                 <div class="col-md-2">
-                                                    <input id="qtform" type="text" name="qtform" value="<?php echo $pedido[0]["qtform"];?>" placeholder="" class="form-control" maxlength = "15" <?php if($acao == 'ver' or $acao == 'apaga'): ?>readonly<?php endif; ?> required>
+                                                    <input id="qtform" type="number" name="qtform" value="<?php echo $pedido[0]["qtform"];?>" placeholder="" class="form-control" maxlength = "15" <?php if($acao == 'ver' or $acao == 'apaga'): ?>readonly<?php endif; ?> required>
+                                                </div>
+                                            </div>
+
+                                            <div class="form-group">
+                                                <label class="col-md-4 control-label" for="textinput">Status</label>
+                                                <div class="col-md-4">
+                                                    <select name="status" id="status" style="width:50%" <?php if($acao == 'ver' or $acao == 'apaga'): ?>disabled<?php endif; ?>>
+                                                        <?php if ($pedido[0]["status"] == ""){?>
+                                                            <option selected="" value="Pendente">Pendente</option>
+                                                            <option value="Entregue">Entregue</option>
+                                                        <?php }?>
+                                                        <?php if ($pedido[0]["status"] == "Entregue"){?>
+                                                            <option value="Pendente">Pendente</option>
+                                                            <option selected="" value="Entregue">Entregue</option>
+                                                        <?php }?>
+                                                        <?php if ($pedido[0]["status"] == "Pendente"){?>
+                                                            <option selected="" value="Pendente">Pendente</option>
+                                                            <option value="Entregue">Entregue</option>
+                                                        <?php }?>
+
+                                                    </select>
                                                 </div>
                                             </div>
 
@@ -258,11 +263,8 @@
                                                                     <td>
                                                                         <center>
                                                                             <select id = "<?php echo $cditem;?>" name="<?php echo $cditem;?>" class="form-control" onclick="colocapreco();" <?php if($acao == 'ver' or $acao == 'apaga'): ?>disabled<?php endif; ?>>
-                                                                                <option value= "X|0|Serviços">SERVIÇOS</option>
-                                                                                <option selected ="" value="<?php echo 'S|'.$itens[$f-1]["vlpeca"].'|'.$itens[$f-1]["cdpeca"];?>"><?php echo $itens[$f-1]["cdpeca"];?></option>
-                                                                                <?php for($i=0;$i < count($servicos);$i++) { ?>
-                                                                                    <option value = "<?php echo 'S|'.$servicos[$i]["vlserv"].'|'.$servicos[$i]["cdserv"]." - ".$servicos[$i]["deserv"];?>"><?php echo $servicos[$i]["cdserv"]." - ".$servicos[$i]["deserv"];?></option>
-                                                                                <?php }?>
+                                                                                <option selected ="" value="<?php echo 'P|'.$itens[$f-1]["vlpeca"].'|'.$itens[$f-1]["cdpeca"];?>"><?php echo $itens[$f-1]["cdpeca"];?></option>
+
                                                                                 <option value="X|0|Peças">PEÇAS</option>
                                                                                 <?php for($i=0;$i < count($pecas);$i++) { ?>
                                                                                   <option value = "<?php echo 'P|'.$pecas[$i]["vlpeca"].'|'.$pecas[$i]["cdpeca"]." - ".$pecas[$i]["depeca"];?>"><?php echo $pecas[$i]["cdpeca"]." - ".$pecas[$i]["depeca"];?></option>
@@ -277,10 +279,6 @@
                                                                     <td>
                                                                         <center>
                                                                             <select id = "<?php echo $cditem;?>" name="<?php echo $cditem;?>" class="form-control" onclick="colocapreco();" <?php if($acao == 'ver' or $acao == 'apaga'): ?>disabled<?php endif; ?>>
-                                                                                <option value= "X|0|Serviços" selected>SERVIÇOS</option>
-                                                                                <?php for($i=0;$i < count($servicos);$i++) { ?>
-                                                                                  <option value = "<?php echo 'S|'.$servicos[$i]["vlserv"].'|'.$servicos[$i]["cdserv"]." - ".$servicos[$i]["deserv"];?>"><?php echo $servicos[$i]["cdserv"]." - ".$servicos[$i]["deserv"];?></option>
-                                                                                <?php }?>
                                                                                 <option value="X|0|Peças" selected>PEÇAS</option>
                                                                                 <?php for($i=0;$i < count($pecas);$i++) { ?>
                                                                                   <option value = "<?php echo 'P|'.$pecas[$i]["vlpeca"].'|'.$pecas[$i]["cdpeca"]." - ".$pecas[$i]["depeca"];?>"><?php echo $pecas[$i]["cdpeca"]." - ".$pecas[$i]["depeca"];?></option>

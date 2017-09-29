@@ -93,29 +93,29 @@
                     </li>
 
                     <li>
-                        <a href="cliente.php"><i class="fa fa-users"></i> <span class="nav-label">Cadastrar Clientes</span></a>
+                        <a href="cliente.php"><i class="fa fa-users"></i> <span class="nav-label">Clientes</span></a>
                     </li>
 
                     <?php if ($cdtipo == 'A'){?>
 
                         <li>
-                               <a href="fornecedores.php"><i class="fa fa-users"></i><span class="nav-label">Cadastrar Fornecedores</span></a>
+                               <a href="fornecedores.php"><i class="fa fa-users"></i><span class="nav-label">Fornecedores</span></a>
                         </li>
 
                         <li>
-                            <a href="usuarios.php"><i class="fa fa-users"></i> <span class="nav-label">Cadastrar Usuários</span></a>
+                            <a href="usuarios.php"><i class="fa fa-users"></i> <span class="nav-label">Usuários</span></a>
                         </li>
 
                         <li>
-                            <a href="pedidos.php"><i class="fa fa-pencil-square-o"></i><span class="nav-label">Cadastrar Pedidos</span></a>
+                            <a href="pedidos.php"><i class="fa fa-pencil-square-o"></i><span class="nav-label">Pedidos</span></a>
                         </li>
 
                         <li>
-                            <a href="pecas.php"><i class="fa fa-wrench"></i><span class="nav-label">Cadastrar Peças</span></a>
+                            <a href="pecas.php"><i class="fa fa-wrench"></i><span class="nav-label">Peças/Estoque</span></a>
                         </li>
 
                         <li>
-                            <a href="servicos.php"><i class="fa fa-gavel"></i> <span class="nav-label">Cadastrar Serviços</span></a>
+                            <a href="servicos.php"><i class="fa fa-gavel"></i> <span class="nav-label">Serviços</span></a>
                         </li>
 
                        <li ><!--class="special_link"-->

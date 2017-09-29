@@ -327,11 +327,11 @@
                                                                                 <option value= "X|0|Serviços">SERVIÇOS</option>
                                                                                 <option selected ="" value="<?php echo 'S|'.$itens[$f-1]["vlpeca"].'|'.$itens[$f-1]["cdpeca"];?>"><?php echo $itens[$f-1]["cdpeca"];?></option>
                                                                                 <?php for($i=0;$i < count($servicos);$i++) { ?>
-                                                                                    <option value = "<?php echo 'S|'.$servicos[$i]["vlserv"].'|'.$servicos[$i]["cdserv"]." - ".$servicos[$i]["deserv"];?>"><?php echo $servicos[$i]["cdserv"]." - ".$servicos[$i]["deserv"];?></option>
+                                                                                    <option value = "<?php echo 'S|'.$servicos[$i]["vlserv"].'|'.$servicos[$i]["cdserv"];?>"><?php echo $servicos[$i]["cdserv"]." - ".$servicos[$i]["deserv"];?></option>
                                                                                 <?php }?>
                                                                                 <option value="X|0|Peças">PEÇAS</option>
                                                                                 <?php for($i=0;$i < count($pecas);$i++) { ?>
-                                                                                  <option value = "<?php echo 'P|'.$pecas[$i]["vlpeca"].'|'.$pecas[$i]["cdpeca"]." - ".$pecas[$i]["depeca"];?>"><?php echo $pecas[$i]["cdpeca"]." - ".$pecas[$i]["depeca"];?></option>
+                                                                                  <option value = "<?php echo 'P|'.$pecas[$i]["vlpeca"].'|'.$pecas[$i]["cdpeca"];?>"><?php echo $pecas[$i]["cdpeca"]." - ".$pecas[$i]["depeca"];?></option>
                                                                                 <?php }?>
                                                                             </select>
                                                                         </center>
@@ -345,11 +345,11 @@
                                                                             <select id = "<?php echo $cditem;?>" name="<?php echo $cditem;?>" class="form-control" onclick="colocapreco();" <?php if($acao == 'ver' or $acao == 'apaga'): ?>disabled<?php endif; ?>>
                                                                                 <option value= "X|0|Serviços" selected>SERVIÇOS</option>
                                                                                 <?php for($i=0;$i < count($servicos);$i++) { ?>
-                                                                                  <option value = "<?php echo 'S|'.$servicos[$i]["vlserv"].'|'.$servicos[$i]["cdserv"]." - ".$servicos[$i]["deserv"];?>"><?php echo $servicos[$i]["cdserv"]." - ".$servicos[$i]["deserv"];?></option>
+                                                                                  <option value = "<?php echo 'S|'.$servicos[$i]["vlserv"].'|'.$servicos[$i]["cdserv"];?>"><?php echo $servicos[$i]["cdserv"]." - ".$servicos[$i]["deserv"];?></option>
                                                                                 <?php }?>
                                                                                 <option value="X|0|Peças" selected>PEÇAS</option>
                                                                                 <?php for($i=0;$i < count($pecas);$i++) { ?>
-                                                                                  <option value = "<?php echo 'P|'.$pecas[$i]["vlpeca"].'|'.$pecas[$i]["cdpeca"]." - ".$pecas[$i]["depeca"];?>"><?php echo $pecas[$i]["cdpeca"]." - ".$pecas[$i]["depeca"];?></option>
+                                                                                  <option value = "<?php echo 'P|'.$pecas[$i]["vlpeca"].'|'.$pecas[$i]["cdpeca"];?>"><?php echo $pecas[$i]["cdpeca"]." - ".$pecas[$i]["depeca"];?></option>
                                                                                 <?php }?>
                                                                             </select>
                                                                         </center>

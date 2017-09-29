@@ -82,8 +82,8 @@
                                     <thead>
                                         <tr>
                                             <th>Código</th>
-                                            <th>Descrição</th>
-                                            <th>Valor</th>
+                                            <th class="col-lg-6">Descrição</th>
+                                            <th class="col-lg-2">Valor</th>
                                             <th>Quantidade</th>
                                             <th class="text-right" data-sort-ignore="true">Ação</th>
                                         </tr>

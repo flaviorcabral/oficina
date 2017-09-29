@@ -3,7 +3,7 @@
 -- http://www.phpmyadmin.net
 --
 -- Host: 127.0.0.1
--- Generation Time: 28-Set-2017 às 17:26
+-- Generation Time: 29-Set-2017 às 17:02
 -- Versão do servidor: 10.1.16-MariaDB
 -- PHP Version: 5.6.24
 
@@ -81,8 +81,7 @@ CREATE TABLE `contas` (
 --
 
 INSERT INTO `contas` (`cdcont`, `decont`, `dtcont`, `vlcont`, `cdtipo`, `vlpago`, `dtpago`, `cdquem`, `cdorig`, `deobse`, `flativ`, `dtcada`) VALUES
-(4, 'Cliente a Receber', '2017-11-28', '1000.00', 'Receber', NULL, NULL, '185.629.304-15 - Maria de Lourdes Cabral Pereira', '1', NULL, 'Sim', '2017-09-28'),
-(3, 'Cliente a Receber', '2017-10-28', '1000.00', 'Receber', NULL, NULL, '185.629.304-15 - Maria de Lourdes Cabral Pereira', '1', NULL, 'Sim', '2017-09-28');
+(31, 'Cliente a Receber', '2017-10-29', '2.50', 'Receber', NULL, NULL, '185.629.304-15 - Maria de Lourdes Cabral Pereira', '25', NULL, 'Sim', '2017-09-29');
 
 -- --------------------------------------------------------
 
@@ -182,24 +181,92 @@ CREATE TABLE `logs` (
 --
 
 INSERT INTO `logs` (`cdusua`, `dtlog`, `delog`, `iplog`, `flativ`) VALUES
-('2', '2017-09-28 10:54:56', 'Acesso ao Sistema', '::1', 'S'),
-('2', '2017-09-28 10:56:25', 'InclusÃ£o de clientes na tabela [clientes]', '::1', 'S'),
-('2', '2017-09-28 10:56:47', 'AlteraÃ§Ã£o de dados na tabela [clientes] Cpf/Cnpj 185.629.304-15', '::1', 'S'),
-('2', '2017-09-28 10:58:06', 'InclusÃ£o de dados na tabela [ordem] codigo ', '::1', 'S'),
-('2', '2017-09-28 10:58:06', 'InclusÃ£o de dados na tabela [contas]', '::1', 'S'),
-('2', '2017-09-28 10:58:06', 'InclusÃ£o de dados na tabela [contas]', '::1', 'S'),
-('2', '2017-09-28 10:59:29', 'InclusÃ£o de dados na tabela [fornecedores]', '::1', 'S'),
-('2', '2017-09-28 15:06:51', 'Acesso ao Sistema', '::1', 'S'),
-('4', '2017-09-28 15:09:40', 'Acesso ao Sistema', '::1', 'S'),
-('2', '2017-09-28 15:09:47', 'Acesso ao Sistema', '::1', 'S'),
-('2', '2017-09-28 15:16:12', 'Acesso ao Sistema', '::1', 'S'),
-('2', '2017-09-28 15:29:22', 'Acesso ao Sistema', '::1', 'S'),
-('2', '2017-09-28 15:57:11', 'ExclusÃ£o ordem de serviÃ§o na tabela [ordem] codigo 1', '::1', 'S'),
-('2', '2017-09-28 15:57:11', 'AlteraÃ§Ã£o de dados na tabela [ordem] codigo 1', '::1', 'S'),
-('2', '2017-09-28 15:57:11', 'InclusÃ£o de dados na tabela [contas]', '::1', 'S'),
-('2', '2017-09-28 15:57:11', 'InclusÃ£o de dados na tabela [contas]', '::1', 'S'),
-('2', '2017-09-28 17:11:30', 'Acesso ao Sistema', '::1', 'S'),
-('2', '2017-09-28 17:14:18', 'Acesso ao Sistema', '::1', 'S');
+('2', '2017-09-29 10:21:44', 'ExclusÃ£o ordem de serviÃ§o na tabela [ordem] codigo 2', '::1', 'S'),
+('2', '2017-09-29 10:21:44', 'AlteraÃ§Ã£o de dados na tabela [ordem] codigo 2', '::1', 'S'),
+('2', '2017-09-29 10:21:44', 'InclusÃ£o de dados na tabela [contas]', '::1', 'S'),
+('2', '2017-09-29 10:21:44', 'InclusÃ£o de dados na tabela [contas]', '::1', 'S'),
+('2', '2017-09-29 10:23:02', 'AlteraÃ§Ã£o de dados na tabela [contas] chave 9', '::1', 'S'),
+('2', '2017-09-29 10:29:11', 'AlteraÃ§Ã£o de dados na tabela [contas] chave 7', '::1', 'S'),
+('2', '2017-09-29 10:29:33', 'AlteraÃ§Ã£o de dados na tabela [contas] chave 7', '::1', 'S'),
+('2', '2017-09-29 10:49:37', 'ExclusÃ£o de dados na tabela [pedidos] codigo 1', '::1', 'S'),
+('2', '2017-09-29 10:49:37', 'AlteraÃ§Ã£o de dados na tabela [pedidos] codigo 1', '::1', 'S'),
+('2', '2017-09-29 10:49:37', 'InclusÃ£o de dados na tabela [contas]', '::1', 'S'),
+('2', '2017-09-29 10:49:37', 'InclusÃ£o de dados na tabela [contas]', '::1', 'S'),
+('2', '2017-09-29 10:58:50', 'InclusÃ£o de dados na tabela [pedidos] codigo ', '::1', 'S'),
+('2', '2017-09-29 10:58:50', 'InclusÃ£o de dados na tabela [contas]', '::1', 'S'),
+('2', '2017-09-29 11:02:55', 'ExclusÃ£o de dados na tabela [pedidos] codigo 1', '::1', 'S'),
+('2', '2017-09-29 11:02:55', 'AlteraÃ§Ã£o de dados na tabela [pedidos] codigo 1', '::1', 'S'),
+('2', '2017-09-29 11:02:55', 'InclusÃ£o de dados na tabela [contas]', '::1', 'S'),
+('2', '2017-09-29 11:02:55', 'InclusÃ£o de dados na tabela [contas]', '::1', 'S'),
+('2', '2017-09-29 11:03:11', 'ExclusÃ£o de dados na tabela [pedidos] codigo 2', '::1', 'S'),
+('2', '2017-09-29 11:03:11', 'AlteraÃ§Ã£o de dados na tabela [pedidos] codigo 2', '::1', 'S'),
+('2', '2017-09-29 11:03:11', 'InclusÃ£o de dados na tabela [contas]', '::1', 'S'),
+('2', '2017-09-29 11:05:15', 'ExclusÃ£o de dados na tabela [pedidos] codigo 1', '::1', 'S'),
+('2', '2017-09-29 11:05:15', 'AlteraÃ§Ã£o de dados na tabela [pedidos] codigo 1', '::1', 'S'),
+('2', '2017-09-29 11:05:15', 'InclusÃ£o de dados na tabela [contas]', '::1', 'S'),
+('2', '2017-09-29 11:05:15', 'InclusÃ£o de dados na tabela [contas]', '::1', 'S'),
+('2', '2017-09-29 12:17:14', 'Acesso ao Sistema', '::1', 'S'),
+('2', '2017-09-29 12:18:13', 'ExclusÃ£o de dados na tabela [pedidos] codigo 2', '::1', 'S'),
+('2', '2017-09-29 13:02:06', 'Acesso ao Sistema', '::1', 'S'),
+('2', '2017-09-29 13:02:17', 'ExclusÃ£o de dados na tabela [pedidos] codigo 1', '::1', 'S'),
+('2', '2017-09-29 13:02:17', 'AlteraÃ§Ã£o de dados na tabela [pedidos] codigo 1', '::1', 'S'),
+('2', '2017-09-29 13:02:17', 'InclusÃ£o de dados na tabela [contas]', '::1', 'S'),
+('2', '2017-09-29 13:02:17', 'InclusÃ£o de dados na tabela [contas]', '::1', 'S'),
+('2', '2017-09-29 14:38:44', 'Acesso ao Sistema', '::1', 'S'),
+('2', '2017-09-29 14:39:21', 'ExclusÃ£o ordem de serviÃ§o na tabela [ordem] codigo 2', '::1', 'S'),
+('2', '2017-09-29 14:39:47', 'InclusÃ£o de dados na tabela [ordem] codigo ', '::1', 'S'),
+('2', '2017-09-29 14:40:02', 'InclusÃ£o de dados na tabela [ordem] codigo ', '::1', 'S'),
+('2', '2017-09-29 14:42:40', 'InclusÃ£o de dados na tabela [ordem] codigo ', '::1', 'S'),
+('2', '2017-09-29 14:42:44', 'InclusÃ£o de dados na tabela [ordem] codigo ', '::1', 'S'),
+('2', '2017-09-29 14:42:46', 'InclusÃ£o de dados na tabela [ordem] codigo ', '::1', 'S'),
+('2', '2017-09-29 14:42:54', 'InclusÃ£o de dados na tabela [ordem] codigo ', '::1', 'S'),
+('2', '2017-09-29 14:44:02', 'InclusÃ£o de dados na tabela [ordem] codigo ', '::1', 'S'),
+('2', '2017-09-29 14:44:06', 'InclusÃ£o de dados na tabela [ordem] codigo ', '::1', 'S'),
+('2', '2017-09-29 14:44:56', 'InclusÃ£o de dados na tabela [ordem] codigo ', '::1', 'S'),
+('2', '2017-09-29 14:45:01', 'InclusÃ£o de dados na tabela [ordem] codigo ', '::1', 'S'),
+('2', '2017-09-29 14:45:44', 'InclusÃ£o de dados na tabela [ordem] codigo ', '::1', 'S'),
+('2', '2017-09-29 14:45:51', 'InclusÃ£o de dados na tabela [ordem] codigo ', '::1', 'S'),
+('2', '2017-09-29 14:46:14', 'InclusÃ£o de dados na tabela [ordem] codigo ', '::1', 'S'),
+('2', '2017-09-29 14:46:17', 'InclusÃ£o de dados na tabela [ordem] codigo ', '::1', 'S'),
+('2', '2017-09-29 14:49:22', 'InclusÃ£o de dados na tabela [ordem] codigo ', '::1', 'S'),
+('2', '2017-09-29 14:51:06', 'InclusÃ£o de dados na tabela [ordem] codigo ', '::1', 'S'),
+('2', '2017-09-29 14:51:14', 'InclusÃ£o de dados na tabela [ordem] codigo ', '::1', 'S'),
+('2', '2017-09-29 14:51:26', 'InclusÃ£o de dados na tabela [ordem] codigo ', '::1', 'S'),
+('2', '2017-09-29 14:51:59', 'InclusÃ£o de dados na tabela [ordem] codigo ', '::1', 'S'),
+('2', '2017-09-29 15:14:42', 'InclusÃ£o de dados na tabela [ordem] codigo ', '::1', 'S'),
+('2', '2017-09-29 15:14:42', 'InclusÃ£o de dados na tabela [contas]', '::1', 'S'),
+('2', '2017-09-29 15:32:24', 'InclusÃ£o de dados na tabela [ordem] codigo ', '::1', 'S'),
+('2', '2017-09-29 15:32:24', 'InclusÃ£o de dados na tabela [contas]', '::1', 'S'),
+('2', '2017-09-29 16:01:14', 'ExclusÃ£o ordem de serviÃ§o na tabela [ordem] codigo 23', '::1', 'S'),
+('2', '2017-09-29 16:01:14', 'AlteraÃ§Ã£o de dados na tabela [ordem] codigo 23', '::1', 'S'),
+('2', '2017-09-29 16:01:14', 'InclusÃ£o de dados na tabela [contas]', '::1', 'S'),
+('2', '2017-09-29 16:10:41', 'ExclusÃ£o ordem de serviÃ§o na tabela [ordem] codigo 23', '::1', 'S'),
+('2', '2017-09-29 16:10:41', 'AlteraÃ§Ã£o de dados na tabela [ordem] codigo 23', '::1', 'S'),
+('2', '2017-09-29 16:10:41', 'InclusÃ£o de dados na tabela [contas]', '::1', 'S'),
+('2', '2017-09-29 16:21:36', 'ExclusÃ£o ordem de serviÃ§o na tabela [ordem] codigo 22', '::1', 'S'),
+('2', '2017-09-29 16:21:36', 'AlteraÃ§Ã£o de dados na tabela [ordem] codigo 22', '::1', 'S'),
+('2', '2017-09-29 16:21:36', 'InclusÃ£o de dados na tabela [contas]', '::1', 'S'),
+('2', '2017-09-29 16:24:08', 'ExclusÃ£o ordem de serviÃ§o na tabela [ordem] codigo 22', '::1', 'S'),
+('2', '2017-09-29 16:24:08', 'AlteraÃ§Ã£o de dados na tabela [ordem] codigo 22', '::1', 'S'),
+('2', '2017-09-29 16:24:08', 'InclusÃ£o de dados na tabela [contas]', '::1', 'S'),
+('2', '2017-09-29 16:25:03', 'InclusÃ£o de dados na tabela [ordem] codigo ', '::1', 'S'),
+('2', '2017-09-29 16:25:03', 'InclusÃ£o de dados na tabela [contas]', '::1', 'S'),
+('2', '2017-09-29 16:45:26', 'AlteraÃ§Ã£o de dados na tabela [pecas] codigo 1', '::1', 'S'),
+('2', '2017-09-29 16:46:36', 'InclusÃ£o de dados na tabela [ordem] codigo ', '::1', 'S'),
+('2', '2017-09-29 16:46:36', 'InclusÃ£o de dados na tabela [contas]', '::1', 'S'),
+('2', '2017-09-29 16:47:04', 'ExclusÃ£o ordem de serviÃ§o na tabela [ordem] codigo 25', '::1', 'S'),
+('2', '2017-09-29 16:47:04', 'AlteraÃ§Ã£o de dados na tabela [ordem] codigo 25', '::1', 'S'),
+('2', '2017-09-29 16:47:04', 'InclusÃ£o de dados na tabela [contas]', '::1', 'S'),
+('2', '2017-09-29 16:53:55', 'AlteraÃ§Ã£o de dados na tabela [pecas] codigo 1', '::1', 'S'),
+('2', '2017-09-29 17:01:53', 'AtualizaÃ§Ã£o de dados na tabela [pecas] codigo 1', '::1', 'S'),
+('2', '2017-09-29 17:01:53', 'ExclusÃ£o ordem de serviÃ§o na tabela [ordem] codigo 25', '::1', 'S'),
+('2', '2017-09-29 17:01:53', 'AlteraÃ§Ã£o de dados na tabela [ordem] codigo 25', '::1', 'S'),
+('2', '2017-09-29 17:01:53', 'InclusÃ£o de dados na tabela [contas]', '::1', 'S'),
+('2', '2017-09-29 17:02:04', 'AtualizaÃ§Ã£o de dados na tabela [pecas] codigo 1', '::1', 'S'),
+('2', '2017-09-29 17:02:04', 'ExclusÃ£o ordem de serviÃ§o na tabela [ordem] codigo 25', '::1', 'S'),
+('2', '2017-09-29 17:02:04', 'AtualizaÃ§Ã£o de dados na tabela [pecas] codigo 1', '::1', 'S'),
+('2', '2017-09-29 17:02:04', 'AlteraÃ§Ã£o de dados na tabela [ordem] codigo 25', '::1', 'S'),
+('2', '2017-09-29 17:02:04', 'InclusÃ£o de dados na tabela [contas]', '::1', 'S');
 
 -- --------------------------------------------------------
 
@@ -233,7 +300,7 @@ CREATE TABLE `ordem` (
 --
 
 INSERT INTO `ordem` (`cdorde`, `cdclie`, `veplac`, `vemarc`, `vemode`, `veanom`, `veanof`, `vecorv`, `cdsitu`, `dtorde`, `vlorde`, `cdform`, `qtform`, `vlpago`, `dtpago`, `deobse`, `flativ`, `dtcada`) VALUES
-(1, '185.629.304-15 - Maria de Lourdes Cabral Pereira', '', '', '', '', '', '', 'Pendente', '2017-09-28', '2000.00', 'Dinheiro', 2, '0.00', '0000-00-00', '', 'Sim', '2017-09-28');
+(25, '185.629.304-15 - Maria de Lourdes Cabral Pereira', '', '', '', '', '', '', 'Orcamento', '2017-09-29', '2.50', 'Dinheiro', 1, '0.00', '0000-00-00', '', 'Sim', '2017-09-29');
 
 -- --------------------------------------------------------
 
@@ -255,7 +322,7 @@ CREATE TABLE `ordemi` (
 --
 
 INSERT INTO `ordemi` (`cdorde`, `nritem`, `cdpeca`, `qtpeca`, `vlpeca`, `vltota`) VALUES
-(1, 1, '2 - reparo geral', 1, '2000.00', '2000.00');
+(25, 1, '1', 2, '1.25', '2.50');
 
 -- --------------------------------------------------------
 
@@ -307,19 +374,7 @@ CREATE TABLE `pecas` (
 --
 
 INSERT INTO `pecas` (`cdpeca`, `depeca`, `vlpeca`, `qtpeca`, `flativ`, `dtcada`) VALUES
-('10', '10', '2.58', 10, NULL, NULL),
-('2', '2', '0.52', 2, NULL, NULL),
-('3', '3', '0.78', 3, NULL, NULL),
-('4', '4', '1.03', 4, NULL, NULL),
-('5', '5', '1.29', 5, NULL, NULL),
-('6', '6', '1.55', 6, NULL, NULL),
-('7', '7', '1.81', 7, NULL, NULL),
-('8', '8', '2.07', 8, NULL, NULL),
-('9', '9', '2.33', 9, NULL, NULL),
-('1010', 'Tampa do Reservatório do Óleo', '15.00', 1, NULL, NULL),
-('1233', 'motor completo', '2500.00', 5, NULL, NULL),
-('80973102937012938', 'Bucha da rebimboca da parafuseta', '195.43', 299, NULL, NULL),
-('003', 'COXIM DO MOTOR', '199.00', 2, NULL, NULL);
+('1', 'Borracha de amortecedor', '1.25', 12, NULL, NULL);
 
 -- --------------------------------------------------------
 
@@ -332,16 +387,22 @@ CREATE TABLE `pedidos` (
   `cdforn` varchar(100) CHARACTER SET utf8 DEFAULT NULL,
   `dtpedi` date DEFAULT NULL,
   `vlpedi` decimal(15,2) DEFAULT NULL,
-  `vlpago` decimal(15,2) DEFAULT NULL,
-  `dtpago` date DEFAULT NULL,
   `cdform` varchar(30) CHARACTER SET utf8 DEFAULT NULL,
   `qtform` int(11) DEFAULT NULL,
   `decont` varchar(100) CHARACTER SET utf8 DEFAULT NULL,
   `dtentr` date DEFAULT NULL,
   `deobse` varchar(500) CHARACTER SET utf8 DEFAULT NULL,
+  `status` varchar(50) NOT NULL,
   `flativ` varchar(15) CHARACTER SET utf8 DEFAULT NULL,
   `dtcada` date DEFAULT NULL
 ) ENGINE=MyISAM DEFAULT CHARSET=latin1;
+
+--
+-- Extraindo dados da tabela `pedidos`
+--
+
+INSERT INTO `pedidos` (`cdpedi`, `cdforn`, `dtpedi`, `vlpedi`, `cdform`, `qtform`, `decont`, `dtentr`, `deobse`, `status`, `flativ`, `dtcada`) VALUES
+(1, '1234667899145 - Empresa teste', '2017-09-29', '126.25', 'Dinheiro', 2, '', '2017-09-30', '', 'Entregue', 'Sim', '2017-09-29');
 
 -- --------------------------------------------------------
 
@@ -357,6 +418,14 @@ CREATE TABLE `pedidosi` (
   `vlpeca` decimal(15,2) DEFAULT NULL,
   `vltota` decimal(15,2) DEFAULT NULL
 ) ENGINE=MyISAM DEFAULT CHARSET=latin1;
+
+--
+-- Extraindo dados da tabela `pedidosi`
+--
+
+INSERT INTO `pedidosi` (`cdpedi`, `nritem`, `cdpeca`, `qtpeca`, `vlpeca`, `vltota`) VALUES
+(1, 1, '1 - Borracha de amortecedor', 100, '1.25', '125.00'),
+(1, 2, '1 - Borracha de amortecedor', 1, '1.25', '1.25');
 
 -- --------------------------------------------------------
 
@@ -378,13 +447,7 @@ CREATE TABLE `servicos` (
 --
 
 INSERT INTO `servicos` (`cdserv`, `deserv`, `vlserv`, `qtserv`, `flativ`, `dtcada`) VALUES
-('2', 'reparo geral', '2000.00', 1, NULL, NULL),
-('3', '3', '300.00', 3, NULL, NULL),
-('4', '4', '4.00', 4, NULL, NULL),
-('5', '5', '5.00', 5, NULL, NULL),
-('6', '6', '6.00', 6, NULL, NULL),
-('7', '7', '7.00', 7, NULL, NULL),
-('8', '8', '8.00', 8, NULL, NULL);
+('1', 'Reparo motor', '125.00', 0, NULL, NULL);
 
 -- --------------------------------------------------------
 
@@ -505,17 +568,17 @@ ALTER TABLE `usuarios`
 -- AUTO_INCREMENT for table `contas`
 --
 ALTER TABLE `contas`
-  MODIFY `cdcont` bigint(20) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
+  MODIFY `cdcont` bigint(20) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=32;
 --
 -- AUTO_INCREMENT for table `ordem`
 --
 ALTER TABLE `ordem`
-  MODIFY `cdorde` bigint(20) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+  MODIFY `cdorde` bigint(20) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=26;
 --
 -- AUTO_INCREMENT for table `pedidos`
 --
 ALTER TABLE `pedidos`
-  MODIFY `cdpedi` bigint(20) NOT NULL AUTO_INCREMENT;
+  MODIFY `cdpedi` bigint(20) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 --
 -- AUTO_INCREMENT for table `usuarios`
 --

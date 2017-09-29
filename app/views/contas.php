@@ -81,7 +81,7 @@
                                 <table class="table table-striped table-bordered table-hover dataTables-example" >
                                     <thead>
                                         <tr>
-                                            <th class="col-lg-1">Nº OS/Pedido</th>
+                                            <th class="col-lg-1">OS/Pedido</th>
                                             <th>Cliente/Fornecedor</th>
                                             <th>Tipo</th>
                                             <th>Valor</th>
@@ -150,7 +150,7 @@
                                     </tbody>
                                     <tfoot>
                                         <tr>
-                                            <th>Nº OS/Pedido</th>
+                                            <th>OS/Pedido</th>
                                             <th>Cliente/Fornecedor</th>
                                             <th>Tipo</th>
                                             <th>Valor</th>

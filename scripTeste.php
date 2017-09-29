@@ -13,7 +13,7 @@ session_start();
 $con = new Controller();
 $usu = new Conta();
 
-$result = $con->buscarMaiorOrdemPorCliente("26812855000100 - AILTON F SILVA", "2017-09-08");
+$result = $con->buscarItensOrdem(23);
 
 //$result = $usu->listaUsuarios();
 echo "<pre>";

@@ -1258,6 +1258,37 @@ class Controller
         return false;
     }
 
+    //Atualiza quantidade de peça em estoque
+    function atualizarEstoque($codigo, $qtd)
+    {
+        $peca = new Peca();
+        $result = $peca->atualizaEstoque($codigo, $qtd);
+
+        if($result)
+        {
+            $delog = "Atualização de dados na tabela [pecas] codigo ".$codigo;
+
+            if (isset($_COOKIE['cdusua'])) {
+                $cdusua = $_COOKIE['cdusua'];
+            }
+
+            $this->util->geraLogSistema($cdusua, $delog);
+
+            return $result;
+
+        }
+
+        return false;
+    }
+
+    //Buscar quantidade de peça no estoque
+    function buscaQtdPecaEstoque($codigo)
+    {
+        $peca = new Peca();
+        $result = $peca->estoquePeca($codigo);
+        return $result;
+    }
+
     //Lista estados brasileiros
     function listarEstadosBra()
     {
@@ -1779,6 +1810,21 @@ class Controller
 
             $cdorde = $_REQUEST["cdorde"];
 
+            $itensOrdem = $this->buscarItensOrdem($cdorde);
+
+            foreach($itensOrdem as $item)
+            {
+                $cod = intval($item['cdpeca']);
+                $qtdItem = intval($item['qtpeca']);
+
+                $qtdPecaEst = intval($this->buscaQtdPecaEstoque($cod));
+
+                $total = $qtdPecaEst + $qtdItem;
+
+                $this->atualizarEstoque($cod, $total);
+
+            }
+
             $this->excluirOrdemDeServico($cdorde);
             $this->excluirItensOrdemDeServico($cdorde);
             $this->excluirContaOrdem($cdorde);
@@ -1803,7 +1849,6 @@ class Controller
 
             for ($f = 1; $f <= 20; $f++) {
 
-                $primeiro = $codItem[$f];
                 $aPrimeiro = explode("|", $codItem[$f]);
 
                 if ($aPrimeiro[0] !== 'X') {
@@ -1835,7 +1880,45 @@ class Controller
                 $Flag = false;
             }
 
+            //Implementando controle de estoque
+            for ($f = 1; $f <= 20; $f++) {
+
+                $aPrimeiro = explode("|", $codItem[$f]);
+
+                if ($aPrimeiro[0] !== 'X') {
+                    if ($aPrimeiro[0] == 'P') {
+
+                        $cdpeca = $aPrimeiro[2];
+                        $qtpeca = intval($qtdItem[$f]);
+
+                        $qtdPecaEst = intval($this->buscaQtdPecaEstoque($cdpeca));
+
+                        if ($qtdPecaEst >= $qtpeca) {
+                            $qtdPecaEst -= $qtpeca;
+                            $qtd = $qtdPecaEst;
+
+                            $this->atualizarEstoque($cdpeca, $qtd);
+
+                        } else {
+
+                            $demens = "O.S. possui peça a menor/zerado no estoque!";
+                            $detitu = "Template Oficina | Alteração de Ordem de serviço";
+                            header('Location: mensagem.php?demens=' . $demens . '&detitu=' . $detitu);
+                            $Flag = false;
+
+                        }
+
+                    }
+                }
+            }
+
             if ($Flag == true) {
+
+                if($_POST["qtform"] == 0){
+                    $parcPague = 1;
+                }else{
+                    $parcPague = $_POST["qtform"];
+                }
 
                 //campos da tabela
                 $aNomes = array();
@@ -1872,7 +1955,7 @@ class Controller
                 $aDados[] = $_POST["dtorde"];
                 $aDados[] = $vlorde;
                 $aDados[] = $_POST["cdform"];
-                $aDados[] = $_POST["qtform"];
+                $aDados[] = $parcPague;
                 $aDados[] = $vlpago;
                 $aDados[] = $_POST["dtpago"];
                 $aDados[] = $_POST["deobse"];
@@ -1887,7 +1970,6 @@ class Controller
                 $nritem = 1;
                 for ($f = 1; $f <= 20; $f++) {
 
-                    $primeiro = $codItem[$f];
                     $aPrimeiro = explode("|", $codItem[$f]);
 
                     if ($aPrimeiro[0] !== 'X') {
@@ -2003,7 +2085,6 @@ class Controller
 
             for ($f = 1; $f <= 20; $f++) {
 
-                $primeiro = $aCditem[$f];
                 $aPrimeiro = explode("|", $aCditem[$f]);
                 if ($aPrimeiro[0] !== 'X') {
                     $qtitem++;
@@ -2034,7 +2115,45 @@ class Controller
                 $Flag = false;
             }
 
+            //Implementando controle de estoque
+            for ($f = 1; $f <= 20; $f++) {
+
+                $aPrimeiro = explode("|", $aCditem[$f]);
+
+                if ($aPrimeiro[0] !== 'X') {
+                    if ($aPrimeiro[0] == 'P') {
+
+                        $cdpeca = $aPrimeiro[2];
+                        $qtpeca = intval($aQtitem[$f]);
+
+                        $qtdPecaEst = intval($this->buscaQtdPecaEstoque($cdpeca));
+
+                        if ($qtdPecaEst >= $qtpeca) {
+                            $qtdPecaEst -= $qtpeca;
+                            $qtd = $qtdPecaEst;
+
+                            $this->atualizarEstoque($cdpeca, $qtd);
+
+                        } else {
+
+                            $demens = "O.S. possui peça a menor/zerado no estoque!";
+                            $detitu = "Template Oficina | Lançamendo de Ordem de serviço";
+                            header('Location: mensagem.php?demens=' . $demens . '&detitu=' . $detitu);
+                            $Flag = false;
+
+                        }
+
+                    }
+                }
+            }
+
             if ($Flag == true) {
+
+                if($_POST["qtform"] == 0){
+                    $parcPague = 1;
+                }else{
+                    $parcPague = $_POST["qtform"];
+                }
 
                 //campos da tabela
                 $aNomes = array();
@@ -2069,7 +2188,7 @@ class Controller
                 $aDados[] = $_POST["dtorde"];
                 $aDados[] = $vlorde;
                 $aDados[] = $_POST["cdform"];
-                $aDados[] = $_POST["qtform"];
+                $aDados[] = $parcPague;
                 $aDados[] = $vlpago;
                 $aDados[] = $_POST["dtpago"];
                 $aDados[] = $_POST["deobse"];
@@ -2077,7 +2196,7 @@ class Controller
                 $aDados[] = $dtcada;
 
                 $proc = "Inclusão";
-                $chav = "";
+                $chave = "";
 
                 $this->salvarOrdemDeServico($aDados, $aNomes, $proc, $chave);
 
@@ -2088,10 +2207,10 @@ class Controller
                 $nritem = 1;
                 for ($f = 1; $f <= 20; $f++) {
 
-                    $primeiro = $aCditem[$f];
                     $aPrimeiro = explode("|", $aCditem[$f]);
 
                     if ($aPrimeiro[0] !== 'X') {
+
                         $cdpeca = $aPrimeiro[2];
                         $qtpeca = $aQtitem[$f];
                         $vlpeca = $aVlitem[$f];
@@ -2115,6 +2234,7 @@ class Controller
 
                         $this->salvarItensOrdem($aDados, $aNomes);
                     }
+
                 }
 
                 $result = $this->buscarOrdem($cdorde);
@@ -2207,17 +2327,12 @@ class Controller
             $aCditem = $_POST["cditem"];
             $aQtitem = $_POST["qtitem"];
             $aVlitem = $_POST["vlitem"];
-
             $cdforn = $_POST["cdforn"];
             $dtpedi = $_POST["dtpedi"];
             $vlpedi = $_POST["vlpedi"];
-            $vlpago = $_POST["vlpago"];
 
             $vlpedi = str_replace(".", "", $vlpedi);
             $vlpedi = str_replace(",", ".", $vlpedi);
-
-            $vlpago = str_replace(".", "", $vlpago);
-            $vlpago = str_replace(",", ".", $vlpago);
 
             $qtitem = 0;
             for ($f = 1; $f <= 10; $f++) {
@@ -2260,8 +2375,7 @@ class Controller
                 $aNomes[] = "vlpedi";
                 $aNomes[] = "decont";
                 $aNomes[] = "dtentr";
-                $aNomes[] = "dtpago";
-                $aNomes[] = "vlpago";
+                $aNomes[] = "status";
                 $aNomes[] = "deobse";
                 $aNomes[] = "flativ";
                 $aNomes[] = "dtcada";
@@ -2277,8 +2391,7 @@ class Controller
                 $aDados[] = $vlpedi;
                 $aDados[] = $_POST["decont"];
                 $aDados[] = $_POST["dtentr"];
-                $aDados[] = $_POST["dtpago"];
-                $aDados[] = $vlpago;
+                $aDados[] = $_POST["status"];
                 $aDados[] = $_POST["deobse"];
                 $aDados[] = 'Sim';
                 $aDados[] = $dtcada;
@@ -2395,17 +2508,12 @@ class Controller
             $aCditem = $_POST["cditem"];
             $aQtitem = $_POST["qtitem"];
             $aVlitem = $_POST["vlitem"];
-
             $cdforn = $_POST["cdforn"];
             $dtpedi = $_POST["dtpedi"];
             $vlpedi = $_POST["vlpedi"];
-            $vlpago = $_POST["vlpago"];
 
             $vlpedi = str_replace(".", "", $vlpedi);
             $vlpedi = str_replace(",", ".", $vlpedi);
-
-            $vlpago = str_replace(".", "", $vlpago);
-            $vlpago = str_replace(",", ".", $vlpago);
 
             $qtitem = 0;
             for ($f = 1; $f <= 10; $f++) {
@@ -2447,9 +2555,8 @@ class Controller
                 $aNomes[] = "vlpedi";
                 $aNomes[] = "decont";
                 $aNomes[] = "dtentr";
-                $aNomes[] = "dtpago";
-                $aNomes[] = "vlpago";
                 $aNomes[] = "deobse";
+                $aNomes[] = "status";
                 $aNomes[] = "flativ";
                 $aNomes[] = "dtcada";
                 $aNomes[] = "cdform";
@@ -2463,9 +2570,8 @@ class Controller
                 $aDados[] = $vlpedi;
                 $aDados[] = $_POST["decont"];
                 $aDados[] = $_POST["dtentr"];
-                $aDados[] = $_POST["dtpago"];
-                $aDados[] = $vlpago;
                 $aDados[] = $_POST["deobse"];
+                $aDados[] = $_POST["status"];
                 $aDados[] = 'Sim';
                 $aDados[] = $dtcada;
                 $aDados[] = $_POST["cdform"];

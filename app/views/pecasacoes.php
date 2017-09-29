@@ -113,14 +113,14 @@
                                     <div class="row">
                                             <div class="form-group">
                                                 <label class="col-md-2 control-label" for="textinput">Código</label>
-                                                <div class="col-md-4">
+                                                <div class="col-md-2">
                                                     <input id="cdpeca" name="cdpeca" value="<?php echo $peca["cdpeca"]; ?>" type="text" placeholder="" class="form-control" autofocus maxlength = "50" <?php if($acao == 'ver' or $acao == 'apaga'): ?>readonly=""<?php endif; ?> required>
                                                 </div>
                                             </div>
 
                                             <div class="form-group">
                                                 <label class="col-md-2 control-label" for="textinput">Descrição</label>
-                                                <div class="col-md-8">
+                                                <div class="col-md-6">
                                                     <input id="depeca" name="depeca" value="<?php echo $peca["depeca"]; ?>" type="text" placeholder="" class="form-control" maxlength = "100" <?php if($acao == 'ver' or $acao == 'apaga'): ?>readonly=""<?php endif; ?> required>
                                                 </div>
                                             </div>

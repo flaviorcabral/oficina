@@ -82,6 +82,7 @@
                                     <thead>
                                         <tr>
                                             <th>Código</th>
+                                            <th>Status</th>
                                             <th>Fornecedor</th>
                                             <th>Valor do Pedido</th>
                                             <th>Data do Pedido</th>
@@ -100,12 +101,14 @@
                                                 <?php $coluna3 = number_format($pedidos[$f]["vlpedi"],2,',','.'); ?>
                                                 <?php $coluna4 = date("d/m/Y",$datap); ?>
                                                 <?php $coluna5 = date("d/m/Y",$datae); ?>
+                                                <?php $coluna6 = trim($pedidos[$f]["status"]); ?>
 
                                                 <?php $ver = "pedidosacoes.php?acao=ver&chave=".$coluna1; ?>
                                                 <?php $edita = "pedidosacoes.php?acao=edita&chave=".$coluna1; ?>
                                                 <?php $apaga = "pedidosacoes.php?acao=apaga&chave=".$coluna1; ?>
 
                                                 <td><?php print $coluna1; ?></td>
+                                                <td><?php print $coluna6; ?></td>
                                                 <td><?php print $coluna2; ?></td>
                                                 <td><?php print $coluna3; ?></td>
                                                 <td><?php print $coluna4; ?></td>
@@ -123,6 +126,7 @@
                                     <tfoot>
                                         <tr>
                                             <th>Código</th>
+                                            <th>Status</th>
                                             <th>Fornecedor</th>
                                             <th>Valor do Pedido</th>
                                             <th>Data do Pedido</th>
