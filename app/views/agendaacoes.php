@@ -88,12 +88,12 @@
                     <div class="ibox float-e-margins">
                         <div class="ibox-title">
                             <button type="button" class="btn btn-warning btn-lg btn-block"><i
-                                                        class="fa fa-user"></i> Agenda - <small><?php echo $titulo." da OS"; ?></small>
+                                                        class="fa fa-calendar"></i> Agenda - <small><?php echo $titulo." da O.S."; ?></small>
                             </button>
                         </div>
 
                         <div class="ibox-content">
-                            <form class="form-horizontal" method="POST" enctype="multipart/form-data" action="ordemaa.php">
+                            <form class="form-horizontal" method="POST" enctype="multipart/form-data">
 
                                 <div>
                                     <center>

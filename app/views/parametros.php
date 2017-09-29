@@ -82,7 +82,7 @@
                     <div class="ibox float-e-margins">
                         <div class="ibox-title">
                             <button type="button" class="btn btn-warning btn-lg btn-block"><i
-                                                        class="fa fa-truck"></i> Parâmetros do Sistema - <small><?php echo $titulo; ?></small>
+                                                        class="fa fa-info-circle"></i> Parâmetros do Sistema - <small><?php echo $titulo; ?></small>
                             </button>
                         </div>
 
@@ -90,7 +90,7 @@
                             <form class="form-horizontal" method="POST" enctype="multipart/form-data">
                                 <div class="row">
                                         <center><h2><span class="text-warning"><strong>DADOS DA OFICINA</strong></span></h2></center>
-
+                                        </br>
                                         <div class="form-group">
                                             <label class="col-md-2 control-label" for="textinput">Cnpj</label>
                                             <div class="col-md-3">

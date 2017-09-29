@@ -89,7 +89,7 @@
                     <div class="ibox float-e-margins">
                         <div class="ibox-title">
                             <button type="button" class="btn btn-warning btn-lg btn-block"><i
-                                                        class="fa fa-user"></i> Cadastro de Clientes - <small><?php echo $titulo; ?></small>
+                                                        class="fa fa-user"></i> Cliente - <small><?php echo $titulo; ?></small>
                             </button>
                         </div>
 

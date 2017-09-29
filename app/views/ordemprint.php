@@ -21,6 +21,7 @@
     }
 
     $con = new Controller();
+    $util = new Util();
 
     $chave = trim($_GET["chave"]);
 
@@ -57,15 +58,15 @@
     $cdprop=$aPara[0]["cdprop"];
 
     if (strlen($cdclie) > 11 ) {
-        $cdclie=$con->formata($cdclie,"cnpj");
+        $cdclie=$util->formata($cdclie,"cnpj");
     } Else {
-        $cdclie=$con->formata($cdclie,"cpf");
+        $cdclie=$util->formata($cdclie,"cpf");
     }
 
     if (strlen($cdprop) > 11 ) {
-        $cdprop=$con->formata($cdprop,"cnpj");
+        $cdprop=$util->formata($cdprop,"cnpj");
     } Else {
-        $cdprop=$con->formata($cdprop,"cpf");
+        $cdprop=$util->formata($cdprop,"cpf");
     }
 
 ?>

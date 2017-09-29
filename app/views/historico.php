@@ -66,7 +66,7 @@
                     <div class="ibox float-e-margins">
                         <div class="ibox-title">
                             <button type="button" class="btn btn-warning btn-lg btn-block"><i
-                                                        class="fa fa-truck"></i> Histórico das Ações no Sistema
+                                                        class="fa fa-eye"></i> Histórico das Ações no Sistema
                             </button>
                         </div>
                         <div class="ibox-content">

@@ -85,7 +85,7 @@
                     <div class="ibox float-e-margins">
                         <div class="ibox-title">
                             <button type="button" class="btn btn-warning btn-lg btn-block"><i
-                                                        class="fa fa-user"></i> Cadastro de OS - <small><?php echo $titulo; ?></small>
+                                                        class="fa fa-edit"></i> Ordem de Serviço - <small><?php echo $titulo; ?></small>
                             </button>
                         </div>
 
