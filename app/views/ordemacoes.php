@@ -330,6 +330,7 @@
                                                                                     <option value = "<?php echo 'S|'.$servicos[$i]["vlserv"].'|'.$servicos[$i]["cdserv"];?>"><?php echo $servicos[$i]["cdserv"]." - ".$servicos[$i]["deserv"];?></option>
                                                                                 <?php }?>
                                                                                 <option value="X|0|Peças">PEÇAS</option>
+                                                                                <option selected ="" value="<?php echo 'P|'.$itens[$f-1]["vlpeca"].'|'.$itens[$f-1]["cdpeca"];?>"><?php echo $itens[$f-1]["cdpeca"];?></option>
                                                                                 <?php for($i=0;$i < count($pecas);$i++) { ?>
                                                                                   <option value = "<?php echo 'P|'.$pecas[$i]["vlpeca"].'|'.$pecas[$i]["cdpeca"];?>"><?php echo $pecas[$i]["cdpeca"]." - ".$pecas[$i]["depeca"];?></option>
                                                                                 <?php }?>

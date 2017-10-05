@@ -8,15 +8,23 @@
 
 include 'config.php';
 
-session_start();
+//session_start();
 
 $con = new Controller();
 $usu = new Conta();
 
-$result = $con->buscarItensOrdem(23);
+$result = $con->buscarItensOrdem(4);
+$result1 = $con->buscaQtdPecaEstoque(1);
 
+foreach ($result as $item){
+    $qtd = $item['qtpeca'];
+}
+
+echo $qtd;
+$result1 += $qtd;
 //$result = $usu->listaUsuarios();
 echo "<pre>";
 var_dump($result);
+var_dump($result1);
 echo "<pre/>";
 

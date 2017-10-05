@@ -1810,24 +1810,26 @@ class Controller
 
             $cdorde = $_REQUEST["cdorde"];
 
+            $busca = $this->buscarOrdemCindice($cdorde);
+            $statusold = $busca[0]["cdsitu"];
+
+            $status = $_POST["cdsitu"];
+
             $itensOrdem = $this->buscarItensOrdem($cdorde);
 
-            foreach($itensOrdem as $item)
-            {
-                $cod = intval($item['cdpeca']);
-                $qtdItem = intval($item['qtpeca']);
+            if($statusold != "Orcamento") {
+                foreach ($itensOrdem as $item) {
+                    $cod = intval($item['cdpeca']);
+                    $qtdItem = intval($item['qtpeca']);
 
-                $qtdPecaEst = intval($this->buscaQtdPecaEstoque($cod));
+                    $qtdPecaEst = intval($this->buscaQtdPecaEstoque($cod));
 
-                $total = $qtdPecaEst + $qtdItem;
+                    $qtdPecaEst += $qtdItem;
 
-                $this->atualizarEstoque($cod, $total);
+                    $this->atualizarEstoque($cod, $qtdPecaEst);
 
+                }
             }
-
-            $this->excluirOrdemDeServico($cdorde);
-            $this->excluirItensOrdemDeServico($cdorde);
-            $this->excluirContaOrdem($cdorde);
 
             $dtcada = date('Y-m-d');
             $Flag = true;
@@ -1839,7 +1841,6 @@ class Controller
             $dtorde = $_POST["dtorde"];
             $vlorde = $_POST["vlorde"];
             $vlpago = $_POST["vlpago"];
-
             $vlorde = str_replace(".", "", $vlorde);
             $vlorde = str_replace(",", ".", $vlorde);
             $vlpago = str_replace(".", "", $vlpago);
@@ -1862,6 +1863,7 @@ class Controller
                 $detitu = "Template Oficina | Cadastro de OS";
                 header('Location: mensagem.php?demens=' . $demens . '&detitu=' . $detitu);
                 $Flag = false;
+                exit;
             }
 
             if (empty($cdclie) == true) {
@@ -1870,6 +1872,7 @@ class Controller
                 $detitu = "Template Oficina | Cadastro de OS";
                 header('Location: mensagem.php?demens=' . $demens . '&detitu=' . $detitu);
                 $Flag = false;
+                exit;
             }
 
             if (empty(strtotime($dtorde)) == true) {
@@ -1878,36 +1881,43 @@ class Controller
                 $detitu = "Template Oficina | Cadastro de OS";
                 header('Location: mensagem.php?demens=' . $demens . '&detitu=' . $detitu);
                 $Flag = false;
+                exit;
             }
 
+            $this->excluirOrdemDeServico($cdorde);
+            $this->excluirItensOrdemDeServico($cdorde);
+            $this->excluirContaOrdem($cdorde);
+
             //Implementando controle de estoque
-            for ($f = 1; $f <= 20; $f++) {
+            if($status != "Orcamento") {
+                for ($f = 1; $f <= 20; $f++) {
 
-                $aPrimeiro = explode("|", $codItem[$f]);
+                    $aPrimeiro = explode("|", $codItem[$f]);
 
-                if ($aPrimeiro[0] !== 'X') {
-                    if ($aPrimeiro[0] == 'P') {
+                    if ($aPrimeiro[0] !== 'X') {
+                        if ($aPrimeiro[0] == 'P') {
 
-                        $cdpeca = $aPrimeiro[2];
-                        $qtpeca = intval($qtdItem[$f]);
+                            $cdpeca = $aPrimeiro[2];
+                            $qtpeca = intval($qtdItem[$f]);
 
-                        $qtdPecaEst = intval($this->buscaQtdPecaEstoque($cdpeca));
+                            $qtdPecaEst = intval($this->buscaQtdPecaEstoque($cdpeca));
 
-                        if ($qtdPecaEst >= $qtpeca) {
-                            $qtdPecaEst -= $qtpeca;
-                            $qtd = $qtdPecaEst;
+                            if ($qtdPecaEst >= $qtpeca) {
+                                $qtdPecaEst -= $qtpeca;
+                                $qtd = $qtdPecaEst;
 
-                            $this->atualizarEstoque($cdpeca, $qtd);
+                                $this->atualizarEstoque($cdpeca, $qtd);
 
-                        } else {
+                            } else {
 
-                            $demens = "O.S. possui peça a menor/zerado no estoque!";
-                            $detitu = "Template Oficina | Alteração de Ordem de serviço";
-                            header('Location: mensagem.php?demens=' . $demens . '&detitu=' . $detitu);
-                            $Flag = false;
+                                $demens = "O.S. possui peça a menor/zerado no estoque!";
+                                $detitu = "Template Oficina | Alteração de Ordem de serviço";
+                                header('Location: mensagem.php?demens=' . $demens . '&detitu=' . $detitu);
+                                $Flag = false;
+                                exit;
+                            }
 
                         }
-
                     }
                 }
             }
@@ -1999,10 +2009,9 @@ class Controller
                     }
                 }
 
-                $result = $this->buscarOrdemCindice($cdorde);
-
-                $dtorde = $result[0]["dtorde"];
-                $qtform = $result[0]["qtform"];
+                $busca = $this->buscarOrdemCindice($cdorde);
+                $dtorde = $busca[0]["dtorde"];
+                $qtform = $busca[0]["qtform"];
 
                 if($qtform === "0"){
 
@@ -2010,34 +2019,36 @@ class Controller
 
                 }
 
-                for ($f = 1; $f <= $qtform; $f++) {
+                if($status != "Orcamento") {
+                    for ($f = 1; $f <= $qtform; $f++) {
 
-                    $vlcont = $result[0]["vlorde"] / $qtform;
-                    $dtcont = strtotime($dtorde . "+ {$f} months");
-                    $dtcont = date("Y-m-d", $dtcont);
+                        $vlcont = $busca[0]["vlorde"] / $qtform;
+                        $dtcont = strtotime($dtorde . "+ {$f} months");
+                        $dtcont = date("Y-m-d", $dtcont);
 
-                    $aNomes = array();
-                    $aNomes[] = "decont";
-                    $aNomes[] = "dtcont";
-                    $aNomes[] = "vlcont";
-                    $aNomes[] = "cdtipo";
-                    $aNomes[] = "cdquem";
-                    $aNomes[] = "cdorig";
-                    $aNomes[] = "flativ";
-                    $aNomes[] = "dtcada";
+                        $aNomes = array();
+                        $aNomes[] = "decont";
+                        $aNomes[] = "dtcont";
+                        $aNomes[] = "vlcont";
+                        $aNomes[] = "cdtipo";
+                        $aNomes[] = "cdquem";
+                        $aNomes[] = "cdorig";
+                        $aNomes[] = "flativ";
+                        $aNomes[] = "dtcada";
 
-                    $aDados = array();
-                    $aDados[] = 'Cliente a Receber';
-                    $aDados[] = $dtcont;
-                    $aDados[] = $vlcont;
-                    $aDados[] = 'Receber';
-                    $aDados[] = $result[0]["cdclie"];
-                    $aDados[] = $result[0]["cdorde"];
-                    $aDados[] = 'Sim';
-                    $aDados[] = $dtcada;
+                        $aDados = array();
+                        $aDados[] = 'Cliente a Receber';
+                        $aDados[] = $dtcont;
+                        $aDados[] = $vlcont;
+                        $aDados[] = 'Receber';
+                        $aDados[] = $busca[0]["cdclie"];
+                        $aDados[] = $busca[0]["cdorde"];
+                        $aDados[] = 'Sim';
+                        $aDados[] = $dtcada;
 
-                    $this->salvarConta($aNomes, $aDados);
+                        $this->salvarConta($aNomes, $aDados);
 
+                    }
                 }
 
                 $demens = "Alteração efetuada com sucesso!";
@@ -2050,8 +2061,22 @@ class Controller
 
         if (isset($_REQUEST['apagar']))
         {
-
             $cdorde = $_REQUEST["cdorde"];
+
+            $itensOrdem = $this->buscarItensOrdem($cdorde);
+
+            foreach($itensOrdem as $item)
+            {
+                $cod = intval($item['cdpeca']);
+                $qtdItem = intval($item['qtpeca']);
+
+                $qtdPecaEst = intval($this->buscaQtdPecaEstoque($cod));
+
+                $qtdPecaEst += $qtdItem;
+
+                $this->atualizarEstoque($cod, $qtdPecaEst);
+
+            }
 
             if ($this->excluirOrdemDeServico($cdorde) and $this->excluirItensOrdemDeServico($cdorde) and $this->excluirContaOrdem($cdorde)) {
                 $demens = "Exclusão efetuada com sucesso!";
@@ -2077,6 +2102,7 @@ class Controller
             $dtorde = $_POST["dtorde"];
             $vlorde = $_POST["vlorde"];
             $vlpago = $_POST["vlpago"];
+            $status = $_POST["cdsitu"];
             $vlorde = str_replace(".", "", $vlorde);
             $vlorde = str_replace(",", ".", $vlorde);
             $vlpago = str_replace(".", "", $vlpago);
@@ -2116,33 +2142,35 @@ class Controller
             }
 
             //Implementando controle de estoque
-            for ($f = 1; $f <= 20; $f++) {
+            if($status != "Orcamento") {
+                for ($f = 1; $f <= 20; $f++) {
 
-                $aPrimeiro = explode("|", $aCditem[$f]);
+                    $aPrimeiro = explode("|", $aCditem[$f]);
 
-                if ($aPrimeiro[0] !== 'X') {
-                    if ($aPrimeiro[0] == 'P') {
+                    if ($aPrimeiro[0] !== 'X') {
+                        if ($aPrimeiro[0] == 'P') {
 
-                        $cdpeca = $aPrimeiro[2];
-                        $qtpeca = intval($aQtitem[$f]);
+                            $cdpeca = $aPrimeiro[2];
+                            $qtpeca = intval($aQtitem[$f]);
 
-                        $qtdPecaEst = intval($this->buscaQtdPecaEstoque($cdpeca));
+                            $qtdPecaEst = intval($this->buscaQtdPecaEstoque($cdpeca));
 
-                        if ($qtdPecaEst >= $qtpeca) {
-                            $qtdPecaEst -= $qtpeca;
-                            $qtd = $qtdPecaEst;
+                            if ($qtdPecaEst >= $qtpeca) {
+                                $qtdPecaEst -= $qtpeca;
+                                $qtd = $qtdPecaEst;
 
-                            $this->atualizarEstoque($cdpeca, $qtd);
+                                $this->atualizarEstoque($cdpeca, $qtd);
 
-                        } else {
+                            } else {
 
-                            $demens = "O.S. possui peça a menor/zerado no estoque!";
-                            $detitu = "Template Oficina | Lançamendo de Ordem de serviço";
-                            header('Location: mensagem.php?demens=' . $demens . '&detitu=' . $detitu);
-                            $Flag = false;
+                                $demens = "O.S. possui peça a menor/zerado no estoque!";
+                                $detitu = "Template Oficina | Lançamendo de Ordem de serviço";
+                                header('Location: mensagem.php?demens=' . $demens . '&detitu=' . $detitu);
+                                $Flag = false;
+
+                            }
 
                         }
-
                     }
                 }
             }
@@ -2184,7 +2212,7 @@ class Controller
                 $aDados[] = $_POST["veanom"];
                 $aDados[] = $_POST["veanof"];
                 $aDados[] = $_POST["vecorv"];
-                $aDados[] = $_POST["cdsitu"];
+                $aDados[] = $status;
                 $aDados[] = $_POST["dtorde"];
                 $aDados[] = $vlorde;
                 $aDados[] = $_POST["cdform"];
@@ -2248,7 +2276,8 @@ class Controller
 
                 }
 
-                for ($f = 1; $f <= $qtform; $f++) {
+                if($status != "Orcamento"){
+                    for ($f = 1; $f <= $qtform; $f++) {
 
                     $vlcont = $result[0]["vlorde"] / $qtform;
                     $dtcont = strtotime($dtorde . "+ {$f} months");
@@ -2275,6 +2304,7 @@ class Controller
                     $aDados[] = $dtcada;
 
                     $this->salvarConta($aNomes, $aDados);
+                }
                 }
 
                 $demens = "Cadastro efetuado com sucesso!";

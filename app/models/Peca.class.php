@@ -81,7 +81,7 @@ class Peca
         return false;
     }
 
-    //Incrementa peça estoque
+    //Update peças estoque
     function atualizaEstoque($codigo, $qtd)
     {
         if ($this->con->exec("UPDATE pecas SET qtpeca = '{$qtd}' WHERE cdpeca = '{$codigo}'")) {
