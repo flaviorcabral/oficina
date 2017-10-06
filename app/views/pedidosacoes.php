@@ -111,6 +111,7 @@
                                         <?php if($acao == "novo") {?>
                                             <button class="btn btn-sm btn-danger" name = "salvar" type="submit"><strong>Salvar</strong></button>
                                             <a class="btn btn-sm btn-success" href="fornecedoresacoes.php?acao=novo"><strong>Novo Fornecedor</strong></a>
+                                            <a class="btn btn-sm btn-success" href="pecasacoes.php?acao=novo"><strong>Nova Peça</strong></a>
                                         <?php }?>
                                         <button class="btn btn-sm btn-warning " type="button" onClick="history.go(-1)"><strong>Retornar</strong></button>
                                     </center>
@@ -264,10 +265,9 @@
                                                                         <center>
                                                                             <select id = "<?php echo $cditem;?>" name="<?php echo $cditem;?>" class="form-control" onclick="colocapreco();" <?php if($acao == 'ver' or $acao == 'apaga'): ?>disabled<?php endif; ?>>
                                                                                 <option selected ="" value="<?php echo 'P|'.$itens[$f-1]["vlpeca"].'|'.$itens[$f-1]["cdpeca"];?>"><?php echo $itens[$f-1]["cdpeca"];?></option>
-
                                                                                 <option value="X|0|Peças">PEÇAS</option>
                                                                                 <?php for($i=0;$i < count($pecas);$i++) { ?>
-                                                                                  <option value = "<?php echo 'P|'.$pecas[$i]["vlpeca"].'|'.$pecas[$i]["cdpeca"]." - ".$pecas[$i]["depeca"];?>"><?php echo $pecas[$i]["cdpeca"]." - ".$pecas[$i]["depeca"];?></option>
+                                                                                  <option value = "<?php echo 'P|'.$pecas[$i]["vlpeca"].'|'.$pecas[$i]["cdpeca"];?>"><?php echo $pecas[$i]["cdpeca"]." - ".$pecas[$i]["depeca"];?></option>
                                                                                 <?php }?>
                                                                             </select>
                                                                         </center>
@@ -281,7 +281,7 @@
                                                                             <select id = "<?php echo $cditem;?>" name="<?php echo $cditem;?>" class="form-control" onclick="colocapreco();" <?php if($acao == 'ver' or $acao == 'apaga'): ?>disabled<?php endif; ?>>
                                                                                 <option value="X|0|Peças" selected>PEÇAS</option>
                                                                                 <?php for($i=0;$i < count($pecas);$i++) { ?>
-                                                                                  <option value = "<?php echo 'P|'.$pecas[$i]["vlpeca"].'|'.$pecas[$i]["cdpeca"]." - ".$pecas[$i]["depeca"];?>"><?php echo $pecas[$i]["cdpeca"]." - ".$pecas[$i]["depeca"];?></option>
+                                                                                  <option value = "<?php echo 'P|'.$pecas[$i]["vlpeca"].'|'.$pecas[$i]["cdpeca"];?>"><?php echo $pecas[$i]["cdpeca"]." - ".$pecas[$i]["depeca"];?></option>
                                                                                 <?php }?>
                                                                             </select>
                                                                         </center>

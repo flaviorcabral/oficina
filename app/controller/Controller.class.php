@@ -1815,9 +1815,10 @@ class Controller
 
             $status = $_POST["cdsitu"];
 
-            $itensOrdem = $this->buscarItensOrdem($cdorde);
-
             if($statusold != "Orcamento") {
+
+                $itensOrdem = $this->buscarItensOrdem($cdorde);
+
                 foreach ($itensOrdem as $item) {
                     $cod = intval($item['cdpeca']);
                     $qtdItem = intval($item['qtpeca']);
@@ -2347,9 +2348,28 @@ class Controller
         {
             $cdpedi = $_POST["cdpedi"];
 
-            $this->excluirPedido($cdpedi);
-            $this->excluirItensPedido($cdpedi);
-            $this->excluirContaPedido($cdpedi);
+            $busca = $this->buscarPedido($cdpedi);
+            $statusold = $busca[0]["status"];
+
+            $status = $_POST["status"];
+
+            if($statusold == "Entregue" and $status == "Entregue") {
+
+                $itensPedido = $this->buscaItensPedido($cdpedi);
+
+                foreach ($itensPedido as $item) {
+
+                    $cod = intval($item['cdpeca']);
+                    $qtdItem = intval($item['qtpeca']);
+
+                    $qtdPecaEst = intval($this->buscaQtdPecaEstoque($cod));
+
+                    $qtdPecaEst -= $qtdItem;
+
+                    $this->atualizarEstoque($cod, $qtdPecaEst);
+
+                }
+            }
 
             $dtcada = date('Y-m-d');
             $Flag = true;
@@ -2360,7 +2380,7 @@ class Controller
             $cdforn = $_POST["cdforn"];
             $dtpedi = $_POST["dtpedi"];
             $vlpedi = $_POST["vlpedi"];
-
+            $status = $_POST['status'];
             $vlpedi = str_replace(".", "", $vlpedi);
             $vlpedi = str_replace(",", ".", $vlpedi);
 
@@ -2394,6 +2414,32 @@ class Controller
                 $Flag = false;
             }
 
+            $this->excluirPedido($cdpedi);
+            $this->excluirItensPedido($cdpedi);
+            $this->excluirContaPedido($cdpedi);
+
+            //Implementando controle de estoque
+            if($status == "Entregue") {
+                for ($f = 1; $f <= 20; $f++) {
+
+                    $aPrimeiro = explode("|", $aCditem[$f]);
+
+                    if ($aPrimeiro[0] !== 'X') {
+                        if ($aPrimeiro[0] == 'P') {
+
+                            $cdpeca = $aPrimeiro[2];
+                            $qtpeca = intval($aQtitem[$f]);
+
+                            $qtdPecaEst = intval($this->buscaQtdPecaEstoque($cdpeca));
+
+                            $qtdPecaEst += $qtpeca;
+                            $qtd = $qtdPecaEst;
+
+                            $this->atualizarEstoque($cdpeca, $qtd);
+                        }
+                    }
+                }
+            }
 
             if ($Flag == true) {
 
@@ -2514,7 +2560,23 @@ class Controller
         }
 
         if (isset($_REQUEST['apagar'])) {
+
             $cdpedi = $_POST["cdpedi"];
+
+            $itensPedido = $this->buscaItensPedido($cdpedi);
+
+            foreach($itensPedido as $item)
+            {
+                $cod = intval($item['cdpeca']);
+                $qtdItem = intval($item['qtpeca']);
+
+                $qtdPecaEst = intval($this->buscaQtdPecaEstoque($cod));
+
+                $qtdPecaEst -= $qtdItem;
+
+                $this->atualizarEstoque($cod, $qtdPecaEst);
+
+            }
 
             if ($this->excluirPedido($cdpedi) and $this->excluirItensPedido($cdpedi) and $this->excluirContaPedido($cdpedi)) {
                 $demens = "Exclusão efetuada com sucesso!";
@@ -2541,7 +2603,7 @@ class Controller
             $cdforn = $_POST["cdforn"];
             $dtpedi = $_POST["dtpedi"];
             $vlpedi = $_POST["vlpedi"];
-
+            $status = $_POST['status'];
             $vlpedi = str_replace(".", "", $vlpedi);
             $vlpedi = str_replace(",", ".", $vlpedi);
 
@@ -2575,6 +2637,28 @@ class Controller
                 $Flag = false;
             }
 
+            //Implementando controle de estoque
+            if($status == "Entregue") {
+                for ($f = 1; $f <= 20; $f++) {
+
+                    $aPrimeiro = explode("|", $aCditem[$f]);
+
+                    if ($aPrimeiro[0] !== 'X') {
+                        if ($aPrimeiro[0] == 'P') {
+
+                            $cdpeca = $aPrimeiro[2];
+                            $qtpeca = intval($aQtitem[$f]);
+
+                            $qtdPecaEst = intval($this->buscaQtdPecaEstoque($cdpeca));
+
+                            $qtdPecaEst += $qtpeca;
+                            $qtd = $qtdPecaEst;
+
+                            $this->atualizarEstoque($cdpeca, $qtd);
+                        }
+                    }
+                }
+            }
 
             if ($Flag == true) {
 
